@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/home/daniele/ingegneria_del_software/src/classes",
+      "program": "/home/daniele/ingegneria_del_software/src/classes/build/Debug/outDebug"
+    }
+  ]
+}
