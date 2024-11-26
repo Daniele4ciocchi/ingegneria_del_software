@@ -1,5 +1,5 @@
-#ifndef paziente_h
-#define paziente_h
+#ifndef dottore_h
+#define dottore_h
 
 #include <string.h>
 #include <stdexcept>
@@ -11,17 +11,17 @@
 
 // class
 
-class Paziente{
+class Dottore{
 
     public:
         char* nome = NULL;
         char* mail = NULL;
 
-        Paziente(char* nome_paziente, char* email_paziente);
+        Dottore(char* nome_dottore, char* email_dottore);
 
-        ~Paziente();
+        ~Dottore();
 
-        static Paziente* from_stream(redisReply* reply, int stream_num, int msg_num);
+        static dottore* from_stream(redisReply* reply, int stream_num, int msg_num);
 
 };
 

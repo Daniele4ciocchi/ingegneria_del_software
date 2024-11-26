@@ -6,7 +6,7 @@ RichiestaPrenotazione::RichiestaPrenotazione(
                                 char* tipo_visita,
                                 char* data_visita,
                                 char* data_prenotazione,
-                                char* nome_medico
+                                char* nome_medico,
                                 char* mail_medico
                                 ){
 

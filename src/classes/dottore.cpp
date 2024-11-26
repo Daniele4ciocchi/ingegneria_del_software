@@ -1,20 +1,20 @@
-#include "paziente.h"
+#include "dottore.h"
 
-Paziente::Paziente(char* nome_paziente, char* email_paziente){
+Dottore::Dottore(char* nome_dottore, char* email_dottore){
 
     nome = (char*) malloc(sizeof(char) * PRMTRSIZE);
     mail = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
-    strcpy(nome, nome_paziente);
-    strcpy(mail, mail_paziente);
+    strcpy(nome, nome_dottore);
+    strcpy(mail, mail_dottore);
 }
 
-Paziente::~Paziente(){
+Dottore::~Dottore(){
     free(nome);
     free(mail);
 }
 
-Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num){
+Dottore* Dottore::from_stream(redisReply* reply, int stream_num, int msg_num){
     
     char key[KEYSIZE];
     char value[PRMTRSIZE];
@@ -37,5 +37,5 @@ Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num){
         }
     }
 
-    return new Paziente(name, mail);
+    return new Dottore(nome, mail);
 }
