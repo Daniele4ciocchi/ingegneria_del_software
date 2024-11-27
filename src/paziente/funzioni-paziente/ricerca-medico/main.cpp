@@ -1,11 +1,13 @@
 #include "main.h"
 #include <iostream>
+#include "medico.h"
+
 int main() {
     redisContext *redConn;
     redisReply *redReply;
     PGresult *query_res;
 
-    char query[QUERYSIZE], msg_id[MSGIDSIZE], first_key[KEYSIZE], client_id[VALUESIZE], second_key[KEYSIZE], order_id[PRMTRSIZE];
+    char query[QUERYSIZE], msg_id[MSGIDSIZE], first_key[KEYSIZE], client_id[VALUESIZE], second_key[KEYSIZE], medico_id[PRMTRSIZE];
 
     DbConnection db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
@@ -17,15 +19,12 @@ int main() {
 
         if (ReadNumStreams(redReply) == 0) {
             continue;
-        } 
+        }
 
-        // stream_num = 0  indica un singolo stream
-        // msg_num = 0     indica un solo messaggio nello stream
         ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        // controllo la coppia chiave-valore in redis
         ReadStreamMsgVal(redReply, 0, 0, 0, first_key);
-        ReadStreamMsgVal(redReply, 0, 0, 1, client_id); 
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);
 
         if(strcmp(first_key, "client_id")){
             std::cout << "Errore client id" << std::endl;
@@ -33,21 +32,19 @@ int main() {
             continue;
         }
 
-        // input
         ReadStreamMsgVal(redReply, 0, 0, 2, second_key);
-        ReadStreamMsgVal(redReply, 0, 0, 3, order_id);
+        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);
 
-        if(strcmp(second_key, "order_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
-            std::cout << "Errore order id" << std::endl;
-
+        if(strcmp(second_key, "medico_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
+            std::cout << "Errore medico id" << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
-        std::cout << "order id:"<< order_id << std::endl;
+        std::cout << "medico id:" << medico_id << std::endl;
 
-        sprintf(query, "SELECT * FROM OrderedProduct JOIN Delivery ON Delivery.orderId = OrderedProduct.id AND OrderedProduct.id = %s", order_id);
+        sprintf(query, "SELECT * FROM Medico WHERE id = %s", medico_id);
 
-        std::cout << "ecco la query: "<< query << std::endl;
+        std::cout << "ecco la query: " << query << std::endl;
 
         query_res = db.RunQuery(query, true);
         std::cout << "Numero di righe in output : " << PQntuples(query_res) << std::endl;
@@ -57,49 +54,32 @@ int main() {
             continue;
         }
 
-        std::list<OrderedProduct*> orders;
-        std::list<Delivery*> deliveries;
-
         for(int row = 0; row < PQntuples(query_res); row++) {
-            OrderedProduct * order;
-            order = new OrderedProduct(PQgetvalue(query_res, row, PQfnumber(query_res, "id")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "customer")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "product")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "quanity")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "date")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "zip_code")),
-                                PQgetvalue(query_res, row, PQfnumber(query_res, "address")));
-            
-            orders.push_back(order);
+            Medico *medico;
+            medico = new Medico(PQgetvalue(query_res, row, PQfnumber(query_res, "cf")),
+                                PQgetvalue(query_res, row, PQfnumber(query_res, "nome")),
+                                PQgetvalue(query_res, row, PQfnumber(query_res, "cognome")),
+                                PQgetvalue(query_res, row, PQfnumber(query_res, "nascita")));
 
-            Delivery * delivery;
-            delivery = new Delivery(PQgetvalue(query_res, row, PQfnumber(query_res, "id")),
-                                    PQgetvalue(query_res, row, PQfnumber(query_res, "orderid")),
-                                    PQgetvalue(query_res, row, PQfnumber(query_res, "courier")),
-                                    PQgetvalue(query_res, row, PQfnumber(query_res, "date")),
-                                    PQgetvalue(query_res, row, PQfnumber(query_res, "status")));
+            redReply = RedisCommand(redConn, "XADD %s * cf %s nome %s cognome %s nascita %s",
+                                    WRITE_STREAM, medico->cf, medico->nome, medico->cognome, medico->nascita);
+            assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+            freeReplyObject(redReply);
 
-            deliveries.push_back(delivery);
+            delete medico;
         }
 
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(query_res));
-
-        for(int row = 0; row<PQntuples(query_res); row++) {
-
-            OrderedProduct* order = orders.front();
-            orders.pop_front();
-
-            Delivery* delivery = deliveries.front();
-            deliveries.pop_front();
-
-            redReply = RedisCommand(redConn, "XADD %s * row %d order_id %s customer %s product %s quantity %s date %s zip_code %s address %s delivery_id %s courier %s delivery_date %s status %s", 
-                                    WRITE_STREAM, row, order->id, order->customer, order->product, order->quantity, order->date, order->zip_code, order->address, delivery->id, delivery->courier, delivery->date, delivery->status);
-            assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
-            freeReplyObject(redReply);
-        }
     }
 
     db.disconnectFromDatabase();
 
     return 0;
+}
+
+void send_response_status(redisContext *redConn, const char *stream, const char *client_id, const char *status, const char *msg_id, int num_results) {
+    redisReply *redReply;
+    redReply = RedisCommand(redConn, "XADD %s * client_id %s status %s msg_id %s num_results %d", stream, client_id, status, msg_id, num_results);
+    assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+    freeReplyObject(redReply);
 }

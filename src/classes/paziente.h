@@ -14,10 +14,15 @@
 class Paziente{
 
     public:
+        char* cf   = NULL;
         char* nome = NULL;
-        char* mail = NULL;
+        char* cognome = NULL;
+        char* nascita = NULL;
+        char* indirizzo = NULL;
+        char* email = NULL;
+        char* telefono = NULL;
 
-        Paziente(char* nome_paziente, char* email_paziente);
+        Paziente(char* cf_paziente, char* nome_paziente, char* cognome_paziente, char* nascita_paziente, char* indirizzo_paziente, char* email_paziente, char* telefono_paziente);
 
         ~Paziente();
 

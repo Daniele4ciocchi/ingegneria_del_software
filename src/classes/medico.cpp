@@ -1,25 +1,25 @@
-#include "amministrativo.h"
+#include "medico.h"
 
-Amministrativo::Amministrativo(char* cf_amministrativo, char* nome_amministrativo, char* cognome_amministrativo, char* nascita_amministrativo) {
+Medico::Medico(char* cf_medico, char* nome_medico, char* cognome_medico, char* nascita_medico) {
     cf = (char*) malloc(sizeof(char) * 17);
     nome = (char*) malloc(sizeof(char) * 101);
     cognome = (char*) malloc(sizeof(char) * 101);
     nascita = (char*) malloc(sizeof(char) * 11);
 
-    strcpy(cf, cf_amministrativo);
-    strcpy(nome, nome_amministrativo);
-    strcpy(cognome, cognome_amministrativo);
-    strcpy(nascita, nascita_amministrativo);
+    strcpy(cf, cf_medico);
+    strcpy(nome, nome_medico);
+    strcpy(cognome, cognome_medico);
+    strcpy(nascita, nascita_medico);
 }
 
-Amministrativo::~Amministrativo() {
+Medico::~Medico() {
     free(cf);
     free(nome);
     free(cognome);
     free(nascita);
 }
 
-Amministrativo* Amministrativo::from_stream(redisReply* reply, int stream_num, int msg_num) {
+Medico* Medico::from_stream(redisReply* reply, int stream_num, int msg_num) {
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
@@ -59,5 +59,5 @@ Amministrativo* Amministrativo::from_stream(redisReply* reply, int stream_num, i
         throw std::invalid_argument("Stream error: invalid fields");
     }
 
-    return new Amministrativo(cf, nome, cognome, nascita);
+    return new Medico(cf, nome, cognome, nascita);
 }

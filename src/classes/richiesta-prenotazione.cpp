@@ -1,91 +1,96 @@
-#include "richiesta-prenotazione.h"
+#include "richiesta_prenotazione.h"
 
 RichiestaPrenotazione::RichiestaPrenotazione(
-                                char* nome_paziente, 
-                                char* mail_paziente, 
-                                char* tipo_visita,
-                                char* data_visita,
-                                char* data_prenotazione,
-                                char* nome_medico,
-                                char* mail_medico
-                                ){
+    int id_richiesta,
+    int id_paziente,
+    int id_medico,
+    int id_amministrativo,
+    char* specializzazione,
+    char* irich_timestamp,
+    char* giornoorariopren_timestamp
+) {
+    id = id_richiesta;
+    paziente_id = id_paziente;
+    medico_id = id_medico;
+    amministrativo_id = id_amministrativo;
 
-    nome_p      = (char*) malloc(sizeof(char) * PRMTRSIZE); //nome paziente
-    mail_p      = (char*) malloc(sizeof(char) * PRMTRSIZE); //mail paziente
-    tipo_v      = (char*) malloc(sizeof(char) * PRMTRSIZE); //tipo visita
-    data_v      = (char*) malloc(sizeof(char) * PRMTRSIZE); //data visita
-    data_pr     = (char*) malloc(sizeof(char) * PRMTRSIZE); //data prenotazione
-    nome_m      = (char*) malloc(sizeof(char) * PRMTRSIZE); //nome medico
-    mail_m      = (char*) malloc(sizeof(char) * PRMTRSIZE); //mail medico
+    specializzazione_nome = (char*) malloc(sizeof(char) * 101);
+    irich = (char*) malloc(sizeof(char) * 20); // Esempio: "2024-11-27 15:30:00"
+    giornoorariopren = (char*) malloc(sizeof(char) * 20);
 
-
-    strcpy(nome_p, nome_paziente);
-    strcpy(mail_p, mail_paziente);
-    strcpy(tipo_v, tipo_visita);
-    strcpy(data_v, data_visita);
-    strcpy(data_pr, data_prenotazione);
-    strcpy(nome_m, nome_medico);
-    strcpy(email_m, email_medico);
-
-
+    strcpy(specializzazione_nome, specializzazione);
+    strcpy(irich, irich_timestamp);
+    strcpy(giornoorariopren, giornoorariopren_timestamp);
 }
 
-RichiestaPrenotazione::~RichiestaPrenotazione(){
-    free(nome_p);
-    free(mail_p);
-    free(tipo_v);
-    free(data_v);
-    free(data_pr);
-    free(nome_m);
-    free(email_m);
+RichiestaPrenotazione::~RichiestaPrenotazione() {
+    free(specializzazione_nome);
+    free(irich);
+    free(giornoorariopren);
 }
 
-// nella funzione di sotto bisogna defnire bene i campiin quanto non sono sicuro 
-// che rispecchino quelli del database redis 
+RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int stream_num, int msg_num) {
+    char key[PARAMETERS_LEN];
+    char value[PARAMETERS_LEN];
 
-RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int stream_num, int msg_num){
-    
-    char key[KEYSIZE];
-    char value[PRMTRSIZE];
+    int id_richiesta;
+    int id_paziente;
+    int id_medico;
+    int id_amministrativo;
+    char specializzazione[101];
+    char irich[20];
+    char giornoorariopren[20];
 
-    char nome_p[PRMTRSIZE];
-    char mail_p[PRMTRSIZE];
-    char tipo_v[PRMTRSIZE];
-    char data_v[PRMTRSIZE];
-    char nome_m[PRMTRSIZE];
-    char mail_m[PRMTRSIZE];
+    char read_fields = 0b0000000;
 
-    char* data_pr;
-    auto current_timestamp = std::chrono::system_clock::now();
-    std::time_t current_time = std::chrono::system_clock::to_time_t(current_timestamp);
-    date = std::ctime(&current_time);
-
-    for (int field_num = 2; field_num < ReadStreamMsgNumVal(reply, stream_num, msg_num); field_num +=  2) {
+    for (int field_num = 2; field_num < ReadStreamMsgNumVal(reply, stream_num, msg_num); field_num += 2) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
-        
-        if (!strcmp(key, "nome_paziente")) {
-            snprintf(nome_p, PRMTRSIZE, "%s", value);
 
-        } else if (!strcmp(key, "mail_paziente")) {
-            snprintf(mail_p, PRMTRSIZE, "%s", value);
+        if (!strcmp(key, "id")) {
+            id_richiesta = atoi(value);
+            read_fields |= 0b0000001;
 
-        } else if (!strcmp(key, "tipo_visita")){
-            snprintf(tipo_v, PRMTRSIZE, "%s", value);
+        } else if (!strcmp(key, "paziente_id")) {
+            id_paziente = atoi(value);
+            read_fields |= 0b0000010;
 
-        } else if (!strcmp(key, "data_visita")){
-            snprintf(data_v, PRMTRSIZE, "%s", value);
-            
-        } else if (!strcmp(key, "nome_medico")){
-            snprintf(nome_m, PRMTRSIZE, "%s", value);
-            
-        } else if (!strcmp(key, "mail_medico")){
-            snprintf(mail_m, PRMTRSIZE, "%s", value);
-            
+        } else if (!strcmp(key, "medico_id")) {
+            id_medico = atoi(value);
+            read_fields |= 0b0000100;
+
+        } else if (!strcmp(key, "amministrativo_id")) {
+            id_amministrativo = atoi(value);
+            read_fields |= 0b0001000;
+
+        } else if (!strcmp(key, "specializzazione_nome")) {
+            snprintf(specializzazione, 101, "%s", value);
+            read_fields |= 0b0010000;
+
+        } else if (!strcmp(key, "irich")) {
+            snprintf(irich, 20, "%s", value);
+            read_fields |= 0b0100000;
+
+        } else if (!strcmp(key, "giornoorariopren")) {
+            snprintf(giornoorariopren, 20, "%s", value);
+            read_fields |= 0b1000000;
+
         } else {
             throw std::invalid_argument("Stream error: invalid fields");
         }
     }
 
-    return new RichiestaPrenotazione(name_p, mail_p, tipo_v, data_v, datapr, nome_m, mail_m);
+    if (read_fields != 0b1111111) {
+        throw std::invalid_argument("Stream error: invalid fields");
+    }
+
+    return new RichiestaPrenotazione(
+        id_richiesta,
+        id_paziente,
+        id_medico,
+        id_amministrativo,
+        specializzazione,
+        irich,
+        giornoorariopren
+    );
 }

@@ -13,15 +13,17 @@
 
 class Amministrativo{
 
-    public:
-        char* nome = NULL;
-        char* mail = NULL;
+public:
+    char* cf   = NULL;
+    char* nome = NULL;
+    char* cognome = NULL;
+    char* nascita = NULL;
 
-        Amministrativo(char* nome_amministrativo, char* email_amministrativo);
+    Amministrativo(char* cf_amministrativo, char* nome_amministrativo, char* cognome_amministrativo, char* nascita_amministrativo);
 
-        ~Amministrativo();
+    ~Amministrativo();
 
-        static Amministrativo* from_stream(redisReply* reply, int stream_num, int msg_num);
+    static Amministrativo* from_stream(redisReply* reply, int stream_num, int msg_num);
 
 };
 
