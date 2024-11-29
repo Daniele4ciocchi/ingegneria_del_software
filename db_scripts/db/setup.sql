@@ -5,7 +5,7 @@ CREATE DATABASE :dbname;
 -- Creiamo l'utente :admin
 \c :dbname postgres
 
-REASSIGN OWNED BY :admin TO postgres ;
+REASSIGN OWNED BY :admin TO postgres;
 
 REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM :admin;
 REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM :admin;
