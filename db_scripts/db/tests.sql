@@ -1,3 +1,5 @@
+BEGIN;
+
 -- Inserimento nella tabella persona
 INSERT INTO persona (cf, nome, cognome, nascita) VALUES 
 ('RSSMRA85M01H501Z', 'Mario', 'Rossi', '1985-03-01'),
@@ -27,6 +29,8 @@ INSERT INTO medico_specializzazione (medico_id, specializzazione_nome) VALUES
 (6, 'Pneumatologia'),
 (6, 'Cardiologia');
 
+COMMIT;
+
 -- Inserimento nella tabella indisponibilita
 INSERT INTO indisponibilita (medico_id, inizioind, fineind) VALUES 
 (6, '2024-12-01 09:00:00', '2024-12-01 12:00:00');
@@ -50,4 +54,4 @@ INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES
 
 -- Inserimento nella tabella feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES 
-(11, 6, '2024-12-02 11:00:00', 4, 5);
+(11, 11, '2024-12-02 11:00:00', 4, 5);

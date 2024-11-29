@@ -29,7 +29,7 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO :paziente;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO :paziente_non_registrato;
 
 -- Permessi amministrativo
-GRANT INSERT, UPDATE, DELETE ON  perosna TO :amministrativo;
+GRANT INSERT, UPDATE, DELETE ON  persona TO :amministrativo;
 GRANT INSERT, UPDATE, DELETE ON  medico TO :amministrativo;
 GRANT INSERT, UPDATE, DELETE ON  paziente TO :amministrativo;
 GRANT INSERT, UPDATE, DELETE ON  indisponibilita TO :amministrativo;
@@ -44,7 +44,7 @@ GRANT SELECT ON prenotazionerifiutata TO :amministrativo;
 GRANT SELECT ON feedback TO :medico;
 
 -- Permessi paziente_non_registrato
-GRANT INSERT ON perosna TO :paziente_non_registrato;
+GRANT INSERT ON persona TO :paziente_non_registrato;
 GRANT INSERT ON paziente TO :paziente_non_registrato;
 GRANT SELECT ON medico TO :paziente_non_registrato;
 

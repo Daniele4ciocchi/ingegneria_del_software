@@ -28,7 +28,7 @@ create table if not exists communication (
         primary key (client_server_name, client_file_descriptor, client_iconnection, irequest),
         foreign key (client_server_name, client_file_descriptor, client_iconnection) references client(server_name, file_descriptor, iconnection),
         check (iresponse is null or iresponse >= irequest),
-        ccheck (irequest >= client_iconnection)
+        check (irequest >= client_iconnection)
 );
 
 create table if not exists sessionstatistic (

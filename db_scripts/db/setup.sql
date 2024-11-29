@@ -7,19 +7,10 @@ CREATE DATABASE :dbname;
 
 REASSIGN OWNED BY :admin TO postgres;
 
-REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM :admin;
-REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM :admin;
-REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public FROM :admin;
-
-DROP OWNED BY :admin;
-DROP USER IF EXISTS :admin;
-
-CREATE USER :admin WITH ENCRYPTED PASSWORD 'admin';
-
 -- Creiamo l'utente amministrativo
 \c :dbname postgres
 
-REASSIGN OWNED BY :customer TO postgres;
+REASSIGN OWNED BY :amministrativo TO postgres;
 
 REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM :amministrativo;
 REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM :amministrativo;
@@ -28,7 +19,7 @@ REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public FROM :amministrativo;
 DROP OWNED BY :amministrativo;
 DROP USER IF EXISTS :amministrativo;
 
-CREATE USER :customer WITH ENCRYPTED PASSWORD 'amministrativo';
+CREATE USER :amministrativo WITH ENCRYPTED PASSWORD 'amministrativo';
 
 -- Creiamo l'utente medico
 \c :dbname postgres
