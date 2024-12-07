@@ -1,20 +1,27 @@
 #ifndef PRENOTAZIONE_ACCETTATA_H
 #define PRENOTAZIONE_ACCETTATA_H
 
-#include <ctime>
-#include <stdexcept>
+/* System libraries */
 #include <string.h>
+#include <stdexcept>
 
+/* Local libraries */
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
+
+/* Classes */
 class PrenotazioneAccettata {
 public:
-    int richiesta_id;
-    std::tm iaccet;
-    bool prestazioneavvenuta;
+    int id;
+    char* data;
+    char* ora;
+    char* medico_cf;
+    char* paziente_cf;
 
-    PrenotazioneAccettata(int richiesta_id, const std::tm& iaccet, bool prestazioneavvenuta);
+    PrenotazioneAccettata(int id, char* data, char* ora, char* medico_cf, char* paziente_cf);
     ~PrenotazioneAccettata();
 
     static PrenotazioneAccettata* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
-#endif // PRENOTAZIONE_ACCETTATA_H
+#endif

@@ -1,42 +1,27 @@
-#ifndef richiesta_prenotazione_h
-#define richiesta_prenotazione_h
+#ifndef RICHIESTA_PRENOTAZIONE_H
+#define RICHIESTA_PRENOTAZIONE_H
 
+/* System libraries */
 #include <string.h>
 #include <stdexcept>
 
-// librerie locali
+/* Local libraries */
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
 
-#include "../service/redis/redisConnection.h"
-#include "../shared/standard.h"
-
-// class
-
+/* Classes */
 class RichiestaPrenotazione {
-
 public:
     int id;
-    int paziente_id;
-    int medico_id;
-    int amministrativo_id;
+    char* data;
+    char* ora;
+    char* medico_cf;
+    char* paziente_cf;
 
-    char* specializzazione_nome = NULL;
-    char* irich = NULL;
-    char* giornoorariopren = NULL;
-
-    RichiestaPrenotazione(
-        int id_richiesta,
-        int id_paziente,
-        int id_medico,
-        int id_amministrativo,
-        char* specializzazione,
-        char* irich_timestamp,
-        char* giornoorariopren_timestamp
-    );
-
+    RichiestaPrenotazione(int id, const char* data, const char* ora, const char* medico_cf, const char* paziente_cf);
     ~RichiestaPrenotazione();
 
     static RichiestaPrenotazione* from_stream(redisReply* reply, int stream_num, int msg_num);
-
 };
 
 #endif

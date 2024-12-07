@@ -1,20 +1,28 @@
 #ifndef PRENOTAZIONE_RIFIUTATA_H
 #define PRENOTAZIONE_RIFIUTATA_H
 
-#include <ctime>
-#include <stdexcept>
+/* System libraries */
 #include <string.h>
+#include <stdexcept>
 
+/* Local libraries */
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
+
+/* Classes */
 class PrenotazioneRifiutata {
 public:
-    int richiesta_id;
-    std::tm irif;
-    int motivazione_id;
+    int id;
+    char* data;
+    char* ora;
+    char* medico_cf;
+    char* paziente_cf;
+    char* motivo;
 
-    PrenotazioneRifiutata(int richiesta_id, const std::tm& irif, int motivazione_id);
+    PrenotazioneRifiutata(int id, char* data, char* ora, char* medico_cf, char* paziente_cf, char* motivo);
     ~PrenotazioneRifiutata();
 
     static PrenotazioneRifiutata* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
-#endif // PRENOTAZIONE_RIFIUTATA_H
+#endif

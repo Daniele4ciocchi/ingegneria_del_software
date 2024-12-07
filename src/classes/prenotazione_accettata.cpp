@@ -1,49 +1,69 @@
 #include "prenotazione_accettata.h"
 
-PrenotazioneAccettata::PrenotazioneAccettata(int richiesta_id, const std::tm& iaccet, bool prestazioneavvenuta) {
-    this->richiesta_id = richiesta_id;
-    this->iaccet = iaccet;
-    this->prestazioneavvenuta = prestazioneavvenuta;
+PrenotazioneAccettata::PrenotazioneAccettata(int id, char* data, char* ora, char* medico_cf, char* paziente_cf) {
+    this->id = id;
+    this->data = (char*) malloc(sizeof(char) * 11);
+    this->ora = (char*) malloc(sizeof(char) * 6);
+    this->medico_cf = (char*) malloc(sizeof(char) * 17);
+    this->paziente_cf = (char*) malloc(sizeof(char) * 17);
+
+    strcpy(this->data, data);
+    strcpy(this->ora, ora);
+    strcpy(this->medico_cf, medico_cf);
+    strcpy(this->paziente_cf, paziente_cf);
 }
 
 PrenotazioneAccettata::~PrenotazioneAccettata() {
-    // Destructor logic if needed
+    free(this->data);
+    free(this->ora);
+    free(this->medico_cf);
+    free(this->paziente_cf);
 }
 
 PrenotazioneAccettata* PrenotazioneAccettata::from_stream(redisReply* reply, int stream_num, int msg_num) {
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    int richiesta_id;
-    std::tm iaccet;
-    bool prestazioneavvenuta;
+    int id;
+    char data[11];
+    char ora[6];
+    char medico_cf[17];
+    char paziente_cf[17];
 
-    char read_fields = 0b000;
+    char read_fields = 0b00000;
 
     for (int field_num = 2; field_num < ReadStreamMsgNumVal(reply, stream_num, msg_num); field_num += 2) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
-        if (!strcmp(key, "richiesta_id")) {
-            richiesta_id = atoi(value);
-            read_fields |= 0b001;
+        if (!strcmp(key, "id")) {
+            id = atoi(value);
+            read_fields |= 0b00001;
 
-        } else if (!strcmp(key, "iaccet")) {
-            strptime(value, "%Y-%m-%d %H:%M:%S", &iaccet);
-            read_fields |= 0b010;
+        } else if (!strcmp(key, "data")) {
+            snprintf(data, 11, "%s", value);
+            read_fields |= 0b00010;
 
-        } else if (!strcmp(key, "prestazioneavvenuta")) {
-            prestazioneavvenuta = (bool) atoi(value);
-            read_fields |= 0b100;
+        } else if (!strcmp(key, "ora")) {
+            snprintf(ora, 6, "%s", value);
+            read_fields |= 0b00100;
+
+        } else if (!strcmp(key, "medico_cf")) {
+            snprintf(medico_cf, 17, "%s", value);
+            read_fields |= 0b01000;
+
+        } else if (!strcmp(key, "paziente_cf")) {
+            snprintf(paziente_cf, 17, "%s", value);
+            read_fields |= 0b10000;
 
         } else {
             throw std::invalid_argument("Stream error: invalid fields");
         }
     }
 
-    if (read_fields != 0b111) {
+    if (read_fields != 0b11111) {
         throw std::invalid_argument("Stream error: invalid fields");
     }
 
-    return new PrenotazioneAccettata(richiesta_id, iaccet, prestazioneavvenuta);
+    return new PrenotazioneAccettata(id, data, ora, medico_cf, paziente_cf);
 }
