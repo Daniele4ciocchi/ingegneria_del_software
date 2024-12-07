@@ -1,6 +1,6 @@
 #include "medico_specializzazione.h"
 
-MedicoSpecializzazione::MedicoSpecializzazione(int medico_id, const char* specializzazione_nome) {
+MedicoSpecializzazione::MedicoSpecializzazione(int medico_id, char* specializzazione_nome) {
     this->medico_id = medico_id;
     this->specializzazione_nome = (char*) malloc(sizeof(char) * 101);
     strcpy(this->specializzazione_nome, specializzazione_nome);

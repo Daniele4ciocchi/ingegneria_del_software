@@ -1,21 +1,26 @@
 #ifndef INDISPONIBILITA_H
 #define INDISPONIBILITA_H
 
-#include <ctime>
-#include <stdexcept>
+/* System libraries */
 #include <string.h>
+#include <stdexcept>
+#include <ctime>
 
+/* Local libraries */
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
+
+/* Classes */
 class Indisponibilita {
 public:
-    int id;
     int medico_id;
-    std::tm inizioind;
-    std::tm fineind;
+    std::tm inizio;
+    std::tm fine;
 
-    Indisponibilita(int id, int medico_id, const std::tm& inizioind, const std::tm& fineind);
+    Indisponibilita(int medico_id, const std::tm& inizio, const std::tm& fine);
     ~Indisponibilita();
 
     static Indisponibilita* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
-#endif // INDISPONIBILITA_H
+#endif

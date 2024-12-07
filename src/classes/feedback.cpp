@@ -1,6 +1,11 @@
 #include "feedback.h"
 
-Feedback::Feedback(int paziente_id, int prenotazione_accettata_id, const std::tm& ifeed, int votosodd, int votopunt) {
+Feedback::Feedback(int paziente_id,
+        int prenotazione_accettata_id,
+        const std::tm& ifeed,
+        int votosodd,
+        int votopunt) {
+
     this->paziente_id = paziente_id;
     this->prenotazione_accettata_id = prenotazione_accettata_id;
     this->ifeed = ifeed;

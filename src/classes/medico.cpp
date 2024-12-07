@@ -1,32 +1,30 @@
 #include "medico.h"
 
-Medico::Medico(char* cf_medico, char* nome_medico, char* cognome_medico, char* nascita_medico) {
-    cf = (char*) malloc(sizeof(char) * 17);
-    nome = (char*) malloc(sizeof(char) * 101);
-    cognome = (char*) malloc(sizeof(char) * 101);
-    nascita = (char*) malloc(sizeof(char) * 11);
+Medico::Medico(int id, char* nome, char* cognome, char* specializzazione) {
+    this->id = id;
+    this->nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->cognome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->specializzazione = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
 
-    strcpy(cf, cf_medico);
-    strcpy(nome, nome_medico);
-    strcpy(cognome, cognome_medico);
-    strcpy(nascita, nascita_medico);
+    strcpy(this->nome, nome);
+    strcpy(this->cognome, cognome);
+    strcpy(this->specializzazione, specializzazione);
 }
 
 Medico::~Medico() {
-    free(cf);
     free(nome);
     free(cognome);
-    free(nascita);
+    free(specializzazione);
 }
 
 Medico* Medico::from_stream(redisReply* reply, int stream_num, int msg_num) {
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    char cf[17];
-    char nome[101];
-    char cognome[101];
-    char nascita[11];
+    int id;
+    char nome[PARAMETERS_LEN];
+    char cognome[PARAMETERS_LEN];
+    char specializzazione[PARAMETERS_LEN];
 
     char read_fields = 0b0000;
 
@@ -34,20 +32,20 @@ Medico* Medico::from_stream(redisReply* reply, int stream_num, int msg_num) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
-        if (!strcmp(key, "cf")) {
-            snprintf(cf, 17, "%s", value);
+        if (!strcmp(key, "id")) {
+            id = atoi(value);
             read_fields |= 0b0001;
 
         } else if (!strcmp(key, "nome")) {
-            snprintf(nome, 101, "%s", value);
+            snprintf(nome, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b0010;
 
         } else if (!strcmp(key, "cognome")) {
-            snprintf(cognome, 101, "%s", value);
+            snprintf(cognome, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b0100;
 
-        } else if (!strcmp(key, "nascita")) {
-            snprintf(nascita, 11, "%s", value);
+        } else if (!strcmp(key, "specializzazione")) {
+            snprintf(specializzazione, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b1000;
 
         } else {
@@ -59,5 +57,5 @@ Medico* Medico::from_stream(redisReply* reply, int stream_num, int msg_num) {
         throw std::invalid_argument("Stream error: invalid fields");
     }
 
-    return new Medico(cf, nome, cognome, nascita);
+    return new Medico(id, nome, cognome, specializzazione);
 }

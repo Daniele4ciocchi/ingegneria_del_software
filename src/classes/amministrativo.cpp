@@ -1,10 +1,14 @@
 #include "amministrativo.h"
 
-Amministrativo::Amministrativo(char* cf_amministrativo, char* nome_amministrativo, char* cognome_amministrativo, char* nascita_amministrativo) {
-    cf = (char*) malloc(sizeof(char) * 17);
-    nome = (char*) malloc(sizeof(char) * 101);
-    cognome = (char*) malloc(sizeof(char) * 101);
-    nascita = (char*) malloc(sizeof(char) * 11);
+Amministrativo::Amministrativo(char* cf_amministrativo,
+        char* nome_amministrativo,
+        char* cognome_amministrativo,
+        char* nascita_amministrativo) {
+
+    cf = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    cognome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    nascita = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
 
     strcpy(cf, cf_amministrativo);
     strcpy(nome, nome_amministrativo);
@@ -23,10 +27,10 @@ Amministrativo* Amministrativo::from_stream(redisReply* reply, int stream_num, i
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    char cf[17];
-    char nome[101];
-    char cognome[101];
-    char nascita[11];
+    char cf[PARAMETERS_LEN];
+    char nome[PARAMETERS_LEN];
+    char cognome[PARAMETERS_LEN];
+    char nascita[PARAMETERS_LEN];
 
     char read_fields = 0b0000;
 
@@ -35,19 +39,19 @@ Amministrativo* Amministrativo::from_stream(redisReply* reply, int stream_num, i
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "cf")) {
-            snprintf(cf, 17, "%s", value);
+            snprintf(cf, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b0001;
 
         } else if (!strcmp(key, "nome")) {
-            snprintf(nome, 101, "%s", value);
+            snprintf(nome, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b0010;
 
         } else if (!strcmp(key, "cognome")) {
-            snprintf(cognome, 101, "%s", value);
+            snprintf(cognome, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b0100;
 
         } else if (!strcmp(key, "nascita")) {
-            snprintf(nascita, 11, "%s", value);
+            snprintf(nascita, PARAMETERS_LEN, "%s", value);
             read_fields |= 0b1000;
 
         } else {

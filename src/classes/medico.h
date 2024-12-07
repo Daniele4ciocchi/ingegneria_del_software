@@ -1,30 +1,26 @@
-#ifndef medico_h
-#define medico_h
+#ifndef MEDICO_H
+#define MEDICO_H
 
+/* System libraries */
 #include <string.h>
 #include <stdexcept>
 
-// librerie locali
+/* Local libraries */
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
 
-#include "../service/redis/redisConnection.h"
-#include "../shared/standard.h"
-
-// class
-
+/* Classes */
 class Medico {
-
 public:
-    char* cf   = NULL;
+    int id;
     char* nome = NULL;
     char* cognome = NULL;
-    char* nascita = NULL;
+    char* specializzazione = NULL;
 
-    Medico(char* cf_medico, char* nome_medico, char* cognome_medico, char* nascita_medico);
-
+    Medico(int id, char* nome, char* cognome, char* specializzazione);
     ~Medico();
 
     static Medico* from_stream(redisReply* reply, int stream_num, int msg_num);
-
 };
 
 #endif
