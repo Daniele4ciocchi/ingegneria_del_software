@@ -12,12 +12,10 @@
 /* Classes */
 class Amministrativo {
 public:
-    char* cf = NULL;
-    char* nome = NULL;
-    char* cognome = NULL;
-    char* nascita = NULL;
+    char* id_amministrativo = NULL;
+    char* cf_amministrativo = NULL;
 
-    Amministrativo(char* cf_amministrativo, char* nome_amministrativo, char* cognome_amministrativo, char* nascita_amministrativo);
+    Amministrativo(char* id_amministrativo, char* cf_amministrativo);
     ~Amministrativo();
 
     static Amministrativo* from_stream(redisReply* reply, int stream_num, int msg_num);

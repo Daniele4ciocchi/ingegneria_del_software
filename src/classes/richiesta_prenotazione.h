@@ -12,13 +12,14 @@
 /* Classes */
 class RichiestaPrenotazione {
 public:
-    int id;
-    char* data;
-    char* ora;
-    char* medico_cf;
-    char* paziente_cf;
+    char* id = NULL;
+    char* paziente_id = NULL;
+    char* medico_id = NULL;
+    char* amministrativo_id = NULL;
+    char* specializzazione_nome = NULL;
+    char* giornoorariopren = NULL;
 
-    RichiestaPrenotazione(int id, const char* data, const char* ora, const char* medico_cf, const char* paziente_cf);
+    RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* giornoorariopren);
     ~RichiestaPrenotazione();
 
     static RichiestaPrenotazione* from_stream(redisReply* reply, int stream_num, int msg_num);

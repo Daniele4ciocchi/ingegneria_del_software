@@ -1,21 +1,27 @@
 #include "medico_specializzazione.h"
 
-MedicoSpecializzazione::MedicoSpecializzazione(int medico_id, char* specializzazione_nome) {
-    this->medico_id = medico_id;
-    this->specializzazione_nome = (char*) malloc(sizeof(char) * 101);
+MedicoSpecializzazione::MedicoSpecializzazione(char* medico_id, char* specializzazione_nome) {
+
+    this->medico_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->specializzazione_nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+
+    strcpy(this->medico_id, medico_id);
     strcpy(this->specializzazione_nome, specializzazione_nome);
+
 }
 
 MedicoSpecializzazione::~MedicoSpecializzazione() {
+    free(this->medico_id);
     free(this->specializzazione_nome);
+
 }
 
 MedicoSpecializzazione* MedicoSpecializzazione::from_stream(redisReply* reply, int stream_num, int msg_num) {
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    int medico_id;
-    char specializzazione_nome[101];
+    char medico_id[PARAMETERS_LEN];
+    char specializzazione_nome[PARAMETERS_LEN];
 
     char read_fields = 0b00;
 
@@ -24,11 +30,11 @@ MedicoSpecializzazione* MedicoSpecializzazione::from_stream(redisReply* reply, i
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "medico_id")) {
-            medico_id = atoi(value);
+            strcpy(medico_id, value);
             read_fields |= 0b01;
 
         } else if (!strcmp(key, "specializzazione_nome")) {
-            snprintf(specializzazione_nome, 101, "%s", value);
+            strcpy(specializzazione_nome, value);
             read_fields |= 0b10;
 
         } else {

@@ -12,17 +12,17 @@
 
 /* Classes */
 class Feedback {
-public:
-    int paziente_id;
-    int prenotazione_accettata_id;
-    std::tm ifeed;
-    int votosodd;
-    int votopunt;
+    public:
+        char* paziente_id = NULL;
+        char* prenotazione_accettata_id = NULL;
+        char* ifeed = NULL;
+        char* votosodd = NULL;
+        char* votopunt = NULL;
 
-    Feedback(int paziente_id, int prenotazione_accettata_id, const std::tm& ifeed, int votosodd, int votopunt);
-    ~Feedback();
+        Feedback(char* paziente_id, char* prenotazione_accettata_id, char* ifeed, char* votosodd, char* votopunt);
+        ~Feedback();
 
-    static Feedback* from_stream(redisReply* reply, int stream_num, int msg_num);
+        static Feedback* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
 #endif

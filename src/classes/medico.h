@@ -11,16 +11,14 @@
 
 /* Classes */
 class Medico {
-public:
-    int id;
-    char* nome = NULL;
-    char* cognome = NULL;
-    char* specializzazione = NULL;
+    public:
+        char* id = NULL;
+        char* cf = NULL;
 
-    Medico(int id, char* nome, char* cognome, char* specializzazione);
-    ~Medico();
+        Medico(char* id, char* cf);
+        ~Medico();
 
-    static Medico* from_stream(redisReply* reply, int stream_num, int msg_num);
+        static Medico* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
 #endif

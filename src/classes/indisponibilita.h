@@ -12,15 +12,17 @@
 
 /* Classes */
 class Indisponibilita {
-public:
-    int medico_id;
-    std::tm inizio;
-    std::tm fine;
+    public:
+        char* id_indisponibilita = NULL;
+        char* medico_id;
+        char* inizio;
+        char* fine;
 
-    Indisponibilita(int medico_id, const std::tm& inizio, const std::tm& fine);
-    ~Indisponibilita();
 
-    static Indisponibilita* from_stream(redisReply* reply, int stream_num, int msg_num);
+        Indisponibilita(char* id_indisponibilita, char* medico_id, char* inizio, char* fine);
+        ~Indisponibilita();
+
+        static Indisponibilita* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
 #endif

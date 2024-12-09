@@ -11,14 +11,14 @@
 
 /* Classes */
 class Motivazione {
-public:
-    int id;
-    char* motivo = NULL;
-
-    Motivazione(int id, const char* motivo);
-    ~Motivazione();
-
-    static Motivazione* from_stream(redisReply* reply, int stream_num, int msg_num);
+    public:
+        char* id = NULL;
+        char* motivo = NULL;
+    
+        Motivazione(char* id, char* motivo);
+        ~Motivazione();
+    
+        static Motivazione* from_stream(redisReply* reply, int stream_num, int msg_num);
 };
 
 #endif

@@ -12,15 +12,14 @@
 /* Classes */
 class Paziente {
 public:
-    char* cf;
-    char* nome;
-    char* cognome;
-    char* nascita;
-    char* indirizzo;
-    char* email;
-    char* telefono;
+    char* id = NULL;
+    char* cf = NULL;
+    char* indirizzo = NULL;
+    char* email = NULL;
+    char* telefono = NULL;
+    
 
-    Paziente(char* cf_paziente, char* nome_paziente, char* cognome_paziente, char* nascita_paziente, char* indirizzo_paziente, char* email_paziente, char* telefono_paziente);
+    Paziente(char* id, char* cf, char* indirizzo, char* email, char* telefono);
     ~Paziente();
 
     static Paziente* from_stream(redisReply* reply, int stream_num, int msg_num);

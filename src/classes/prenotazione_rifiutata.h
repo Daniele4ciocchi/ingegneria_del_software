@@ -12,14 +12,12 @@
 /* Classes */
 class PrenotazioneRifiutata {
 public:
-    int id;
-    char* data;
-    char* ora;
-    char* medico_cf;
-    char* paziente_cf;
-    char* motivo;
+    char* richiesta_id = NULL;
+    char* irif = NULL;
+    char* motivazione_id = NULL;
 
-    PrenotazioneRifiutata(int id, char* data, char* ora, char* medico_cf, char* paziente_cf, char* motivo);
+
+    PrenotazioneRifiutata(char* richiesta_id, char* irif, char* motivazione_id);
     ~PrenotazioneRifiutata();
 
     static PrenotazioneRifiutata* from_stream(redisReply* reply, int stream_num, int msg_num);

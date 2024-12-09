@@ -12,10 +12,10 @@
 /* Classes */
 class MedicoSpecializzazione {
 public:
-    int medico_id;
+    char* medico_id = NULL;
     char* specializzazione_nome = NULL;
 
-    MedicoSpecializzazione(int medico_id, char* specializzazione_nome);
+    MedicoSpecializzazione(char* medico_id, char* specializzazione_nome);
     ~MedicoSpecializzazione();
 
     static MedicoSpecializzazione* from_stream(redisReply* reply, int stream_num, int msg_num);

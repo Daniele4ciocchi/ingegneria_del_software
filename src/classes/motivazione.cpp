@@ -1,12 +1,15 @@
 #include "motivazione.h"
 
-Motivazione::Motivazione(int id, const char* motivo) {
-    this->id = id;
-    this->motivo = (char*) malloc(sizeof(char) * 101);
+Motivazione::Motivazione(char* id, char* motivo) {
+    this->id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->motivo = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+
     strcpy(this->motivo, motivo);
+    strcpy(this->id, id);
 }
 
 Motivazione::~Motivazione() {
+    free(this->id);
     free(this->motivo);
 }
 
@@ -14,8 +17,8 @@ Motivazione* Motivazione::from_stream(redisReply* reply, int stream_num, int msg
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    int id;
-    char motivo[101];
+    char id[PARAMETERS_LEN];
+    char motivo[PARAMETERS_LEN];
 
     char read_fields = 0b00;
 
@@ -24,20 +27,16 @@ Motivazione* Motivazione::from_stream(redisReply* reply, int stream_num, int msg
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "id")) {
-            id = atoi(value);
+            strcpy(id, value);
             read_fields |= 0b01;
 
         } else if (!strcmp(key, "motivo")) {
-            snprintf(motivo, 101, "%s", value);
+            strcpy(motivo, value);
             read_fields |= 0b10;
 
         } else {
             throw std::invalid_argument("Stream error: invalid fields");
         }
-    }
-
-    if (read_fields != 0b11) {
-        throw std::invalid_argument("Stream error: invalid fields");
     }
 
     return new Motivazione(id, motivo);

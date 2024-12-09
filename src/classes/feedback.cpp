@@ -1,31 +1,37 @@
 #include "feedback.h"
 
-Feedback::Feedback(int paziente_id,
-        int prenotazione_accettata_id,
-        const std::tm& ifeed,
-        int votosodd,
-        int votopunt) {
+Feedback::Feedback(char* paziente_id, char* prenotazione_accettata_id, char* ifeed, char* votosodd, char* votopunt) {
 
-    this->paziente_id = paziente_id;
-    this->prenotazione_accettata_id = prenotazione_accettata_id;
-    this->ifeed = ifeed;
-    this->votosodd = votosodd;
-    this->votopunt = votopunt;
+    this->paziente_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->prenotazione_accettata_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->ifeed = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->votosodd = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->votopunt = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+
+    strcpy(this->paziente_id, paziente_id);
+    strcpy(this->prenotazione_accettata_id, prenotazione_accettata_id);
+    strcpy(this->ifeed, ifeed);
+    strcpy(this->votosodd, votosodd);
+    strcpy(this->votopunt, votopunt);
 }
 
 Feedback::~Feedback() {
-    // Destructor logic if needed
+    free(this->paziente_id);
+    free(this->prenotazione_accettata_id);
+    free(this->ifeed);
+    free(this->votosodd);
+    free(this->votopunt);
 }
 
 Feedback* Feedback::from_stream(redisReply* reply, int stream_num, int msg_num) {
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    int paziente_id;
-    int prenotazione_accettata_id;
-    std::tm ifeed;
-    int votosodd;
-    int votopunt;
+    char paziente_id[PARAMETERS_LEN];
+    char prenotazione_accettata_id[PARAMETERS_LEN];
+    char ifeed[PARAMETERS_LEN];
+    char votosodd[PARAMETERS_LEN];
+    char votopunt[PARAMETERS_LEN];
 
     char read_fields = 0b00000;
 
@@ -34,23 +40,23 @@ Feedback* Feedback::from_stream(redisReply* reply, int stream_num, int msg_num) 
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "paziente_id")) {
-            paziente_id = atoi(value);
+            strcpy(paziente_id, value);
             read_fields |= 0b00001;
 
         } else if (!strcmp(key, "prenotazione_accettata_id")) {
-            prenotazione_accettata_id = atoi(value);
+            strcpy(prenotazione_accettata_id, value);
             read_fields |= 0b00010;
 
         } else if (!strcmp(key, "ifeed")) {
-            strptime(value, "%Y-%m-%d %H:%M:%S", &ifeed);
+            strcpy(ifeed, value);
             read_fields |= 0b00100;
 
         } else if (!strcmp(key, "votosodd")) {
-            votosodd = atoi(value);
+            strcpy(votosodd, value);
             read_fields |= 0b01000;
 
         } else if (!strcmp(key, "votopunt")) {
-            votopunt = atoi(value);
+            strcpy(votopunt, value);
             read_fields |= 0b10000;
 
         } else {
@@ -64,3 +70,4 @@ Feedback* Feedback::from_stream(redisReply* reply, int stream_num, int msg_num) 
 
     return new Feedback(paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt);
 }
+

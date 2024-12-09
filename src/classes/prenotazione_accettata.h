@@ -12,13 +12,11 @@
 /* Classes */
 class PrenotazioneAccettata {
 public:
-    int id;
-    char* data;
-    char* ora;
-    char* medico_cf;
-    char* paziente_cf;
+    char* richiesta_id = NULL;
+    char* iaccet = NULL;
+    char* prestazioneavvenuta = NULL;
 
-    PrenotazioneAccettata(int id, char* data, char* ora, char* medico_cf, char* paziente_cf);
+    PrenotazioneAccettata(char* richiesta_id, char* iaccet, char* prestazioneavvenuta);
     ~PrenotazioneAccettata();
 
     static PrenotazioneAccettata* from_stream(redisReply* reply, int stream_num, int msg_num);
