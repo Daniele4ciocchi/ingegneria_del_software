@@ -16,7 +16,7 @@
 /* Local libraries */
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
-#include "../../../../classes/richiesta-prenotazione.h"
+#include "../../../../classes/richiesta_prenotazione.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 

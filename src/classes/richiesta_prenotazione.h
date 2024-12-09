@@ -17,6 +17,7 @@ public:
     char* ora;
     char* medico_cf;
     char* paziente_cf;
+    char* ammini
 
     RichiestaPrenotazione(int id, const char* data, const char* ora, const char* medico_cf, const char* paziente_cf);
     ~RichiestaPrenotazione();
