@@ -4,7 +4,8 @@
             "name": "linux-clang-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/postgresql"
+                "/usr/include/postgresql",
+                "/usr/include/redis"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
