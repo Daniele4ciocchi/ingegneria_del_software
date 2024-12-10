@@ -12,21 +12,12 @@
 /* Classes */
 class RichiestaPrenotazione {
 public:
-<<<<<<< HEAD
     char* id = NULL;
     char* paziente_id = NULL;
     char* medico_id = NULL;
     char* amministrativo_id = NULL;
     char* specializzazione_nome = NULL;
     char* giornoorariopren = NULL;
-=======
-    int id;
-    char* data;
-    char* ora;
-    char* medico_cf;
-    char* paziente_cf;
-    char* ammini
->>>>>>> refs/remotes/origin/main
 
     RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* giornoorariopren);
     ~RichiestaPrenotazione();
