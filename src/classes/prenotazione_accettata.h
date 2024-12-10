@@ -20,6 +20,7 @@ public:
     ~PrenotazioneAccettata();
 
     static PrenotazioneAccettata* from_stream(redisReply* reply, int stream_num, int msg_num);
+    std::string to_insert_query() const;
 };
 
 #endif

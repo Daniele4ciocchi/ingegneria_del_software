@@ -1,14 +1,13 @@
 #include "paziente.h"
 
-Paziente::Paziente(char* id, char* cf, char* indirizzo, char* email, char* telefono) {
+Paziente::Paziente( char* cf, char* indirizzo, char* email, char* telefono) {
 
-    this->id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
     this->cf = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
     this->indirizzo = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
     this->email = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
     this->telefono = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
 
-    strcpy(this->id, id);
+
     strcpy(this->cf, cf);
     strcpy(this->indirizzo, indirizzo);
     strcpy(this->email, email);
@@ -16,7 +15,7 @@ Paziente::Paziente(char* id, char* cf, char* indirizzo, char* email, char* telef
 }
 
 Paziente::~Paziente() {
-    free(this->id);
+
     free(this->cf);
     free(this->indirizzo);
     free(this->email);
@@ -27,7 +26,7 @@ Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num) 
     char key[PARAMETERS_LEN];
     char value[PARAMETERS_LEN];
 
-    char id[PARAMETERS_LEN];
+
     char cf[PARAMETERS_LEN];
     char indirizzo[PARAMETERS_LEN];
     char email[PARAMETERS_LEN];
@@ -39,11 +38,7 @@ Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num) 
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
-        if (!strcmp(key, "id")) {
-            strcpy(id, value);
-            read_fields |= 0b01;
-
-        } else if (!strcmp(key, "cf")) {
+        if (!strcmp(key, "cf")) {
             strcpy(cf, value);
             read_fields |= 0b10;
 
@@ -64,6 +59,6 @@ Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num) 
         }
     }
 
-    return new Paziente(id, cf, indirizzo, email, telefono);
+    return new Paziente( cf, indirizzo, email, telefono);
 }
 

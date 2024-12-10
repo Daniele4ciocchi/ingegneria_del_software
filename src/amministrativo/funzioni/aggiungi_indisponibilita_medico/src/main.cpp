@@ -1,0 +1,66 @@
+#include "main.h"
+
+int main() {
+    redisContext *c2r;
+    redisReply *reply;
+
+    PGresult *query_res;
+
+    std::string query;
+
+    char response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
+
+    Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
+    c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
+
+    Indisponibilita* indisponibilita;
+
+    while(1) {
+        reply = RedisCommand(c2r, "XREADGROUP GROUP main indisponibilita BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+
+        assertReply(c2r, reply);
+
+        if (ReadNumStreams(reply) == 0) {
+            continue;
+        }
+
+        ReadStreamNumMsgID(reply, 0, 0, msg_id);
+        ReadStreamMsgVal(reply, 0, 0, 0, first_key);
+        ReadStreamMsgVal(reply, 0, 0, 1, client_id);
+
+        if(strcmp(first_key, "client_id")) {
+            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            continue;
+        }
+
+        // Convert request
+        try {
+            indisponibilita = Indisponibilita::from_stream(reply, 0, 0);
+        }
+        catch(std::invalid_argument exp) {
+            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            continue;
+        }
+
+        // Construct the query
+        std::ostringstream query;
+        query << "INSERT INTO indisponibilita (medico_id, inizioind, fineind) VALUES ("
+              << "'" << indisponibilita->medico_id << "', "
+              << "'" << indisponibilita->inizio << "', "
+              << "'" << indisponibilita->fine << "');";
+
+        query_res = db.RunQuery((char *) query.str().c_str(), false);
+
+        if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK) {
+            send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
+            delete indisponibilita;
+            continue;
+        }
+
+        send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
+        delete indisponibilita;
+    }
+
+    db.finish();
+
+    return 0;

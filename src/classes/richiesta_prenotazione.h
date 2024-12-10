@@ -17,12 +17,16 @@ public:
     char* medico_id = NULL;
     char* amministrativo_id = NULL;
     char* specializzazione_nome = NULL;
+    char* irich = NULL;
     char* giornoorariopren = NULL;
 
     RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* giornoorariopren);
     ~RichiestaPrenotazione();
 
     static RichiestaPrenotazione* from_stream(redisReply* reply, int stream_num, int msg_num);
+    std::string to_insert_query();
+    std::string to_update_query();
+
 };
 
 #endif
