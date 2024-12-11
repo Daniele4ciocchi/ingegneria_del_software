@@ -46,8 +46,8 @@ int main() {
             continue;
         }
 
-        sprintf(query, "INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VALUES (\'%s\', \'%s\', \'%s\')",
-                       richiestaAccettata->richiesta_id, richiestaAccettata->iaccet,);
+        sprintf(query, "INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VALUES (\'%s\', CURRENT_TIMESTAMP, false')",
+                       richiestaAccettata->richiesta_id);
         
         query_res = db.RunQuery((char *) query.c_str(), false);
 

@@ -25,8 +25,8 @@
 
 /* Constants */
 
-#define READ_STREAM "take-purchase-delivery-in"
-#define WRITE_STREAM "take-purchase-delivery-out"
+#define READ_STREAM "accetta_richpren-in"
+#define WRITE_STREAM "accetta_richpren-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379
