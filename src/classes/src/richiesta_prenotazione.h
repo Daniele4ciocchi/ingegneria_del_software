@@ -20,7 +20,7 @@ public:
     char* irich = NULL;
     char* giornoorariopren = NULL;
 
-    RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* giornoorariopren);
+    RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome,char* irich, char* giornoorariopren);
     ~RichiestaPrenotazione();
 
     static RichiestaPrenotazione* from_stream(redisReply* reply, int stream_num, int msg_num);

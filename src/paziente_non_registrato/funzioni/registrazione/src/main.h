@@ -19,8 +19,8 @@
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
 
-#include "../../../../classes/paziente.h"
-#include "../../../../classes/persona.h"
+#include "../../../../classes/src/paziente.h"
+#include "../../../../classes/src/persona.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 

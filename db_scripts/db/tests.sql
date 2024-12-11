@@ -44,7 +44,7 @@ INSERT INTO richiestaprenotazione (paziente_id, medico_id, amministrativo_id, sp
 -- Inserimento nella tabella prenotazioneaccettata
 INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VALUES 
 (11, '2024-11-29 10:00:00', true),
-(12, '2024-11-28 21:00:00');
+(12, '2024-11-28 21:00:00', false);
 
 -- Inserimento nella tabella motivazione
 INSERT INTO motivazione (motivo) VALUES 

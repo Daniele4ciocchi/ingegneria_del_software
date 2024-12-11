@@ -1,5 +1,5 @@
 from requests_init import requests, apis, ports
-from param_value.wrong_arg import WrongArg
+from generatori_parametri.wrong_arg import WrongArg
 
 import socket
 import random

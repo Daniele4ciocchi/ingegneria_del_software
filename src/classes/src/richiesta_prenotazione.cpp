@@ -1,6 +1,6 @@
 #include "richiesta_prenotazione.h"
 
-RichiestaPrenotazione::RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* giornoorariopren) {
+RichiestaPrenotazione::RichiestaPrenotazione(char* id, char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* irich, char* giornoorariopren) {
     
     this->id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
     this->paziente_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
@@ -84,32 +84,5 @@ RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int
         throw std::invalid_argument("Missing fields in RichiestaPrenotazione");
     }
 
-    return new RichiestaPrenotazione(id, paziente_id, medico_id, amministrativo_id, specializzazione_nome, giornoorariopren);
+    return new RichiestaPrenotazione(id, paziente_id, medico_id, amministrativo_id, specializzazione_nome, irich, giornoorariopren);
 }
-
-std::string RichiestaPrenotazione::to_insert_query() const {
-    std::ostringstream query;
-    query << "INSERT INTO richiestaprenotazione (id, paziente_id, medico_id, amministrativo_id, specializzazione_nome,irich, giornoorariopren) VALUES ("
-          << "'" << id << "', "
-          << "'" << paziente_id << "', "
-          << "'" << medico_id << "', "
-          << "'" << amministrativo_id << "', "
-          << "'" << specializzazione_nome << "', "
-          << "'" << irich << "', "
-          << "'" << giornoorariopren << "');";
-    return query.str();
-}
-
-std::string RichiestaPrenotazione::to_update_query() const {
-    std::ostringstream query;
-    query << "UPDATE prenotazioni SET "
-          << "paziente_id = '" << paziente_id << "', "
-          << "medico_id = '" << medico_id << "', "
-          << "amministrativo_id = '" << amministrativo_id << "', "
-          << "specializzazione_nome = '" << specializzazione_nome << "', "
-          << "giornoorariopren = '" << giornoorariopren << "' "
-          << "irich = '" << irich << "' "
-          << "WHERE id = '" << id << "';";
-    return query.str();
-}
-

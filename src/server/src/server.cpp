@@ -249,7 +249,7 @@ void Server::close_connections() {
 
     for (i=0; i <= max_fd; ++i){
         if (FD_ISSET(i, &current_set)) {
-            sprintf(query, "UPDATE client SET idisconnection = CURRENT_TIMESTAMP WHERE server_name = \'%s\' AND file_descriptor = %d AND disiconnection IS NULL", server, i);
+            sprintf(query, "UPDATE client SET idisconnection = CURRENT_TIMESTAMP WHERE server_name = \'%s\' AND file_descriptor = %d AND idisconnection IS NULL", server, i);
             query_res = log_db.RunQuery(query, false);
             close(i);
         }

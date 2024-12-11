@@ -6,8 +6,8 @@
 #include <stdexcept>
 
 /* Local libraries */
-#include "../utils/src/const.h"
-#include "../lib/con2redis/src/con2redis.h"
+#include "../../utils/src/const.h"
+#include "../../lib/con2redis/src/con2redis.h"
 
 /* Classes */
 class Paziente {

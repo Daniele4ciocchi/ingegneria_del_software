@@ -8,7 +8,7 @@ import string
 RANDOM_SEED = 7
 random.seed(RANDOM_SEED)
 
-class AlphaNumeric(ParamInterface):
+class CF(ParamInterface):
     def __init__(self):
         # Regex codice fiscale italiano
         self.regex = r'^[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}$'

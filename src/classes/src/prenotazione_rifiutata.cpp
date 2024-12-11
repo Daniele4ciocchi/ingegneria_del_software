@@ -50,12 +50,3 @@ PrenotazioneRifiutata* PrenotazioneRifiutata::from_stream(redisReply* reply, int
 
     return new PrenotazioneRifiutata(richiesta_id, irif, motivazione_id);
 }
-
-std::string PrenotazioneRifiutata::to_insert_query() const {
-    std::ostringstream query;
-    query << "INSERT INTO prenotazioni_rifiutate (richiesta_id, irif, motivazione_id) VALUES ("
-          << "'" << richiesta_id << "', "
-          << "'" << irif << "', "
-          << "'" << motivazione_id << "');";
-    return query.str();
-}

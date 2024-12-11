@@ -51,11 +51,3 @@ PrenotazioneAccettata* PrenotazioneAccettata::from_stream(redisReply* reply, int
     return new PrenotazioneAccettata(richiesta_id, iaccet, prestazioneavvenuta);
 }
 
-std::string PrenotazioneAccettata::to_insert_query() const {
-    std::ostringstream query;
-    query << "INSERT INTO prenotazioni_accettate (richiesta_id, iaccet, prestazioneavvenuta) VALUES ("
-          << "'" << richiesta_id << "', "
-          << "'" << iaccet << "', "
-          << "'" << prestazioneavvenuta << "');";
-    return query.str();
-}
