@@ -24,7 +24,7 @@ try_cd() {
 }
 
 # Script principale
-try_cd db-scripts
+try_cd db_scripts
 try_sh create.sh
 try_cd ..
 try_sh makes.sh --clean
