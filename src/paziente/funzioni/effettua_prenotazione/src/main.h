@@ -31,7 +31,7 @@
 #define POSTGRESQL_PORT "5432"
 #define POSTGRESQL_USER "customer"
 #define POSTGRESQL_PSW "customer"
-#define POSTGRESQL_DBNAME "ecommerce"
+#define POSTGRESQL_DBNAME "prenotazionimediche"
 
 using namespace std;
 

@@ -33,9 +33,9 @@
 
 #define POSTGRESQL_SERVER "localhost"
 #define POSTGRESQL_PORT "5432"
-#define POSTGRESQL_USER "amministrativo" // esiste amminiistrativo
+#define POSTGRESQL_USER "amministrativo" 
 #define POSTGRESQL_PSW "amministrativo"
-#define POSTGRESQL_DBNAME "ecommerce" // non so il db name
+#define POSTGRESQL_DBNAME "prenotazionimediche" 
 
 using namespace std;
 

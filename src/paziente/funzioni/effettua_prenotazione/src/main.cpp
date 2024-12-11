@@ -45,7 +45,7 @@ int main() {
             continue;
         }
 
-        sprintf(query, "INSERT INTO RichiestaPrenotazione (paziente_id, medico_id, amministrativo_id, specializzazione_nome, irich, giornoorariopren) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')", 
+        sprintf(query, "INSERT INTO richiestaprenotazione (paziente_id, medico_id, amministrativo_id, specializzazione_nome, irich, giornoorariopren) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')", 
                         richiestaPrenotazione->paziente_id, richiestaPrenotazione->medico_id, richiestaPrenotazione->amministrativo_id, richiestaPrenotazione->specializzazione_nome, richiestaPrenotazione->irich, richiestaPrenotazione->giornoorariopren);
 
 

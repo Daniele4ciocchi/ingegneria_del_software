@@ -33,6 +33,25 @@ int main() {
 
         if (strcmp(first_key,"cient_id")!= 0) {
             send_response_status(c2r,WRITE_STREAM,client_id,"BAD_REQUEST", msg_id, 0);
+            continue;
         }
+        std::unique_ptr<RichiestaPrenotazione> richiestaPrenotazione;
+        try {
+            RichiestaPrenotazione = RichiestaPrenotazione::from_stream(reply, 0, 0);
+        } catch(const std::invalid_argument& exp){
+            send_response_status(c2r,WRITE_STREAM,client_id,"BAD_REQUEST",msg_id,0);
+            continue;
+        }
+        
+        query_res = RichiestaPrenotazione->to_insert_query();
+        if(PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK){
+            send_response_status(c2r,WRITE_STREAM,client_id,"DB_ERROR",msg_id,0);
+            continue;
+        }
+
+        send_response_status(c2r,WRITE_STREAM,client_id,"REQUEST_SUCCES",msg_id, 0);
+
     }
+    db.finish();
+    return 0;
 }
