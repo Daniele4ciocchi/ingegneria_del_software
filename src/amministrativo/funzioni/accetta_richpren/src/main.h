@@ -19,9 +19,8 @@
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
 
-#include "richiesta_prenotazione.h"
-#include "prenotazione_accettata.h"
-#include "prenotazione_rifiutata.h"
+#include "../../../../classes/richiesta_prenotazione.h"
+#include "../../../../prenotazione_accettata.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 
@@ -35,8 +34,8 @@
 
 #define POSTGRESQL_SERVER "localhost"
 #define POSTGRESQL_PORT "5432"
-#define POSTGRESQL_USER "courier"
-#define POSTGRESQL_PSW "courier"
+#define POSTGRESQL_USER "amministrativo"
+#define POSTGRESQL_PSW "amministrativo"
 #define POSTGRESQL_DBNAME "ecommerce"
 
 using namespace std;

@@ -16,7 +16,7 @@ int main() {
     Indisponibilita* indisponibilita;
 
     while(1) {
-        reply = RedisCommand(c2r, "XREADGROUP GROUP main indisponibilita BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        reply = RedisCommand(c2r, "XREADGROUP GROUP main amministrativo BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(c2r, reply);
 
@@ -43,11 +43,8 @@ int main() {
         }
 
         // Construct the query
-        std::ostringstream query;
-        query << "INSERT INTO indisponibilita (medico_id, inizioind, fineind) VALUES ("
-              << "'" << indisponibilita->medico_id << "', "
-              << "'" << indisponibilita->inizio << "', "
-              << "'" << indisponibilita->fine << "');";
+        query = "INSERT INTO indisponibilita (medico_id, data_inizio, data_fine) 
+                 VALUES (" + indisponibilita->medico_id + ", '" + indisponibilita->inizio + "', '" + indisponibilita->fine + "')";
 
         query_res = db.RunQuery((char *) query.str().c_str(), false);
 

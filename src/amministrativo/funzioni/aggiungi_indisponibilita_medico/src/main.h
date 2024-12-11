@@ -1,35 +1,42 @@
-# Compiler
-CXX = g++
+#ifndef main_h
+#define main_h
 
-# Compiler flags
-CXXFLAGS = -std=c++11 -Wall -I../../../../lib/con2db -I../../../../lib/con2redis/src -I../../../../utils/src
+/* System libraries */
 
-# Linker flags
-LDFLAGS = -L../../../../lib/con2db -L../../../../lib/con2redis/src -lpq -lhiredis
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/times.h>
+#include <cassert>
+#include <cerrno>
 
-# Target executable
-TARGET = main
+/* Local libraries */
 
-# Source files
-SRCS = main.cpp richiesta_prenotazione.cpp prenotazione_accettata.cpp prenotazione_rifiutata.cpp
+#include "../../../../lib/con2db/pgsql.h"
+#include "../../../../lib/con2redis/src/con2redis.h"
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+#include "../../../../classes/indisponibilita.h"
+#include "../../../../utils/src/utils.h"
+#include "../../../../utils/src/const.h"
 
-# Default target
-all: $(TARGET)
+/* Constants */
 
-# Link the target executable
-$(TARGET): $(OBJS)
-    $(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
+#define READ_STREAM "take-purchase-delivery-in"
+#define WRITE_STREAM "take-purchase-delivery-out"
 
-# Compile source files into object files
-%.o: %.cpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+#define REDIS_SERVER "localhost"
+#define REDIS_PORT 6379
 
-# Clean up build files
-clean:
-    rm -f $(OBJS) $(TARGET)
+#define POSTGRESQL_SERVER "localhost"
+#define POSTGRESQL_PORT "5432"
+#define POSTGRESQL_USER "amministrativo" // esiste amminiistrativo
+#define POSTGRESQL_PSW "amministrativo"
+#define POSTGRESQL_DBNAME "ecommerce" // non so il db name
 
-# Phony targets
-.PHONY: all clean
+using namespace std;
+
+#endif

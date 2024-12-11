@@ -13,13 +13,12 @@
 /* Classes */
 class Indisponibilita {
     public:
-        char* id_indisponibilita = NULL;
-        char* medico_id;
-        char* inizio;
-        char* fine;
+        char* medico_id = NULL;
+        char* inizio = NULL;
+        char* fine = NULL;
 
 
-        Indisponibilita(char* id_indisponibilita, char* medico_id, char* inizio, char* fine);
+        Indisponibilita( char* medico_id, char* inizio, char* fine);
         ~Indisponibilita();
 
         static Indisponibilita* from_stream(redisReply* reply, int stream_num, int msg_num);

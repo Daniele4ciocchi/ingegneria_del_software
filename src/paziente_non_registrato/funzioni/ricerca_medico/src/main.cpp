@@ -12,7 +12,7 @@ int main() {
     c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
 
     while(1) {
-
+        // inizio da non modificare 
         reply = RedisCommand(c2r, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(c2r, reply);
@@ -36,7 +36,7 @@ int main() {
 
         // Take the input
         ReadStreamMsgVal(reply, 0, 0, 2, second_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(reply, 0, 0, 3, product_name);  // Index of second field of msg = 1
+        ReadStreamMsgVal(reply, 0, 0, 3, nome_medico);  // Index of second field of msg = 1
         
         if(strcmp(second_key, "nome_medico") || (ReadStreamMsgNumVal(reply, 0, 0) > 4)){
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
@@ -45,7 +45,7 @@ int main() {
 
         std::string str_nome_medico = nome_medico;
         std::string search_parameter = "%"+ str_nome_medico + "%";
-        // da rifare la query, non so come si fa il join
+        // da rifare la query, bisogna fare il join tra persona e medico per avere il nome del medico
         sprintf(query, "SELECT * FROM medico WHERE name LIKE \'%s\' ", (char*)search_parameter.c_str());
 
         query_res = db.RunQuery(query, true);

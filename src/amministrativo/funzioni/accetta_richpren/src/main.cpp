@@ -16,12 +16,12 @@ int main() {
     // Connessione al server Redis
     c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    DeliveryPurchase* delivery_purchase;  // Puntatore a un oggetto DeliveryPurchase
+    RichiestaPrenotazione* richiesta;  // Puntatore a un oggetto DeliveryPurchase
 
     while(1) {  // Ciclo infinito per elaborare i messaggi
 
         // Legge i messaggi dal gruppo Redis
-        reply = RedisCommand(c2r, "XREADGROUP GROUP main courier BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        reply = RedisCommand(c2r, "XREADGROUP GROUP main amministrativo BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         // Verifica la validità della risposta
         assertReply(c2r, reply);
@@ -48,7 +48,7 @@ int main() {
 
         // Converte il messaggio in un oggetto DeliveryPurchase
         try{
-            delivery_purchase = DeliveryPurchase::from_stream(reply, 0, 0);
+            richiesta = RichiestaPrenotazione::from_stream(reply, 0, 0);
         }
         catch(std::invalid_argument exp){
             // Invia una risposta di richiesta non valida
@@ -57,7 +57,7 @@ int main() {
         }
 
         // Crea la query di inserimento
-        query = delivery_purchase->to_insert_query();
+        query = //da capire come implementare la query
         
         // Esegue la query SQL
         query_res = db.RunQuery((char *) query.c_str(), false);
