@@ -1,8 +1,8 @@
 # to-do list
 
 - amministrativo
-    - [x] accetta richiesta prenotazione (serve intervento di gabriele)
-    - [x] rifiuta   //          //              //
+    - [x] accetta richiesta prenotazione 
+    - [x] rifiuta richiesta prenotazione
     - [x] aggiungi indisponibilità medico 
     - [ ] aggiungi specializzazione medico
     - [ ] cronologia richiesta prenotazione
@@ -19,7 +19,7 @@
     - [ ] termina prestazione
 - paziente
     - [ ] cronologia prenotazioni
-    - [ ] effettua prenotazione
+    - [x] effettua prenotazione testare
     - [ ] lascia feedback
     - [ ] ricerca medico
 

@@ -26,17 +26,17 @@
 
 /* Constants */
 
-#define READ_STREAM "add-supplier-in"
-#define WRITE_STREAM "add-supplier-out"
+#define READ_STREAM "registrazione-in"
+#define WRITE_STREAM "registrazione-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379
 
 #define POSTGRESQL_SERVER "localhost"
 #define POSTGRESQL_PORT "5432"
-#define POSTGRESQL_USER "supplier"
-#define POSTGRESQL_PSW "supplier"
-#define POSTGRESQL_DBNAME "ecommerce"
+#define POSTGRESQL_USER "paziente_non_registrato"
+#define POSTGRESQL_PSW "paziente_non_registrato"
+#define POSTGRESQL_DBNAME "prenotazionimediche"
 
 using namespace std;
 
