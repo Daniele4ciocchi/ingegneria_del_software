@@ -1,6 +1,5 @@
 #include "main.h"
 #include <sstrem>
-
 //ottengo la cronologia
 
 std::string get_booking_history(Con2DB &db, const std::string &client_id) {
@@ -19,8 +18,8 @@ std::string get_booking_history(Con2DB &db, const std::string &client_id) {
     for (int i = 0; i < rows; i++) {
         result_stream << "id=" <<PQgetvalue(query_res, i, 0)
                     << ";medico_id=" <<PQgetvalue(query_res, i, 1)
-                    << ";data_ora=" <<PQgetvalue(queryres,i, 2)
-                    << ";durata=" <<PQgetvalue(queryres,i, 3)
+                    << ";data_ora=" <<PQgetvalue(query_res,i, 2)
+                    << ";durata=" <<PQgetvalue(query_res,i, 3);
         if (i<rows-1)result_stream << "|";
     }
     PQclear(query_res);
@@ -57,7 +56,7 @@ int main(){
         //Estrazione del messaggio
         ReadStreamNumMsgID(reply,0,0,msg_id);
         ReadStreamMsgVal(reply,0,0,0,first_key);
-        ReadStreamMsgVal(reply,0,0,1,clent_id);
+        ReadStreamMsgVal(reply,0,0,1,client_id);
 
         if (strcmp(first_key, "client_id") != 0){
             send_response_status(c2r, WRITE_STREAM,client_id, "BAD_REQUEST",msg_id, 0);
@@ -69,7 +68,7 @@ int main(){
         {
             std::string history = get_booking_history(db,client_id);
             //Aggiungo la cronologia al flusso Redis
-            RedisCommand(2r,"XADD %s * client_id %s history %s",WRITE_STREAM, clien_id, history.c_str());
+            RedisCommand(c2r,"XADD %s * client_id %s history %s",WRITE_STREAM, clien_id, history.c_str());
         }
         catch(const std::exception &e)
         {

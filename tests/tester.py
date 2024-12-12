@@ -63,7 +63,7 @@ if __name__ == "__main__":
                 s.send(request_string.encode()) # Invia la richiesta al server
                 print("post invio")
                 
-                # ABBIAMO UN PROBLEMA QUI SULL'ULTIMA RICHIESTA DELLE 5
+                # ABBIAMO UN PROBLEMA QUI SI BLOCCA PERCHE' IL SERVERNON DA RISPOSTA
                 response = s.recv(4096).decode() # Ricevi la risposta dal server
                 print(f"Risposta ricevuta: {response}")
     

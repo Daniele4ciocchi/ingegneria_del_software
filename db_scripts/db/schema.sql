@@ -3,14 +3,6 @@
 create domain codice_fiscale as varchar(16)
     check (value ~ '^[A-Z0-9]{16}$');
 
-create type indirizzo as (
-    via varchar(255),
-    numero_civico varchar(10),
-    cap varchar(5),
-    citta varchar(100),
-    provincia varchar(100)
-);
-
 create domain valutazione as integer
 check (value between 1 and 5);
 
@@ -25,7 +17,7 @@ create table if not exists persona (
 create table if not exists paziente (
     id          serial          primary key,
     cf          codice_fiscale  not null, 
-    indirizzo   indirizzo       not null,
+    indirizzo   varchar(1000)       not null,
     email       varchar(100)    not null,
     telefono    varchar(10)    not null,
     foreign key (cf) references persona(cf)

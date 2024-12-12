@@ -20,8 +20,8 @@
 - paziente
     - [x] cronologia prenotazioni testare
     - [x] effettua prenotazione testare
-    - [x] lascia feedback
-    - [ ] ricerca medico
+    - [x] lascia feedback testare
+    - [x] ricerca medico testare
 
 
 1. da capire db name e se esistono gli utenti amministrativo, paziente e medico (con rispettiva password)

@@ -11,11 +11,5 @@ class Indirizzo():
         citta = fake.city()
         provincia = fake.state()
 
-        indirizzo = {
-            "via": via,
-            "numero_civico": numero_civico,
-            "cap": cap,
-            "citta": citta,
-            "provincia": provincia
-        }
+        indirizzo = via + ", " + numero_civico + ", " + cap  + ", " + citta + ", " + provincia
         return indirizzo

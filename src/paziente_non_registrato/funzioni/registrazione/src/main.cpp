@@ -66,10 +66,8 @@ int main() {
 
         //seconda query
         
-        sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\',(\'%s\', \'%s\', \'%s\', \'%s\',\'%s\') , \'%s\', \'%s\')", 
-                        paziente->cf, 
-                        paziente->via, paziente->numero_civico, paziente->cap, paziente->citta, paziente->provincia, 
-                        paziente->email, paziente->telefono);
+        sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
+                        paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
         
         query_res_2 = db.RunQuery(query, false);
         

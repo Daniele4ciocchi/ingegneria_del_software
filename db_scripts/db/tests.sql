@@ -8,8 +8,8 @@ INSERT INTO persona (cf, nome, cognome, nascita) VALUES
 
 -- Inserimento nella tabella paziente
 INSERT INTO paziente (cf, indirizzo, email, telefono) VALUES 
-('RSSMRA85M01H501Z', ('Via Roma', '10', '00100', 'Roma', 'RM'), 'mario.rossi@email.com', '3331234567'),
-('BNCLDN85M01H501Y', ('Via Milano', '5', '20100', 'Milano', 'MI'), 'luigi.bianchi@email.com', '3337654321');
+('RSSMRA85M01H501Z', 'Via Roma, 10, 00100, Roma, RM', 'mario.rossi@email.com', '3331234567'),
+('BNCLDN85M01H501Y', 'Via Milano, 5, 20100, Milano, MI', 'luigi.bianchi@email.com', '3337654321');
 
 -- Inserimento nella tabella medico
 INSERT INTO medico (cf) VALUES 
