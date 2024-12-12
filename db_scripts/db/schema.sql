@@ -11,11 +11,6 @@ create type indirizzo as (
     provincia varchar(100)
 );
 
-create type telefono as (
-    prefisso_internazionale varchar(5), 
-    numero varchar(15)
-);
-
 create domain valutazione as integer
 check (value between 1 and 5);
 
@@ -32,7 +27,7 @@ create table if not exists paziente (
     cf          codice_fiscale  not null, 
     indirizzo   indirizzo       not null,
     email       varchar(100)    not null,
-    telefono    telefono        not null,
+    telefono    varchar(10)    not null,
     foreign key (cf) references persona(cf)
 );
 

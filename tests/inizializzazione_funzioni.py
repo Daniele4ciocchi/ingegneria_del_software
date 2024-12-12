@@ -1,13 +1,19 @@
 from generatori_parametri.generatore_nomi import NomePersona
 from generatori_parametri.generatore_cognomi import CognomePersona
 from generatori_parametri.generatore_cf import CF
-from generatori_parametri.generatore_data import DataNascita, Data
+from generatori_parametri.generatore_date import DataNascita
+from generatori_parametri.generatore_indirizzi import Indirizzo
+from generatori_parametri.generatore_stringhe import Stringa
+from generatori_parametri.generatore_numeri_telefono import Telefono
 
 requests = {
  "registrazione" : [[("cf", CF)],
                     [("nome", NomePersona)],
                     [("cognome", CognomePersona)],
-                    [("nascita", DataNascita)]]
+                    [("nascita", DataNascita)],
+                    [("indirizzo", Indirizzo)],
+                    [("email", Stringa)],
+                    [("telefono", Telefono)]],
  
 }
 

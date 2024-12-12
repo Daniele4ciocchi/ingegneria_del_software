@@ -16,7 +16,7 @@ public:
     char* nome = NULL;
     char* cognome = NULL;
     char* nascita = NULL;
-    
+
 
     Persona( char* cf, char* nome, char* cognome, char* nascita);
     ~Persona();

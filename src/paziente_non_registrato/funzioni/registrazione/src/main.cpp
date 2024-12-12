@@ -40,7 +40,7 @@ int main() {
         // Convert request
         try{
             // campi per lo stream redis 
-            // 0: cf, 1: nome, 2: cognome, 3: nascita, 4: indirizzo, 5: email, 6 telefono
+            // 0: cf, 1: nome, 2: cognome, 3: nascita, 4: email, 5: telefono, 6: via, 7: civico, 8: cap, 9: citta, 10: provincia
             persona = Persona::from_stream(reply, 0, 0); // passo prima lo stream redis a persona e poi a paziente
             paziente = Paziente::from_stream(reply, 0, 0);
         }
@@ -66,8 +66,10 @@ int main() {
 
         //seconda query
         
-        sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
-                        paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
+        sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\',(\'%s\', \'%s\', \'%s\', \'%s\',\'%s\') , \'%s\', \'%s\')", 
+                        paziente->cf, 
+                        paziente->via, paziente->numero_civico, paziente->cap, paziente->citta, paziente->provincia, 
+                        paziente->email, paziente->telefono);
         
         query_res_2 = db.RunQuery(query, false);
         

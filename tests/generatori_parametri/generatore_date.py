@@ -1,7 +1,5 @@
 import random
 import datetime
-import string
-import re
 
 RANDOM_SEED = 8
 random.seed(RANDOM_SEED)

@@ -31,16 +31,16 @@ INSERT INTO specializzazione (nome, duratavisitah) VALUES
 
 -- Popolamento pazienti
 INSERT INTO paziente (cf, indirizzo, email, telefono) VALUES
-('ABCDEF12G34H567I', ROW('Via Roma', '10', '00100', 'Roma', 'RM'), 'mario.rossi@example.com', ROW('+39', '3401234567')),
-('BCDEFG23H45I678J', ROW('Corso Italia', '15', '10100', 'Torino', 'TO'), 'luca.verdi@example.com', ROW('+39', '3456789012')),
-('CDEFGH34I56J789K', ROW('Piazza Garibaldi', '5', '80100', 'Napoli', 'NA'), 'giulia.bianchi@example.com', ROW('+39', '3312345678')),
-('DEFGHI45J67K890L', ROW('Via Milano', '20', '20100', 'Milano', 'MI'), 'francesca.neri@example.com', ROW('+39', '3209876543')),
-('EFGHIJ56K78L901M', ROW('Viale Venezia', '8', '30100', 'Venezia', 'VE'), 'giovanni.esposito@example.com', ROW('+39', '3276543210')),
-('FGHIJK67L89M012N', ROW('Via Firenze', '12', '50100', 'Firenze', 'FI'), 'maria.conte@example.com', ROW('+39', '3298765432')),
-('GHIJKL78M90N123O', ROW('Via Napoli', '3', '70100', 'Bari', 'BA'), 'sofia.ricci@example.com', ROW('+39', '3345678901')),
-('HIJKLM89N01O234P', ROW('Via Bologna', '9', '40100', 'Bologna', 'BO'), 'antonio.deluca@example.com', ROW('+39', '3309876543')),
-('IJKLMN90O12P345Q', ROW('Via Palermo', '6', '90100', 'Palermo', 'PA'), 'chiara.ferrari@example.com', ROW('+39', '3391234567')),
-('JKLMNO01P23Q456R', ROW('Via Cagliari', '7', '09100', 'Cagliari', 'CA'), 'paolo.gallo@example.com', ROW('+39', '3323456789'));
+('ABCDEF12G34H567I', ROW('Via Roma', '10', '00100', 'Roma', 'RM'), 'mario.rossi@example.com', '3401234567'),
+('BCDEFG23H45I678J', ROW('Corso Italia', '15', '10100', 'Torino', 'TO'), 'luca.verdi@example.com', '3456789012'),
+('CDEFGH34I56J789K', ROW('Piazza Garibaldi', '5', '80100', 'Napoli', 'NA'), 'giulia.bianchi@example.com', '3312345678'),
+('DEFGHI45J67K890L', ROW('Via Milano', '20', '20100', 'Milano', 'MI'), 'francesca.neri@example.com', '3209876543'),
+('EFGHIJ56K78L901M', ROW('Viale Venezia', '8', '30100', 'Venezia', 'VE'), 'giovanni.esposito@example.com', '3276543210'),
+('FGHIJK67L89M012N', ROW('Via Firenze', '12', '50100', 'Firenze', 'FI'), 'maria.conte@example.com', '3298765432'),
+('GHIJKL78M90N123O', ROW('Via Napoli', '3', '70100', 'Bari', 'BA'), 'sofia.ricci@example.com', '3345678901'),
+('HIJKLM89N01O234P', ROW('Via Bologna', '9', '40100', 'Bologna', 'BO'), 'antonio.deluca@example.com', '3309876543'),
+('IJKLMN90O12P345Q', ROW('Via Palermo', '6', '90100', 'Palermo', 'PA'), 'chiara.ferrari@example.com', '3391234567'),
+('JKLMNO01P23Q456R', ROW('Via Cagliari', '7', '09100', 'Cagliari', 'CA'), 'paolo.gallo@example.com', '3323456789');
 
 -- Popolamento medici
 INSERT INTO medico (cf) VALUES
