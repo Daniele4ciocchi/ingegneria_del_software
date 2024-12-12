@@ -21,7 +21,7 @@ Test generator
 
 if __name__ == "__main__":
     # Lista di tuple (tipoRichiesta,numRichiesteDaEseguire)
-    counter = [(k, 1) for k in requests.keys()]
+    counter = [(k, 20) for k in requests.keys()]
     # Numero richieste totali da eseguire
     num_requests = sum([v for _, v in counter])
     test = 1
@@ -54,56 +54,25 @@ if __name__ == "__main__":
         # Tipo k della richiesta iniziale
         req = k
         # Indici degli argomenti validi che possono essere inseriti nella richiesta k
-        to_insert = [i for i in range(len(requests[k]))]
+        to_insert = len(requests[k])
 
-        for i in range(args, 0, -2):
-            # Comportamento se i possibili argomenti sono finiti così come i false_args
-            if len(to_insert) == 0 and false_args == 0:
-                break
-
-            # Comportamento quando rimangono solamente false_args, genera un argomento errato
-            if true_args == 0 or len(to_insert) == 0:
-                req += " " + wrong_arg_key.right().replace(" ", "##") + " " + wrong_arg_key.right().replace(" ", "##")
-                continue
-
-            # Indice casuale della lista d'indici validi di k
-            pop_i = random.randint(0, len(to_insert) -1)
-            # Un indice di k valido da essere sostituito
-            index = to_insert[pop_i]
-            arg_index = random.randint(0, len(requests[k][index]) -1)
-
-            """
-            print('Richieste\n')
-            print(requests)
-            print('1livello\n')
-            print(requests[k])
-            print('2livello\n')
-            print(requests[k][index])
-            print('3livello\n')
-            print(requests[k][index][arg_index])
-            """
-
+    
+        
+        for j in range(len(requests[k])):
             # Se il numero casuale è maggiore di false_args, viene aggiunto un argomento valido
-            if random.randint(1, i) > false_args:
+            if random.randint(1, 1) == 1:
                 # Chiave valida presa direttamente dalla richiesta k
-                req += " " + requests[k][index][arg_index][0]
+                req += " " + requests[k][j][0][0]
+                # Valore valido preso dalla funzione che genera valori corretti all'interno della classe del tipo
+                req += " " + str(requests[k][j][0][1]().right()).replace(" ", "##")
                 true_args -= 1
             else:
                 # Chiave generata errata
                 req += " " + wrong_arg_key.right().replace(" ", "##")
-                false_args -= 1
-
-            # check for value wrong or right
-            if random.randint(1, i -1) > false_args:
-                # Valore valido preso dalla funzione che genera valori corretti all'interno della classe del tipo
-                req += " " + str(requests[k][index][arg_index][1]().right()).replace(" ", "##")
-                true_args -= 1
-            else:
                 # Valore errato preso dalla funzione che genera valori corretti all'interno della classe del tipo
-                req += " " + str(requests[k][index][arg_index][1]().wrong())
+                req += " " + str(requests[k][j][0][1]().wrong())
                 false_args -= 1
 
-            to_insert.pop(pop_i)
 
         #handler, port = ports[random.randint(0, 3)]
         handler, port = ports[3]
