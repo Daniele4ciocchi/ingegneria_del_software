@@ -39,14 +39,18 @@ int main() {
 
         // Convert request
         try{
-            //paziente = Paziente::from_stream(reply, 0, 0);
-            persona = Persona::from_stream(reply, 0, 0);
+            // campi per lo stream redis 
+            // 0: cf, 1: nome, 2: cognome, 3: nascita, 4: indirizzo, 5: email, 6 telefono
+            persona = Persona::from_stream(reply, 0, 0); // passo prima lo stream redis a persona e poi a paziente
+            paziente = Paziente::from_stream(reply, 0, 0);
         }
 
         catch(std::invalid_argument exp){
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
+
+        //prima query
 
         sprintf(query, "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
                         persona->cf, persona->nome, persona->cognome, persona->nascita);
@@ -59,7 +63,9 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-/*
+
+        //seconda query
+        
         sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
                         paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
         
@@ -71,7 +77,7 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-*/
+
     }
 
     db.finish();
