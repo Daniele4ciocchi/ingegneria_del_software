@@ -63,7 +63,8 @@ if __name__ == "__main__":
                 s.send(request_string.encode()) # Invia la richiesta al server
                 print("post invio")
                 
-                response = s.recv(2048).decode() # Ricevi la risposta dal server
+                # ABBIAMO UN PROBLEMA QUI SULL'ULTIMA RICHIESTA DELLE 5
+                response = s.recv(4096).decode() # Ricevi la risposta dal server
                 print(f"Risposta ricevuta: {response}")
     
                 if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR"):

@@ -15,7 +15,7 @@ BEGIN
     END LOOP;
 END $$;
 
-
+/*
 -- [V.persona.completezza]
 CREATE OR REPLACE FUNCTION verifica_persona_completezza_deferred()
 RETURNS TRIGGER AS $$
@@ -43,7 +43,7 @@ AFTER INSERT OR UPDATE ON persona
 DEFERRABLE INITIALLY DEFERRED
 FOR EACH ROW
 EXECUTE FUNCTION verifica_persona_completezza_deferred();
-
+*/
 
 -- [V.medico.almenounaspecializzazione]
 CREATE OR REPLACE FUNCTION medico_specializzato()
