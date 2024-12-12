@@ -3,21 +3,20 @@ import random
 import string
 from inizializzazione_funzioni import requests, apis, ports
 
+HOST = "127.0.0.1"  # Indirizzo del server
+random.seed()
 
+# Lista per tracciare richieste errate
 errate = []
-HOST = "127.0.0.1"  # L'indirizzo IP del server
-PORT = 42072  # La porta del server
 
-RANDOM_SEED = 71 # Imposta un seed per la generazione casuale
-random.seed(RANDOM_SEED)
-# Richiesta esempio : nome-funzione key1 value1 ... keyN valueN
-request_string = "check-order order_id 2" 
-#request_string = "take-delivery orderId 2 courier 1 status shipped"
 
 def generate_random_argument(parameter_class):
+    """Genera un valore casuale per un parametro dato."""
     return parameter_class().receive_random_value()
 
+
 def generate_random_request(client):
+    """Genera una richiesta casuale per un client dato."""
     apis_name = random.choice(apis[client])
 
     request_args = []
@@ -30,54 +29,57 @@ def generate_random_request(client):
     request_string = f"{apis_name}"
     for arg_values in request_args:
         for arg_name, arg_value in arg_values.items():
-            if type(arg_value) == string:
-                arg_value.replace(" ", "##")              # è giusto così lo spacing ?
+            if isinstance(arg_value, str):
+                arg_value = arg_value.replace(" ", "##")
             request_string += f" {arg_name} {arg_value}"
-    
+
     return request_string.strip()
 
 
-if __name__ == "__main__":
-    totale = 10
-    richieste = 2
+def send_request(client, port, request_string):
+    """Invia una richiesta al server e restituisce la risposta."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, port))
+            s.settimeout(5)  # Timeout incrementato a 5 secondi
+
+            print(f"Inviando la richiesta: {request_string}")
+            s.send(request_string.encode())
+
+            response = s.recv(4096).decode()
+            print(f"Risposta ricevuta: {response}")
+            return response
+    except socket.timeout:
+        print("Timeout: il server non ha risposto.")
+        return "TIMEOUT"
+    except Exception as e:
+        print(f"Errore durante l'invio della richiesta: {e}")
+        return "ERROR"
+
+
+def main():
+    totale = 2
+    richieste = 10
     succesful = 0
     failed = 0
-    
-    for _ in range(totale):
-        
-        client = random.choice(list(apis.keys()))
-        print(client, type(client))
-        #client = "paziente_non_registrato"
-        PORT = ports[client]
-        PORT = 42072
-        client = "paziente_non_registrato"
-        
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((HOST, PORT))
-            s.settimeout(2)  
-  
-            for _ in range(richieste):
-                request_string = generate_random_request(client)
 
-                print(f"Inviando la richiesta: {request_string}")
-    
-                s.send(request_string.encode()) # Invia la richiesta al server
-                print("post invio")
-                
-                # ABBIAMO UN PROBLEMA QUI SI BLOCCA PERCHE' IL SERVERNON DA RISPOSTA
-                try:
-                    response = s.recv(4096).decode()  # Ricevi la risposta dal server
-                    print(f"Risposta ricevuta: {response}")
-                    if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR") or response.startswith("Timeout"):
-                        failed += 1
-                        errate.append(request_string)
-                    else:
-                        succesful += 1
-                except socket.timeout:
-                    print("Timeout: il server non ha risposto.")
-                    failed += 1
-    
-                
-                            
-    print(f"\n succesful requests: {succesful}/{totale*richieste} \n failed requests: {failed}/{totale*richieste} \n\n")
-    
+    for _ in range(totale):
+        client = random.choice(list(apis.keys()))
+        port = ports.get(client)  # Usa la porta configurata o quella di default
+
+        for _ in range(richieste):
+            request_string = generate_random_request(client)
+
+            response = send_request(client, port, request_string)
+            if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR") or response == "TIMEOUT" or response == "ERROR":
+                failed += 1
+                errate.append(request_string)
+            else:
+                succesful += 1
+
+    print(f"\nSuccesful requests: {succesful}/{totale * richieste}")
+    print(f"Failed requests: {failed}/{totale * richieste}")
+
+
+if __name__ == "__main__":
+    main()

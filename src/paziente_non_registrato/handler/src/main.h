@@ -1,9 +1,6 @@
 #ifndef paziente_non_registrato_handler
 #define paziente_non_registrato_handler
 
-/* System libraries  */
-
-
 /* Local libraries */
 #include "../../../server/src/server.h"
 #include "../../../server/src/handler.h"
