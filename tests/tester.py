@@ -38,8 +38,8 @@ def generate_random_request(client):
 
 
 if __name__ == "__main__":
-    totale = 50
-    richieste = 5
+    totale = 10
+    richieste = 2
     succesful = 0
     failed = 0
     
@@ -54,6 +54,7 @@ if __name__ == "__main__":
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((HOST, PORT))
+            s.settimeout(2)  
   
             for _ in range(richieste):
                 request_string = generate_random_request(client)
@@ -64,14 +65,19 @@ if __name__ == "__main__":
                 print("post invio")
                 
                 # ABBIAMO UN PROBLEMA QUI SI BLOCCA PERCHE' IL SERVERNON DA RISPOSTA
-                response = s.recv(4096).decode() # Ricevi la risposta dal server
-                print(f"Risposta ricevuta: {response}")
-    
-                if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR"):
+                try:
+                    response = s.recv(4096).decode()  # Ricevi la risposta dal server
+                    print(f"Risposta ricevuta: {response}")
+                    if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR") or response.startswith("Timeout"):
+                        failed += 1
+                        errate.append(request_string)
+                    else:
+                        succesful += 1
+                except socket.timeout:
+                    print("Timeout: il server non ha risposto.")
                     failed += 1
-                    errate.append(request_string)
-                else:
-                    succesful += 1
+    
+                
                             
     print(f"\n succesful requests: {succesful}/{totale*richieste} \n failed requests: {failed}/{totale*richieste} \n\n")
     

@@ -12,4 +12,5 @@ class Indirizzo():
         provincia = fake.state()
 
         indirizzo = via + ", " + numero_civico + ", " + cap  + ", " + citta + ", " + provincia
+        indirizzo = indirizzo.replace("'", "")
         return indirizzo
