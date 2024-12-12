@@ -33,13 +33,13 @@ int main() {
         ReadStreamMsgVal(reply, 0, 0, 1, client_id);    // Index of second field of msg = 1
 
         if(strcmp(first_key, "client_id")){
-            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUESTTTT", msg_id, 0);
             continue;
         }
 
         // Convert request
         try{
-            paziente = Paziente::from_stream(reply, 0, 0);
+            //paziente = Paziente::from_stream(reply, 0, 0);
             persona = Persona::from_stream(reply, 0, 0);
         }
 
@@ -59,7 +59,7 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-
+/*
         sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
                         paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
         
@@ -71,7 +71,7 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-
+*/
     }
 
     db.finish();

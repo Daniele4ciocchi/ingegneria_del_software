@@ -18,9 +18,9 @@
     - [ ] statistiche 
     - [ ] termina prestazione
 - paziente
-    - [ ] cronologia prenotazioni
+    - [x] cronologia prenotazioni testare
     - [x] effettua prenotazione testare
-    - [ ] lascia feedback
+    - [x] lascia feedback
     - [ ] ricerca medico
 
 

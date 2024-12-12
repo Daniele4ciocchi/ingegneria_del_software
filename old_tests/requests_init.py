@@ -6,8 +6,7 @@ requests = {
  "registrazione" : [[("cf", CF)],
                     [("nome", StringNC)],
                     [("cognome", StringNC)],
-                    [("nascita", BornDate)]],
-
+                    [("nascita", BornDate)]]
  
 }
 

@@ -72,17 +72,6 @@ if __name__ == "__main__":
             index = to_insert[pop_i]
             arg_index = random.randint(0, len(requests[k][index]) -1)
 
-            """
-            print('Richieste\n')
-            print(requests)
-            print('1livello\n')
-            print(requests[k])
-            print('2livello\n')
-            print(requests[k][index])
-            print('3livello\n')
-            print(requests[k][index][arg_index])
-            """
-
             # Se il numero casuale è maggiore di false_args, viene aggiunto un argomento valido
             if random.randint(1, i) > false_args:
                 # Chiave valida presa direttamente dalla richiesta k

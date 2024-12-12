@@ -72,6 +72,9 @@ if __name__ == "__main__":
                 # Valore errato preso dalla funzione che genera valori corretti all'interno della classe del tipo
                 req += " " + str(requests[k][j][0][1]().wrong())
                 false_args -= 1
+        
+        req = k
+        req += " "+"cf"+" "+ "SPEGRL03D08E472M"+" "+"nome"+" "+"gabriele"+" "+"cognome"+" "+"sepe"+" "+" nascita"+" "+"2003/04/08"
 
 
         #handler, port = ports[random.randint(0, 3)]
