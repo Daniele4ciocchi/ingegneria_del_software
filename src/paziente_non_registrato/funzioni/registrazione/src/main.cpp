@@ -44,12 +44,17 @@ int main() {
             persona = Persona::from_stream(reply, 0, 0); // passo prima lo stream redis a persona e poi a paziente
             paziente = Paziente::from_stream(reply, 0, 0);
         }
-
+        catch (std::invalid_argument& exp) {
+            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            std::cerr << "Errore in from_stream: " << exp.what() << std::endl;
+            continue;
+}
+/*
         catch(std::invalid_argument exp){
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
-
+*/
         //prima query
 
         sprintf(query, "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 

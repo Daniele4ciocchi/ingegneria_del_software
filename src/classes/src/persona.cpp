@@ -1,4 +1,5 @@
 #include "persona.h"
+#include <iostream>
 
 Persona::Persona( char* cf, char* nome, char* cognome, char* nascita) {
 
@@ -39,24 +40,37 @@ Persona* Persona::from_stream(redisReply* reply, int stream_num, int msg_num) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "cf")) {
-            strcpy(cf, value);
+            strncpy(cf, value, PARAMETERS_LEN - 1);
+            cf[PARAMETERS_LEN - 1] = '\0';
             read_fields |= 0b10;
 
         } else if (!strcmp(key, "nome")) {
-            strcpy(nome, value);
+            strncpy(nome, value, PARAMETERS_LEN - 1);
+            nome[PARAMETERS_LEN - 1] = '\0';
             read_fields |= 0b100;
 
         } else if (!strcmp(key, "cognome")) {
-            strcpy(cognome, value);
+            strncpy(cognome, value, PARAMETERS_LEN - 1);
+            cognome[PARAMETERS_LEN - 1] = '\0';
             read_fields |= 0b1000;
 
         } else if (!strcmp(key, "nascita")) {
-            strcpy(nascita, value);
+            strncpy(nascita, value, PARAMETERS_LEN - 1);
+            nascita[PARAMETERS_LEN - 1] = '\0';
             read_fields |= 0b10000;
 
         } else {
-            throw std::invalid_argument("Stream error: invalid fields");
+            continue; // Ignora campi sconosciuti
         }
+    }
+
+    if ((read_fields & 0b11110) != 0b11110) {
+        std::string missing_fields;
+        if (!(read_fields & 0b10)) missing_fields += "cf ";
+        if (!(read_fields & 0b100)) missing_fields += "nome ";
+        if (!(read_fields & 0b1000)) missing_fields += "cognome ";
+        if (!(read_fields & 0b10000)) missing_fields += "nascita ";
+        throw std::invalid_argument("Stream error: missing fields - " + missing_fields);
     }
 
     return new Persona( cf, nome, cognome, nascita);
