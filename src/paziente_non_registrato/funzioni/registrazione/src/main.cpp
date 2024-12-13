@@ -56,10 +56,10 @@ int main() {
         }
         */
        
-        //prima query
-
-        sprintf(query, "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
-                        persona->cf, persona->nome, persona->cognome, persona->nascita);
+        sprintf(query,  "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');"
+                        "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", 
+                        persona->cf, persona->nome, persona->cognome, persona->nascita,
+                        paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
 
         query_res = db.RunQuery(query, false);
         
@@ -69,21 +69,6 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-
-        //seconda query
-        
-        sprintf(query_2, "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\')", 
-                        paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
-        
-        query_res_2 = db.RunQuery(query, false);
-        
-        if (PQresultStatus(query_res_2) != PGRES_COMMAND_OK && PQresultStatus(query_res_2) != PGRES_TUPLES_OK) {
-            send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
-            continue;
-        }
-
-        send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-
     }
 
     db.finish();

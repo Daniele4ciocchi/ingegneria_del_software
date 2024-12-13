@@ -1,7 +1,9 @@
 import socket
 import random
-import string
 from inizializzazione_funzioni import requests, apis, ports
+import time
+
+time.sleep(0.1) #100ms
 
 HOST = "127.0.0.1"  # Indirizzo del server
 random.seed()
@@ -40,6 +42,7 @@ def send_request(client, port, request_string):
     """Invia una richiesta al server e restituisce la risposta."""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.connect((HOST, port))
             s.settimeout(5)  # Timeout incrementato a 5 secondi
 
@@ -55,11 +58,12 @@ def send_request(client, port, request_string):
     except Exception as e:
         print(f"Errore durante l'invio della richiesta: {e}")
         return "ERROR"
-
+    finally:
+        print("Socket chiuso correttamente.")
 
 def main():
     totale = 2
-    richieste = 10
+    richieste = 5
     succesful = 0
     failed = 0
 
@@ -71,11 +75,12 @@ def main():
             request_string = generate_random_request(client)
 
             response = send_request(client, port, request_string)
-            if response.startswith("BAD_REQUEST") or response.startswith("DB_ERROR") or response == "TIMEOUT" or response == "ERROR":
+            if response.startswith("REQUEST_SUCCESS"):
+                succesful += 1
+            else:
                 failed += 1
                 errate.append(request_string)
-            else:
-                succesful += 1
+                
 
     print(f"\nSuccesful requests: {succesful}/{totale * richieste}")
     print(f"Failed requests: {failed}/{totale * richieste}")

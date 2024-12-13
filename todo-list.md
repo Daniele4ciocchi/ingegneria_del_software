@@ -23,6 +23,7 @@
     - [x] lascia feedback testare
     - [x] ricerca medico testare
 
-
-1. da capire db name e se esistono gli utenti amministrativo, paziente e medico (con rispettiva password)
-2.
+- varie
+    - [ ] sistemare tester per fargli testare tutte le funzioni
+    - [ ] Sistemare DBERROR se trigger completezza persona è attivo
+    - [ ] 

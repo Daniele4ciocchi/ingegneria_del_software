@@ -44,8 +44,8 @@ GRANT SELECT ON prenotazionerifiutata TO :amministrativo;
 GRANT SELECT ON feedback TO :medico;
 
 -- Permessi paziente_non_registrato
-GRANT INSERT ON persona TO :paziente_non_registrato;
-GRANT INSERT ON paziente TO :paziente_non_registrato;
+GRANT INSERT, UPDATE ON persona TO :paziente_non_registrato;
+GRANT INSERT, UPDATE ON paziente TO :paziente_non_registrato;
 GRANT SELECT ON medico TO :paziente_non_registrato;
 
 -- Permessi paziente
