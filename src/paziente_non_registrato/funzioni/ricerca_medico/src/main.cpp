@@ -47,11 +47,12 @@ int main() {
         std::string search_parameter = "%" + str_specializzazione + "%";
 
         // Query per ottenere i medici con la specializzazione richiesta
-        sprintf(query, "SELECT p.cf, p.nome, p.cognome, s.specializzazione_nome AS specializzazione FROM medico m, persona p, medico_specializzazione s WHERE p.cf = m.cf AND m.id = s.medico_id AND s.specializzazione_nome = '%s';", (char*)search_parameter.c_str());
+        sprintf(query, "SELECT p.cf, p.nome, p.cognome, p.nascita FROM medico m, persona p, medico_specializzazione s WHERE p.cf = m.cf AND m.id = s.medico_id AND s.specializzazione_nome = '%s';", (char*)search_parameter.c_str());
 
         queryRes = db.RunQuery(query, true);
         
         if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
+            std::cout << "Errore query o medico non trovato" << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
@@ -67,7 +68,7 @@ int main() {
             
             medici.push_back(medico);
         }
-
+   
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
         for(int row = 0; row < PQntuples(queryRes); row++){
@@ -76,12 +77,15 @@ int main() {
 
             medici.pop_front();
 
-            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s specializzazione %s", 
-                                 WRITE_STREAM, row,  m->nome, m->cognome, str_specializzazione);
+            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s", 
+                                 WRITE_STREAM, row,  m->nome, m->cognome);
+            cout << redReply->str << endl;
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
 
         }
+       
+
     }
 
     db.finish();

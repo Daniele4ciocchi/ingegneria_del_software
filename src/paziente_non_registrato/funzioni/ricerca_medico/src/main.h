@@ -36,7 +36,7 @@
 #define POSTGRESQL_PORT "5432"
 #define POSTGRESQL_USER "paziente_non_registrato"
 #define POSTGRESQL_PSW "paziente_non_registrato"
-#define POSTGRESQL_DBNAME "prenbotazionimediche"
+#define POSTGRESQL_DBNAME "prenotazionimediche"
 
 using namespace std;
 
