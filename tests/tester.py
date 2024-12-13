@@ -48,6 +48,7 @@ def send_request(client, port, request_string):
 
             print(f"Inviando la richiesta: {request_string}")
             s.send(request_string.encode())
+            print('post invio')
 
             response = s.recv(4096).decode()
             print(f"Risposta ricevuta: {response}")

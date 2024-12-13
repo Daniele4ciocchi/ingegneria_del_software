@@ -1,83 +1,85 @@
 #include "main.h"
 
 int main() {
-    redisContext *c2r;
-    redisReply *reply;
+    redisContext *redConn;
+    redisReply *redReply;
 
-    PGresult *query_res;
+    PGresult *queryRes;
 
-    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN], second_key[KEY_LEN], nome_medico[VALUE_LEN];
+    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN], second_key[KEY_LEN], specializzazione[VALUE_LEN];
 
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
-    c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
+    redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
     while(1) {
         // inizio da non modificare 
-        reply = RedisCommand(c2r, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
-        assertReply(c2r, reply);
+        assertReply(redConn, redReply);
 
-        if (ReadNumStreams(reply) == 0) {
+        if (ReadNumStreams(redReply) == 0) {
             continue;
         } 
 
         // Only one stream --> stream_num = 0
         // Only one message in stream --> msg_num = 0
-        ReadStreamNumMsgID(reply, 0, 0, msg_id);
+        ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
         // Check if the first key/value pair is the client_id
-        ReadStreamMsgVal(reply, 0, 0, 0, first_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(reply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    // Index of first field of msg = 0
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    // Index of second field of msg = 1
 
         if(strcmp(first_key, "client_id")){
-            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
         // Take the input
-        ReadStreamMsgVal(reply, 0, 0, 2, second_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(reply, 0, 0, 3, nome_medico);  // Index of second field of msg = 1
+        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    // Index of third field of msg = 2
+        ReadStreamMsgVal(redReply, 0, 0, 3, specializzazione);  // Index of fourth field of msg = 3
         
-        if(strcmp(second_key, "nome_medico") || (ReadStreamMsgNumVal(reply, 0, 0) > 4)){
-            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+        if(strcmp(second_key, "specializzazione") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
+            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
-        std::string str_nome_medico = nome_medico;
-        std::string search_parameter = "%"+ str_nome_medico + "%";
-        // da rifare la query, bisogna fare il join tra persona e medico per avere il nome del medico
-        sprintf(query, "SELECT * FROM medico WHERE name LIKE \'%s\' ", (char*)search_parameter.c_str());
+        std::string str_specializzazione = specializzazione;
+        std::string search_parameter = "%" + str_specializzazione + "%";
 
-        query_res = db.RunQuery(query, true);
+        // Query per ottenere i medici con la specializzazione richiesta
+        sprintf(query, "SELECT p.cf, p.nome, p.cognome, s.specializzazione_nome AS specializzazione FROM medico m, persona p, medico_specializzazione s WHERE p.cf = m.cf AND m.id = s.medico_id AND s.specializzazione_nome = '%s';", (char*)search_parameter.c_str());
 
-        if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK) {
-            send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
+        queryRes = db.RunQuery(query, true);
+        
+        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
+            send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
 
-        std::list<Medico*> medici;
+        std::list<Persona*> medici;
 
-        for(int row = 0; row < PQntuples(query_res); row++){
-            Medico* medico;
-            medico = new Medico(PQgetvalue(query_res, row, PQfnumber(query_res, "code")),
-                                        PQgetvalue(query_res, row, PQfnumber(query_res, "name")),
-                                        PQgetvalue(query_res, row, PQfnumber(query_res, "description")),
-                                        PQgetvalue(query_res, row, PQfnumber(query_res, "price")));
+        for(int row = 0; row < PQntuples(queryRes); row++){
+            Persona* medico;
+            medico = new Persona(PQgetvalue(queryRes, row, PQfnumber(queryRes, "cf")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nome")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "cognome")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nascita")));
             
             medici.push_back(medico);
         }
 
-        send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(query_res));
+        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
-        for(int row = 0; row<PQntuples(query_res); row++){
+        for(int row = 0; row < PQntuples(queryRes); row++){
 
-            Medico *m = medici.front();
+            Persona *m = medici.front();
 
             medici.pop_front();
 
-            reply = RedisCommand(c2r, "XADD %s * row %d code %s name %s description %s price %s", WRITE_STREAM, row, p->code, p->name, p->description, p->price);
-            assertReplyType(c2r, reply, REDIS_REPLY_STRING);
-            freeReplyObject(reply);
+            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s specializzazione %s", 
+                                 WRITE_STREAM, row,  m->nome, m->cognome, str_specializzazione);
+            assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+            freeReplyObject(redReply);
 
         }
     }

@@ -5,6 +5,7 @@ from generatori_parametri.generatore_date import DataNascita
 from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
+from generatori_parametri.generatore_specializzazioni import Specializzazione
 
 requests = {
  "registrazione" : [[("cf", CF)],
@@ -14,6 +15,8 @@ requests = {
                     [("indirizzo", Indirizzo)],
                     [("email", Stringa)],
                     [("telefono", Telefono)]],
+
+"ricerca_medico" : [[("specializzazione", Specializzazione)]],
  
 }
 
@@ -23,6 +26,6 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_medico"]}
 
-apis = {"paziente_non_registrato" :  ["registrazione"]}
+apis = {"paziente_non_registrato" :  ["ricerca_medico"]}
 
 ports = {"amministrativo" : 42070, "medico" : 42069, "paziente" : 42071, "paziente_non_registrato" : 42072}

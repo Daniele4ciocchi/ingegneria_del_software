@@ -46,20 +46,22 @@ void search_medico(redisContext *redConn, DbConnection &db, const char *msg_id, 
 int main() {
     redisContext *redConn;
     redisReply *redReply;
-    char msg_id[MSGIDSIZE], first_key[KEYSIZE], client_id[VALUESIZE], second_key[KEYSIZE], medico_id[PRMTRSIZE];
+    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN], second_key[KEY_LEN], specializzazione[VALUE_LEN];
 
     // Connessione a Redis e al database
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
-    DbConnection db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
+    Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
 
+    // Controllo sulla connessione Redis
     if (!redConn || redConn->err) {
         std::cerr << "Errore connessione Redis" << std::endl;
         return -1;
     }
 
     while (true) {
-        redReply = RedisCommand(redConn, "XREADGROUP GROUP main customer BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
-        if (!redReply || ReadNumStreams(redReply) == 0) {
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        
+        if (ReadNumStreams(redReply) == 0) {
             if (redReply) freeReplyObject(redReply);
             continue;
         }
@@ -68,16 +70,16 @@ int main() {
         ReadStreamMsgVal(redReply, 0, 0, 0, first_key);
         ReadStreamMsgVal(redReply, 0, 0, 1, client_id);
 
-        if (strcmp(first_key, "client_id") != 0) {
+        if (strcmp(first_key, "client_id")) {
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             freeReplyObject(redReply);
             continue;
         }
 
         ReadStreamMsgVal(redReply, 0, 0, 2, second_key);
-        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);
+        ReadStreamMsgVal(redReply, 0, 0, 3, specializzazione);
 
-        if (strcmp(second_key, "medico_id") != 0) {
+        if (strcmp(second_key, "specializzazione") || (ReadStreamMsgNumVal(reply, 0, 0) > 4)){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             freeReplyObject(redReply);
             continue;

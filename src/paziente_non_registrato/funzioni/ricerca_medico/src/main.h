@@ -20,23 +20,23 @@
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
 // 
-#include "../../../../classes/medico.h"
+#include "../../../../classes/src/persona.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 
 /* Constants */
 
-#define READ_STREAM "search-products-in"
-#define WRITE_STREAM "search-products-out"
+#define READ_STREAM "ricerca_medico-in"
+#define WRITE_STREAM "ricerca_medico-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379
 
 #define POSTGRESQL_SERVER "localhost"
 #define POSTGRESQL_PORT "5432"
-#define POSTGRESQL_USER "customer"
-#define POSTGRESQL_PSW "customer"
-#define POSTGRESQL_DBNAME "ecommerce"
+#define POSTGRESQL_USER "paziente_non_registrato"
+#define POSTGRESQL_PSW "paziente_non_registrato"
+#define POSTGRESQL_DBNAME "prenbotazionimediche"
 
 using namespace std;
 

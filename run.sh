@@ -104,6 +104,6 @@ set_current_root src/paziente_non_registrato
 run_main handler/bin
 
 run_main funzioni/registrazione/bin
-#run_main funzioni/ricerca_medico/bin
+run_main funzioni/ricerca_medico/bin
 
 printf "\n\n\n########## Run script completed ###########\n\n\n\n"
