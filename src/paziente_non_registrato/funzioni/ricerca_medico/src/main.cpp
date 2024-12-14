@@ -57,7 +57,7 @@ int main() {
             continue;
         }
 
-        print_queryResult(queryRes);
+        print_queryResult(queryRes, specializzazione);
 
         std::list<Persona*> medici;
 

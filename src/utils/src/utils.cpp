@@ -11,7 +11,7 @@ void send_response_status(redisContext* c2r, const char *stream, const char *cli
     freeReplyObject(reply);
 }
 
-void print_queryResult(PGresult *queryRes) {
+void print_queryResult(PGresult *queryRes, const char* parametro_ricerca) {
     if (!queryRes) {
         fprintf(stderr, "Risultato della query è NULL\n");
         return;
@@ -26,12 +26,18 @@ void print_queryResult(PGresult *queryRes) {
     int nFields = PQnfields(queryRes);
     int nTuples = PQntuples(queryRes);
 
-    printf("Numero di colonne: %d\n", nFields);
-    printf("Numero di righe: %d\n", nTuples);
+    printf("Risultato della query per %s\n", parametro_ricerca);
 
+    // Print column names
+    for (int i = 0; i < nFields; i++) {
+        printf("%s\t |", PQfname(queryRes, i));
+    }
+    printf("\n");
+
+    // Print rows
     for (int i = 0; i < nTuples; i++) {
         for (int j = 0; j < nFields; j++) {
-            printf("%s\t", PQgetvalue(queryRes, i, j));
+            printf("%s\t |", PQgetvalue(queryRes, i, j));
         }
         printf("\n");
     }
