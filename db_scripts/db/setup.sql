@@ -62,3 +62,17 @@ DROP OWNED BY :paziente;
 DROP USER IF EXISTS :paziente;
 
 CREATE USER :paziente WITH ENCRYPTED PASSWORD 'paziente';
+
+-- Creiamo l'utente tester
+\c :dbname postgres
+
+REASSIGN OWNED BY :tester TO postgres;
+
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM :tester;
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM :tester;
+REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public FROM :tester;
+
+DROP OWNED BY :tester;
+DROP USER IF EXISTS :tester;
+
+CREATE USER :tester WITH ENCRYPTED PASSWORD 'tester';

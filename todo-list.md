@@ -9,9 +9,9 @@
     - [ ] elimina medico 
     - [ ] elimina paziente
 
-- paziente non registrato 
+- paziente non registrato (FINITO E FUNZIONANTE)
     - [x] registrazione 
-    - [ ] ricerca medico
+    - [x] ricerca medico
 - medico
     - [ ] cronologia prestazioni 
     - [ ] prestazioni future

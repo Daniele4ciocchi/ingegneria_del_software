@@ -5,4 +5,5 @@
 \set medico medico
 \set paziente_non_registrato paziente_non_registrato
 \set paziente paziente
+\set tester tester
 \set handler handler

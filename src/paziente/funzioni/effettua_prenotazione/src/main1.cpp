@@ -1,3 +1,4 @@
+/*
 #include "main.h"
 bool handle_redis_error(redisContext* c2r,redisReply* reply, const char*client_id, const char* msg_id, const char* status) {
     if (!reply || reply->type == REDIS_REPLY_ERROR){
@@ -55,3 +56,4 @@ int main() {
     db.finish();
     return 0;
 }
+*/

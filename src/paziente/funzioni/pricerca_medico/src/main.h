@@ -13,20 +13,21 @@
 #include <sys/times.h>
 #include <cassert>
 #include <cerrno>
+#include <list>
 
 /* Local libraries */
 
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
-
-#include "../../../../classes/src/feedback.h"
+// 
+#include "../../../../classes/src/persona.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 
 /* Constants */
 
-#define READ_STREAM "feedback-in"
-#define WRITE_STREAM "feedback-out"
+#define READ_STREAM "pricerca_medico-in"
+#define WRITE_STREAM "pricerca_medico-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379

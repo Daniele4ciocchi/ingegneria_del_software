@@ -51,7 +51,14 @@ GRANT SELECT ON medico TO :paziente_non_registrato;
 
 -- Permessi paziente
 GRANT SELECT ON medico TO :paziente;
+GRANT SELECT ON persona TO :paziente;
+GRANT SELECT ON medico_specializzazione TO :paziente;
 GRANT INSERT, SELECT ON richiestaprenotazione TO :paziente;
 GRANT SELECT ON prenotazioneaccettata TO :paziente;
 GRANT SELECT ON prenotazionerifiutata TO :paziente;
 GRANT INSERT ON feedback TO :paziente;
+
+-- Permessi tester
+GRANT SELECT ON medico TO :tester;
+GRANT SELECT ON paziente TO :tester;
+GRANT SELECT ON amministrativo TO :tester;

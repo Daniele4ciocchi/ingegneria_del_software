@@ -86,16 +86,16 @@ pkill main
 #run_main funzioni/statistiche/bin
 #run_main funzioni/termina_prestazione/bin
 
-#printf "############## PAZIENTE ##############\n\n"
+printf "############## PAZIENTE ##############\n\n"
 
-#set_current_root src/paziente
+set_current_root src/paziente
 
-#run_main handler/bin
+run_main handler/bin
 
-#run_main funzioni/cronologia_prenotazioni/bin
-#run_main funzioni/effettua_prenotazione/bin
-#run_main funzioni/lascia_feedback/bin
-#run_main funzioni/ricerca_medico/bin
+run_main funzioni/cronologia_prenotazioni/bin
+run_main funzioni/effettua_prenotazione/bin
+run_main funzioni/lascia_feedback/bin
+run_main funzioni/pricerca_medico/bin
 
 printf "############## PAZIENTE NON REGISTRATO ##############\n\n"
 
