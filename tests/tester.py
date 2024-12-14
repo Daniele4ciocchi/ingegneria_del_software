@@ -1,9 +1,7 @@
 import socket
 import random
 from inizializzazione_funzioni import requests, apis, ports
-import time
 
-time.sleep(0.1) #100ms
 
 HOST = "127.0.0.1"  # Indirizzo del server
 random.seed()
@@ -64,7 +62,7 @@ def send_request(client, port, request_string):
 
 def main():
     totale = 2
-    richieste = 5
+    richieste = 20
     succesful = 0
     failed = 0
 

@@ -11,6 +11,34 @@ void send_response_status(redisContext* c2r, const char *stream, const char *cli
     freeReplyObject(reply);
 }
 
+void print_queryResult(PGresult *queryRes) {
+    if (!queryRes) {
+        fprintf(stderr, "Risultato della query è NULL\n");
+        return;
+    }
+
+    if (PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
+        fprintf(stderr, "Query fallita: %s\n", PQresultErrorMessage(queryRes));
+        PQclear(queryRes);
+        return;
+    }
+
+    int nFields = PQnfields(queryRes);
+    int nTuples = PQntuples(queryRes);
+
+    printf("Numero di colonne: %d\n", nFields);
+    printf("Numero di righe: %d\n", nTuples);
+
+    for (int i = 0; i < nTuples; i++) {
+        for (int j = 0; j < nFields; j++) {
+            printf("%s\t", PQgetvalue(queryRes, i, j));
+        }
+        printf("\n");
+    }
+
+    PQclear(queryRes);
+}
+
 std::string replace_substring(std::string input, const std::string& target, const std::string& replacement) {
     size_t pos = input.find(target);
 

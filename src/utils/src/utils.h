@@ -9,14 +9,19 @@
 #include <chrono>
 #include <ctime>
 #include <sstream>
+#include <libpq-fe.h>
 
 /* Local libraries */
 
 #include "../../lib/con2redis/src/con2redis.h"
+#include "../../lib/con2db/pgsql.h"
+
 
 /* Procedures */
 
 void send_response_status(redisContext* c2r, const char *stream, const char *client_id, const char *resp_status, const char *msg_id, const int nrows);
+
+void print_queryResult(PGresult *queryRes);
 
 std::string replace_substring(std::string input, const std::string& target, const std::string& replacement);
 
