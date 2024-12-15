@@ -15,18 +15,16 @@ def generate_random_argument(parameter_class):
     return parameter_class().receive_random_value()
 
 
-def generate_random_request(client):
-    """Genera una richiesta casuale per un client dato."""
-    apis_name = random.choice(apis[client])
+def generate_random_request(funzione):
 
     request_args = []
-    for arg_set in requests[apis_name]:
+    for arg_set in requests[funzione]:
         arg_values = {}
         for arg_name, arg_class in arg_set:
             arg_values[arg_name] = generate_random_argument(arg_class)
         request_args.append(arg_values)
 
-    request_string = f"{apis_name}"
+    request_string = f"{funzione}"
     for arg_values in request_args:
         for arg_name, arg_value in arg_values.items():
             if isinstance(arg_value, str):
@@ -42,7 +40,7 @@ def send_request(client, port, request_string):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.connect((HOST, port))
-            s.settimeout(5)  # Timeout incrementato a 5 secondi
+            s.settimeout(2)  # Timeout incrementato a 5 secondi
 
             print(f"Inviando la richiesta: {request_string}")
             s.send(request_string.encode())
@@ -61,28 +59,35 @@ def send_request(client, port, request_string):
         print("Socket chiuso correttamente.")
 
 def main():
-    totale = 2
-    richieste = 4
+    client_list = list(apis.keys())
+    richieste = 0
+    test = 2
     succesful = 0
     failed = 0
 
-    for _ in range(totale):
-        client = random.choice(list(apis.keys()))
+    # Entriamo una volta in ogni client
+    for client in client_list:
         port = ports.get(client)  # Usa la porta configurata o quella di default
 
-        for _ in range(richieste):
-            request_string = generate_random_request(client)
+        funzioni = apis[client]
 
-            response = send_request(client, port, request_string)
-            if response.startswith("REQUEST_SUCCESS"):
-                succesful += 1
-            else:
-                failed += 1
-                errate.append(request_string)
+        for funzione in funzioni:
+
+            for _ in range(test): 
+
+                request_string = generate_random_request(funzione)
+                richieste += 1
+
+                response = send_request(client_list, port, request_string)
+                if response.startswith("REQUEST_SUCCESS"):
+                    succesful += 1
+                else:
+                    failed += 1
+                    errate.append(request_string)
                 
 
-    print(f"\nSuccesful requests: {succesful}/{totale * richieste}")
-    print(f"Failed requests: {failed}/{totale * richieste}")
+    print(f"\nSuccesful requests: {succesful}/{richieste}")
+    print(f"Failed requests: {failed}/{richieste}")
 
 
 if __name__ == "__main__":
