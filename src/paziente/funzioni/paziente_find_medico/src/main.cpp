@@ -13,7 +13,7 @@ int main() {
 
     while(1) {
         // inizio da non modificare 
-        redReply = RedisCommand(redConn, "XREADGROUP GROUP main pricerca_medico BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente_find_medico BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(redConn, redReply);
 

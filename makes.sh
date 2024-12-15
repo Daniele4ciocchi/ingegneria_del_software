@@ -134,7 +134,7 @@ make_folder handler/src
 make_folder funzioni/cronologia_prenotazioni/src
 make_folder funzioni/effettua_prenotazione/src
 make_folder funzioni/lascia_feedback/src
-make_folder funzioni/pricerca_medico/src
+make_folder funzioni/paziente_find_medico/src
 
 printf "############## PAZIENTE NON REGISTRATO ##############\n\n"
 

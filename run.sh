@@ -95,7 +95,7 @@ run_main handler/bin
 run_main funzioni/cronologia_prenotazioni/bin
 run_main funzioni/effettua_prenotazione/bin
 run_main funzioni/lascia_feedback/bin
-run_main funzioni/pricerca_medico/bin
+run_main funzioni/paziente_find_medico/bin
 
 printf "############## PAZIENTE NON REGISTRATO ##############\n\n"
 

@@ -31,17 +31,17 @@ requests = {
 
 "lascia_feedback" : [],
  
-"pricerca_medico" : [[("specializzazione", Specializzazione)]],
+"paziente_find_medico" : [[("specializzazione", Specializzazione)]],
 }
 
 
 apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren", "elimina_medico", "elimina_paziente"],
        "medico" : ["cronologia_prestazioni", "prestazioni_future", "statistiche", "termina_prestazione"],
-       "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
+       "paziente" : ["paziente_find_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_medico"]}
 
 apis = {"paziente_non_registrato" :  [ "ricerca_medico"],
-        "paziente" : ["pricerca_medico"]
+        "paziente" : ["paziente_find_medico"]
         }
 
 ports = {"amministrativo" : 42070, "medico" : 42069, "paziente" : 42071, "paziente_non_registrato" : 42072}

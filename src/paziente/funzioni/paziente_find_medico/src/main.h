@@ -26,8 +26,9 @@
 
 /* Constants */
 
-#define READ_STREAM "pricerca_medico-in"
-#define WRITE_STREAM "pricerca_medico-out"
+#define READ_STREAM "paziente_find_medico-in"
+#define WRITE_STREAM "paziente_find_medico-out"
+
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379
