@@ -50,27 +50,28 @@ RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int
 
         if (!strcmp(key, "paziente_id")) {
             strcpy(paziente_id, value);
-            read_fields |= 0b10;
+            read_fields |= 0b1;
 
         } else if (!strcmp(key, "medico_id")) {
             strcpy(medico_id, value);
-            read_fields |= 0b100;
+            read_fields |= 0b10;
 
         } else if (!strcmp(key, "amministrativo_id")) {
             strcpy(amministrativo_id, value);
-            read_fields |= 0b1000;
+            read_fields |= 0b100;
 
         } else if (!strcmp(key, "specializzazione_nome")) {
             strcpy(specializzazione_nome, value);
-            read_fields |= 0b10000;
+            read_fields |= 0b1000;
 
         } else if (!strcmp(key, "giornoorariopren")) {
             strcpy(giornoorariopren, value);
-            read_fields |= 0b100000;
+            read_fields |= 0b10000;
         }
     }
 
-    if (read_fields != 0b111111) {
+
+    if (read_fields != 0b11111) {
         throw std::invalid_argument("Missing fields in RichiestaPrenotazione");
     }
 

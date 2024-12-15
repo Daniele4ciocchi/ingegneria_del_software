@@ -59,6 +59,7 @@ GRANT SELECT ON prenotazioneaccettata TO :paziente;
 GRANT SELECT ON prenotazionerifiutata TO :paziente;
 GRANT INSERT ON feedback TO :paziente;
 
+
 -- Permessi tester
 GRANT SELECT ON medico TO :tester;
 GRANT SELECT ON paziente TO :tester;
