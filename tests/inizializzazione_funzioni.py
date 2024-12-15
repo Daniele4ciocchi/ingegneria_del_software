@@ -6,7 +6,7 @@ from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
 from generatori_parametri.generatore_specializzazioni import Specializzazione
-#from generatori_parametri.generatore_id import IdPaziente, IdMedico, IdAmministrativo, IdPrenotazione_accettata
+from generatori_parametri.generatore_id import IdPaziente, IdMedico, IdAmministrativo, IdPrenotazione_accettata
 
 requests = {
  #funzioni paziente_non_registrato
@@ -18,16 +18,14 @@ requests = {
                     [("email", Stringa)],
                     [("telefono", Telefono)]],
 
-"ricerca_non_registrata" : [[("specializzazione", Specializzazione)]],
-
 #funzioni paziente
-#"cronologia_prenotazioni" : [[("paziente_id", IdPaziente)]],
+"cronologia_prenotazioni" : [[("paziente_id", IdPaziente)]],
 
-#"effettua_prenotazione" : [[("paziente_id", IdPaziente)],
- #                          [("medico_id", IdMedico)],
-  #                         [("amministrativo_id", IdAmministrativo)],
-   #                        [("specializzazione", Specializzazione)] #mi puzza un po' 
-    #                       ], 
+"effettua_prenotazione" : [[("paziente_id", IdPaziente)],
+                           [("medico_id", IdMedico)],
+                           [("amministrativo_id", IdAmministrativo)],
+                           [("specializzazione", Specializzazione)] #mi puzza un po' 
+                           ], 
 
 "lascia_feedback" : [],
  

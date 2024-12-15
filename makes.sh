@@ -143,6 +143,5 @@ set_current_root src/paziente_non_registrato
 make_folder handler/src
 
 make_folder funzioni/registrazione/src
-#make_folder funzioni/ricerca_non_registrata/src
 
 printf "\n\n\n########## Make script completed ###########\n\n\n\n"

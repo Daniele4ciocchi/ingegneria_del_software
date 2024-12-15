@@ -61,7 +61,8 @@ def send_request(client, port, request_string):
 def main():
     client_list = list(apis.keys())
     richieste = 0
-    test = 2
+    # MODIFICARE SOLO QUESTO VALORE PER AUMENTARE IL NUMERO DI TEST PER OGNI FUNZIONE
+    test = 3
     succesful = 0
     failed = 0
 
@@ -71,6 +72,7 @@ def main():
 
         funzioni = apis[client]
 
+        # Entriamo una volta il ogni funzione
         for funzione in funzioni:
 
             for _ in range(test): 
