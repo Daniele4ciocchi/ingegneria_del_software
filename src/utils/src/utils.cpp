@@ -11,39 +11,6 @@ void send_response_status(redisContext* c2r, const char *stream, const char *cli
     freeReplyObject(reply);
 }
 
-void print_queryResult(PGresult *queryRes, const char* parametro_ricerca) {
-    if (!queryRes) {
-        fprintf(stderr, "Risultato della query è NULL\n");
-        return;
-    }
-
-    if (PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
-        fprintf(stderr, "Query fallita: %s\n", PQresultErrorMessage(queryRes));
-        PQclear(queryRes);
-        return;
-    }
-
-    int nFields = PQnfields(queryRes);
-    int nTuples = PQntuples(queryRes);
-
-    printf("Risultato della query per %s\n", parametro_ricerca);
-
-    // Print column names
-    for (int i = 0; i < nFields; i++) {
-        printf("%s\t |", PQfname(queryRes, i));
-    }
-    printf("\n");
-
-    // Print rows
-    for (int i = 0; i < nTuples; i++) {
-        for (int j = 0; j < nFields; j++) {
-            printf("%s\t |", PQgetvalue(queryRes, i, j));
-        }
-        printf("\n");
-    }
-
-    PQclear(queryRes);
-}
 
 std::string replace_substring(std::string input, const std::string& target, const std::string& replacement) {
     size_t pos = input.find(target);

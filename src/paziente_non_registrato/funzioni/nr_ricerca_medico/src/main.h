@@ -26,8 +26,8 @@
 
 /* Constants */
 
-#define READ_STREAM "ricerca_non_registrata-in"
-#define WRITE_STREAM "ricerca_non_registrata-out"
+#define READ_STREAM "nr_ricerca_medico-in"
+#define WRITE_STREAM "nr_ricerca_medico-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379

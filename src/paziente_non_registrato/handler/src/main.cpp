@@ -2,7 +2,7 @@
 
 int main(){
     int num_types = 2;
-    std::string req_types[num_types] = {"registrazione"};
+    std::string req_types[num_types] = {"registrazione", "nr_ricerca_medico"};
 
     Server server(SERVER_ID, 42072, REDIS_SERVER, REDIS_PORT, req_types, num_types);
 
