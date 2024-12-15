@@ -95,7 +95,7 @@ run_main handler/bin
 run_main funzioni/cronologia_prenotazioni/bin
 run_main funzioni/effettua_prenotazione/bin
 run_main funzioni/lascia_feedback/bin
-run_main funzioni/find_medico/bin
+run_main funzioni/ricerca_medico/bin
 
 printf "############## PAZIENTE NON REGISTRATO ##############\n\n"
 
@@ -104,6 +104,6 @@ set_current_root src/paziente_non_registrato
 run_main handler/bin
 
 run_main funzioni/registrazione/bin
-run_main funzioni/ricerca_medicoo/bin
+#run_main funzioni/ricerca_non_registrata/bin
 
 printf "\n\n\n########## Run script completed ###########\n\n\n\n"

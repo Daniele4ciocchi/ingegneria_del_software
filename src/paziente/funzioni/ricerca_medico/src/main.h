@@ -26,16 +26,17 @@
 
 /* Constants */
 
-#define READ_STREAM "ricerca_medicoo-in"
-#define WRITE_STREAM "ricerca_medicoo-out"
+#define READ_STREAM "ricerca_medico-in"
+#define WRITE_STREAM "ricerca_medico-out"
+
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379
 
 #define POSTGRESQL_SERVER "localhost"
 #define POSTGRESQL_PORT "5432"
-#define POSTGRESQL_USER "paziente_non_registrato"
-#define POSTGRESQL_PSW "paziente_non_registrato"
+#define POSTGRESQL_USER "paziente"
+#define POSTGRESQL_PSW "paziente"
 #define POSTGRESQL_DBNAME "prenotazionimediche"
 
 using namespace std;

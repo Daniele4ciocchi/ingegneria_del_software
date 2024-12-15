@@ -20,8 +20,8 @@ requests = {
 
 apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren", "elimina_medico", "elimina_paziente"],
        "medico" : ["cronologia_prestazioni", "prestazioni_future", "statistiche", "termina_prestazione"],
-       "paziente" : ["ricerca_medicoo", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
-       "paziente_non_registrato" : ["registrazione", "ricerca_medicoo"]}
+       "paziente" : ["ricerca_non_registrata", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
+       "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
 apis = {"paziente_non_registrato" :  ["registrazione"]}
 
