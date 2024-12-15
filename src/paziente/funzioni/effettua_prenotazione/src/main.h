@@ -25,8 +25,8 @@
 
 /* Constants */
 
-#define READ_STREAM "richiesta_prenotazione-in"
-#define WRITE_STREAM "richiesta_prenotazione-out"
+#define READ_STREAM "effettua_prenotazione-in"
+#define WRITE_STREAM "effettua_prenotazione-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379

@@ -1,80 +1,93 @@
 #include "main.h"
-#include <sstream> // Corretto include
-
-// Ottengo la cronologia
-std::string get_booking_history(Con2DB &db, const std::string &client_id) {
-    std::ostringstream query;
-    query << "SELECT id, medico_id, data_ora, durata FROM prenotazioni "
-          << "WHERE client_id = '" << client_id << "' ORDER BY data_ora DESC;";
-
-    PGresult *query_res = db.RunQuery((char *)query.str().c_str(), false);
-    if (PQresultStatus(query_res) != PGRES_TUPLES_OK) {
-        PQclear(query_res);
-        throw std::runtime_error("Errore nella query per la cronologia.");
-    }
-
-    // Stringa con i dati
-    std::ostringstream result_stream;
-    int rows = PQntuples(query_res);
-    for (int i = 0; i < rows; i++) {
-        result_stream << "id=" << PQgetvalue(query_res, i, 0)
-                      << ";medico_id=" << PQgetvalue(query_res, i, 1)
-                      << ";data_ora=" << PQgetvalue(query_res, i, 2)
-                      << ";durata=" << PQgetvalue(query_res, i, 3);
-        if (i < rows - 1) result_stream << "|";
-    }
-    PQclear(query_res);
-
-    return result_stream.str();
-}
 
 int main() {
-    redisContext *c2r;
-    redisReply *reply;
+    redisContext *redConn;
+    redisReply *redReply;
 
-    char msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
+    PGresult *queryRes;
 
-    // Connessione al database Redis
+    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN], second_key[KEY_LEN], idPaziente[VALUE_LEN];
+
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
-    c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
-    if (c2r == nullptr || c2r->err) {
-        std::cerr << "Errore nella connessione a Redis: " << c2r->errstr << std::endl;
-        return -1;
-    }
+    redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    while (true) {
-        // Legge un messaggio dalla coda Redis
-        reply = RedisCommand(c2r, "XREADGROUP GROUP main booking_history BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
-        if (!reply || reply->type == REDIS_REPLY_ERROR) {
-            if (reply) freeReplyObject(reply);
+    while(1) {
+        // inizio da non modificare 
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+
+        assertReply(redConn, redReply);
+
+        if (ReadNumStreams(redReply) == 0) {
             continue;
-        }
-        if (ReadNumStreams(reply) == 0) {
-            freeReplyObject(reply);
-            continue;
-        }
+        } 
 
-        // Estrazione del messaggio
-        ReadStreamNumMsgID(reply, 0, 0, msg_id);
-        ReadStreamMsgVal(reply, 0, 0, 0, first_key);
-        ReadStreamMsgVal(reply, 0, 0, 1, client_id);
+        // Only one stream --> stream_num = 0
+        // Only one message in stream --> msg_num = 0
+        ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        if (strcmp(first_key, "client_id") != 0) {
-            send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
-            freeReplyObject(reply);
+        // Check if the first key/value pair is the client_id
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    // Index of first field of msg = 0
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+
+        if(strcmp(first_key, "client_id")){
+            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
-        // Recupero cronologia delle prenotazioni
-        try {
-            std::string history = get_booking_history(db, client_id);
-            // Aggiungo la cronologia al flusso Redis
-            RedisCommand(c2r, "XADD %s * client_id %s history %s", WRITE_STREAM, client_id, history.c_str());
-        } catch (const std::exception &e) {
-            send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
+        // Take the input
+        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    // Index of third field of msg = 2
+        ReadStreamMsgVal(redReply, 0, 0, 3, idPaziente);  // Index of fourth field of msg = 3
+        
+        if(strcmp(second_key, "paziente_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
+            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            continue;
         }
 
-        freeReplyObject(reply);
+        std::string str_idpaziente = idPaziente;
+        std::string search_parameter = "%" + str_idpaziente + "%";
+
+        // Query per ottenere i medici con la idpaziente richiesta
+        // la query la lasciamo a gabriele 
+
+        queryRes = db.RunQuery(query, true);
+        
+        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
+            std::cout << "Errore query o medico non trovato" << std::endl;
+            send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
+            continue;
+        }
+
+        //print_queryResult(queryRes, idpaziente);
+
+        std::list<Persona*> medici;
+
+        for(int row = 0; row < PQntuples(queryRes); row++){
+            Persona* medico;
+            medico = new Persona(PQgetvalue(queryRes, row, PQfnumber(queryRes, "cf")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nome")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "cognome")),
+                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nascita")));
+            
+            medici.push_back(medico);
+        }
+   
+        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
+        
+        for(int row = 0; row < PQntuples(queryRes); row++){
+
+            Persona *m = medici.front();
+
+            medici.pop_front();
+
+            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s", 
+                                 WRITE_STREAM, row,  m->nome, m->cognome);
+            cout << redReply->str << endl;
+            assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+            freeReplyObject(redReply);
+
+        }
+       
+
     }
 
     db.finish();

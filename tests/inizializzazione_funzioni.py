@@ -1,7 +1,7 @@
 from generatori_parametri.generatore_nomi import NomePersona
 from generatori_parametri.generatore_cognomi import CognomePersona
 from generatori_parametri.generatore_cf import CF
-from generatori_parametri.generatore_date import DataNascita
+from generatori_parametri.generatore_date import DataNascita, nextData
 from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
@@ -25,7 +25,8 @@ requests = {
 "effettua_prenotazione" : [[("paziente_id", IdPaziente)],
                            [("medico_id", IdMedico)],
                            [("amministrativo_id", IdAmministrativo)],
-                           [("specializzazione", Specializzazione)] #mi puzza un po' 
+                           [("specializzazione_nome", Specializzazione)],
+                           [("giornoorariopren", nextData)]
                            ], 
 
 "lascia_feedback" : [],
@@ -39,7 +40,7 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"paziente" : ["ricerca_medico"],
+apis = {"paziente" : ["ricerca_medico", "effettua_prenotazione"],
         "paziente_non_registrato" : ["registrazione","nr_ricerca_medico"]
         }
 
