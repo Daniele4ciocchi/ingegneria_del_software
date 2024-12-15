@@ -26,8 +26,8 @@
 
 /* Constants */
 
-#define READ_STREAM "paziente_find_medico-in"
-#define WRITE_STREAM "paziente_find_medico-out"
+#define READ_STREAM "find_medico-in"
+#define WRITE_STREAM "find_medico-out"
 
 
 #define REDIS_SERVER "localhost"

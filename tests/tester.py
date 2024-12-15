@@ -61,8 +61,8 @@ def send_request(client, port, request_string):
         print("Socket chiuso correttamente.")
 
 def main():
-    totale = 10
-    richieste = 5
+    totale = 2
+    richieste = 4
     succesful = 0
     failed = 0
 

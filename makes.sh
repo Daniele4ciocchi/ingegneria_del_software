@@ -134,7 +134,7 @@ make_folder handler/src
 make_folder funzioni/cronologia_prenotazioni/src
 make_folder funzioni/effettua_prenotazione/src
 make_folder funzioni/lascia_feedback/src
-make_folder funzioni/paziente_find_medico/src
+make_folder funzioni/find_medico/src
 
 printf "############## PAZIENTE NON REGISTRATO ##############\n\n"
 
@@ -143,6 +143,6 @@ set_current_root src/paziente_non_registrato
 make_folder handler/src
 
 make_folder funzioni/registrazione/src
-make_folder funzioni/ricerca_medico/src
+make_folder funzioni/ricerca_medicoo/src
 
 printf "\n\n\n########## Make script completed ###########\n\n\n\n"

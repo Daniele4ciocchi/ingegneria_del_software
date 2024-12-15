@@ -55,3 +55,20 @@ class IdAmministrativo:
     def __del__(self):
         self.cursor.close()
         self.conn.close()
+
+class IdPrenotazione_accettata:
+    def __init__(self):
+        self.conn = psycopg2.connect(dbname, user, password, host, port)
+        self.cursor = self.conn.cursor()
+
+    def receive_random_value(self):
+        self.cursor.execute("SELECT a.id FROM prenotazione a;")
+        ids = self.cursor.fetchall()
+        if not ids:
+            raise ValueError("No IDs found in the 'amministrativo' table.")
+        return random.choice(ids)[0]
+
+    def __del__(self):
+        self.cursor.close()
+        self.conn.close()
+

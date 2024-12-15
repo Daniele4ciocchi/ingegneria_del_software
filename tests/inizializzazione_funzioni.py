@@ -6,7 +6,7 @@ from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
 from generatori_parametri.generatore_specializzazioni import Specializzazione
-from generatori_parametri.generatore_id import IdPaziente, IdMedico, IdAmministrativo
+from generatori_parametri.generatore_id import IdPaziente, IdMedico, IdAmministrativo, IdPrenotazione_accettata
 
 requests = {
  #funzioni paziente_non_registrato
@@ -18,7 +18,7 @@ requests = {
                     [("email", Stringa)],
                     [("telefono", Telefono)]],
 
-"ricerca_medico" : [[("specializzazione", Specializzazione)]],
+"ricerca_medicoo" : [[("specializzazione", Specializzazione)]],
 
 #funzioni paziente
 "cronologia_prenotazioni" : [[("paziente_id", IdPaziente)]],
@@ -31,17 +31,17 @@ requests = {
 
 "lascia_feedback" : [],
  
-"paziente_find_medico" : [[("specializzazione", Specializzazione)]],
+"find_medico" : [[("specializzazione", Specializzazione)]],
 }
 
 
 apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren", "elimina_medico", "elimina_paziente"],
        "medico" : ["cronologia_prestazioni", "prestazioni_future", "statistiche", "termina_prestazione"],
-       "paziente" : ["paziente_find_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
-       "paziente_non_registrato" : ["registrazione", "ricerca_medico"]}
+       "paziente" : ["find_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
+       "paziente_non_registrato" : ["registrazione", "ricerca_medicoo"]}
 
-apis = {"paziente_non_registrato" :  [ "ricerca_medico"],
-        "paziente" : ["paziente_find_medico"]
+apis = {"paziente" : ["find_medico"],
+        "paziente_non_registrato" : ["registrazione", "ricerca_medicoo"]
         }
 
 ports = {"amministrativo" : 42070, "medico" : 42069, "paziente" : 42071, "paziente_non_registrato" : 42072}
