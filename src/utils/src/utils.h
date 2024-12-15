@@ -9,7 +9,7 @@
 #include <chrono>
 #include <ctime>
 #include <sstream>
-#include <libpq-fe.h>
+#include "../../lib/postgresql/libpq-fe.h"
 
 /* Local libraries */
 

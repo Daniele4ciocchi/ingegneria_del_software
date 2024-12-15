@@ -3,8 +3,7 @@
         {
             "name": "linux-clang-x64",
             "includePath": [
-                "${workspaceFolder}/**",
-                "/usr/include/postgresql"                
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
