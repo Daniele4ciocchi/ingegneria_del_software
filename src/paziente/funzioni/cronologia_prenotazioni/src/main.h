@@ -21,6 +21,7 @@
 #include "../../../../lib/con2redis/src/con2redis.h"
 // 
 #include "../../../../classes/src/persona.h"
+#include "../../../../classes/src/richiesta_prenotazione.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 

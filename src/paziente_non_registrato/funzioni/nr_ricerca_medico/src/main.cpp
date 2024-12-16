@@ -43,9 +43,6 @@ int main() {
             continue;
         }
 
-        std::string str_specializzazione = specializzazione;
-        std::string search_parameter = "%" + str_specializzazione + "%";
-
         // Query per ottenere i medici con la specializzazione richiesta
         sprintf(query, "SELECT p.cf, p.nome, p.cognome, p.nascita FROM medico m, persona p, medico_specializzazione s WHERE p.cf = m.cf AND m.id = s.medico_id AND s.specializzazione_nome = '%s';", specializzazione);
 
@@ -56,8 +53,6 @@ int main() {
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
-
-        //print_queryResult(queryRes, specializzazione);
 
         std::list<Persona*> medici;
 
@@ -72,6 +67,7 @@ int main() {
         }
    
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
+        
         
         for(int row = 0; row < PQntuples(queryRes); row++){
 
