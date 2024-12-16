@@ -25,8 +25,8 @@
 
 /* Constants */
 
-#define READ_STREAM "feedback-in"
-#define WRITE_STREAM "feedback-out"
+#define READ_STREAM "lascia_feedback-in"
+#define WRITE_STREAM "lascia_feedback-out"
 
 #define REDIS_SERVER "localhost"
 #define REDIS_PORT 6379

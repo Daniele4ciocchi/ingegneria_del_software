@@ -26,6 +26,7 @@ INSERT INTO specializzazione (nome, duratavisitah) VALUES
 
 -- Inserimento nella tabella medico_specializzazione
 INSERT INTO medico_specializzazione (medico_id, specializzazione_nome) VALUES 
+(5, 'Pneumatologia'),
 (6, 'Pneumatologia'),
 (6, 'Cardiologia'),
 (6, 'Dermatologia'),
@@ -58,6 +59,8 @@ INSERT INTO motivazione (motivo) VALUES
 INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES 
 (13, '2024-11-29 09:00:00', 3);
 
+/*
 -- Inserimento nella tabella feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES 
 (11, 11, '2024-12-02 11:00:00', 4, 5);
+*/

@@ -60,9 +60,17 @@ INSERT INTO amministrativo (cf) VALUES
 INSERT INTO medico_specializzazione (medico_id, specializzazione_nome) VALUES
 (1, 'Cardiologia'),
 (1, 'Dermatologia'),
+(1, 'Ortopedia'),
+(2, 'Cardiologia'),
 (2, 'Dermatologia'),
+(2, 'Pediatria'),
 (3, 'Ortopedia'),
+(3, 'Pediatria'),
+(3, 'Dermatologia'),
+(4, 'Ortopedia'),
 (4, 'Pediatria'),
+(5, 'Ortopedia'),
+(5, 'Dermatologia'),
 (5, 'Oftalmologia');
 
 COMMIT;
@@ -109,7 +117,9 @@ INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES
 (9, '2024-11-21 12:30', 2),
 (10, '2024-11-21 13:30', 1);
 
+/*
 -- Popolazione feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES
 (2, 2, '2024-12-20 10:30', 5, 4),
 (4, 4, '2024-12-20 12:30', 5, 5);
+*/

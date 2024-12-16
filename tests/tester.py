@@ -62,7 +62,7 @@ def main():
     client_list = list(apis.keys())
     richieste = 0
     # MODIFICARE SOLO QUESTO VALORE PER AUMENTARE IL NUMERO DI TEST PER OGNI FUNZIONE
-    test = 3
+    test = 30
     succesful = 0
     failed = 0
 

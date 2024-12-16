@@ -69,10 +69,6 @@ int main() {
         // nome_medico, cognome_medico, specializzazione, giornoorario, prestazioneavvenuta 
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
-        if (PQntuples(queryRes) == 1) {
-            std::cout << "Nessun risultato per la query." << std::endl;
-        }
-
         for(int row = 0; row < visite.size(); row++){
 
             RichiestaPrenotazione *v = visite.front();
@@ -86,10 +82,9 @@ int main() {
 
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
-
+            
         }
-       
-
+ 
     }
 
     db.finish();

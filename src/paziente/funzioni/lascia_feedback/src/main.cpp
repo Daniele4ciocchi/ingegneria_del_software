@@ -11,18 +11,10 @@ int main() {
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    if (c2r == NULL || c2r->err) {
-        if (c2r) {
-            printf("Error: %s\n", c2r->errstr);
-        } else {
-            printf("Can't allocate redis context\n");
-        }
-        return 1;
-    }
-
     Feedback* feedback;
 
     while(1) {
+
         reply = RedisCommand(c2r, "XREADGROUP GROUP main customer BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(c2r, reply);
@@ -49,33 +41,28 @@ int main() {
         // Convert request
         try {
             feedback = Feedback::from_stream(reply, 0, 0);
-        } catch (std::invalid_argument& exp) {
+        } 
+        catch (std::invalid_argument& exp) {
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             freeReplyObject(reply);
             continue;
         }
 
-        sprintf(query, "INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) "
-                       "VALUES (%d, %d, '%s', %d, %d) RETURNING id;",
+        sprintf(query, "INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\');",
                        feedback->paziente_id, feedback->prenotazione_accettata_id, feedback->ifeed, feedback->votosodd, feedback->votopunt);
 
         query_res = db.RunQuery(query, false);
 
         if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK) {
             send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
-            PQclear(query_res);
-            freeReplyObject(reply);
             continue;
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
 
-        PQclear(query_res);
-        freeReplyObject(reply);
     }
 
     db.finish();
-    redisFree(c2r);
 
     return 0;
 }

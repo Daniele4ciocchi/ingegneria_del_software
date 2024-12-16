@@ -24,6 +24,7 @@
     - [x] ricerca medico testare
 
 - varie
-    - [ ] sistemare tester per fargli testare tutte le funzioni
+    - [x] sistemare tester per fargli testare tutte le funzioni
     - [ ] Sistemare DBERROR se trigger completezza persona è attivo
-    - [ ] 
+    - [ ] Aumentare il popolamento del db, soprattutto come prenotazioniavvenute
+    - [ ] Sistemare tester per db error che sono corretti

@@ -6,7 +6,8 @@ from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
 from generatori_parametri.generatore_specializzazioni import Specializzazione
-from generatori_parametri.generatore_id import IdPaziente, IdMedico, IdAmministrativo, IdPrenotazione_accettata
+from generatori_parametri.generatore_id import IdPaziente, IdPazienteVisitato, IdMedico, IdAmministrativo, IdPrenotazioneAccettataConclusa
+from generatori_parametri.generatore_voti import Voto
 
 requests = {
  #funzioni paziente_non_registrato
@@ -30,7 +31,10 @@ requests = {
                            [("giornoorariopren", Data)]
                            ], 
 
-"lascia_feedback" : [],
+"lascia_feedback" : [[("paziente_id", IdPazienteVisitato)],
+                     [("prenotazione_accettata_id", IdPrenotazioneAccettataConclusa)],
+                     [("votosodd", Voto)],
+                     [("votopunt", Voto)]],
  
 "ricerca_medico" : [[("specializzazione", Specializzazione)]],
 }
@@ -41,7 +45,7 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"paziente" : ["cronologia_prenotazioni", "ricerca_medico"],
+apis = {"paziente" : ["lascia_feedback"],
         #"paziente_non_registrato" : ["registrazione","nr_ricerca_medico"]
         }
 

@@ -4,6 +4,7 @@
 /* System libraries */
 #include <string.h>
 #include <stdexcept>
+#include <chrono>
 #include <ctime>
 
 /* Local libraries */

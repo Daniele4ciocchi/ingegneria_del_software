@@ -28,12 +28,6 @@
 #define POSTGRESQL_PSW "prestazioni_password"
 #define POSTGRESQL_DBNAME "prenotazionimediche"
 
-#define MESSAGE_ID_LEN 128
-#define KEY_LEN 64
-#define VALUE_LEN 256
+using namespace std;
 
-/* Function prototypes */
-std::string get_prestazioni_history(Con2DB &db, const std::string &medico_id);
-void send_response_status(redisContext *redConn, const char *stream, const char *medico_id, const char *status, const char *msg_id, int num_results);
-
-#endif // MAIN_H
+#endif 

@@ -77,7 +77,6 @@ int main() {
 
             redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s", 
                                  WRITE_STREAM, row,  m->nome, m->cognome);
-            cout << redReply->str << endl;
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
 

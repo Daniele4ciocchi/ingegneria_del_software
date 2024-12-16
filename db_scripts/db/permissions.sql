@@ -66,3 +66,5 @@ GRANT INSERT ON feedback TO :paziente;
 GRANT SELECT ON medico TO :tester;
 GRANT SELECT ON paziente TO :tester;
 GRANT SELECT ON amministrativo TO :tester;
+GRANT SELECT ON richiestaprenotazione TO :tester;
+GRANT SELECT ON prenotazioneaccettata TO :tester;
