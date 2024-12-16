@@ -62,7 +62,7 @@ def main():
     client_list = list(apis.keys())
     richieste = 0
     # MODIFICARE SOLO QUESTO VALORE PER AUMENTARE IL NUMERO DI TEST PER OGNI FUNZIONE
-    test = 30
+    test = 5
     succesful = 0
     failed = 0
 
@@ -86,10 +86,12 @@ def main():
                 else:
                     failed += 1
                     errate.append(request_string)
+                    errate.append("\n")
                 
 
     print(f"\nSuccesful requests: {succesful}/{richieste}")
     print(f"Failed requests: {failed}/{richieste}")
+    print(errate)
 
 
 if __name__ == "__main__":
