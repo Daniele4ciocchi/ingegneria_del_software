@@ -11,8 +11,6 @@ int main() {
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    RichiestaPrenotazione* visita;
-
     while(1) {
         // inizio da non modificare 
         redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
@@ -50,7 +48,7 @@ int main() {
         queryRes = db.RunQuery(query, true);
         
         if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
-            std::cout << "Errore query o medico non trovato" << std::endl;
+            std::cout << "Errore query o paziente non trovato" << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
@@ -71,7 +69,11 @@ int main() {
         // nome_medico, cognome_medico, specializzazione, giornoorario, prestazioneavvenuta 
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
-        for(int row = 0; row < PQntuples(queryRes); row++){
+        if (PQntuples(queryRes) == 1) {
+            std::cout << "Nessun risultato per la query." << std::endl;
+        }
+
+        for(int row = 0; row < visite.size(); row++){
 
             RichiestaPrenotazione *v = visite.front();
 
@@ -80,6 +82,8 @@ int main() {
             redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s specializzazione %s giorno %s prestazioneavvenuta %s", 
                                  WRITE_STREAM, row,  v->paziente_id, v->medico_id, v->amministrativo_id, v->specializzazione_nome, v->giornoorariopren);
             cout << redReply->str << endl;
+
+
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
 
