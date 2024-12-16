@@ -54,6 +54,8 @@ GRANT SELECT ON medico_specializzazione TO :paziente_non_registrato;
 GRANT SELECT ON medico TO :paziente;
 GRANT SELECT ON persona TO :paziente;
 GRANT SELECT ON medico_specializzazione TO :paziente;
+GRANT SELECT ON specializzazione TO :paziente;
+GRANT SELECT ON indisponibilita TO :paziente;
 GRANT INSERT, SELECT ON richiestaprenotazione TO :paziente;
 GRANT SELECT ON prenotazioneaccettata TO :paziente;
 GRANT SELECT ON prenotazionerifiutata TO :paziente;

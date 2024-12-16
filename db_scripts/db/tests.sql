@@ -27,7 +27,11 @@ INSERT INTO specializzazione (nome, duratavisitah) VALUES
 -- Inserimento nella tabella medico_specializzazione
 INSERT INTO medico_specializzazione (medico_id, specializzazione_nome) VALUES 
 (6, 'Pneumatologia'),
-(6, 'Cardiologia');
+(6, 'Cardiologia'),
+(6, 'Dermatologia'),
+(6, 'Ortopedia'),
+(6, 'Pediatria'),
+(6, 'Oftalmologia');
 
 COMMIT;
 

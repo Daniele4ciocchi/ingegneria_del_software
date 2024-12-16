@@ -45,7 +45,8 @@ class IdMedico:
         ids = self.cursor.fetchall()
         if not ids:
             raise ValueError("No IDs found in the 'medico' table.")
-        return random.choice(ids)[0]
+        #return random.choice(ids)[0]
+        return 6
 
     def __del__(self):
         if hasattr(self, 'cursor') and self.cursor:
