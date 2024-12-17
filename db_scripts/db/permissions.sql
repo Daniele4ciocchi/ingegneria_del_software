@@ -39,8 +39,10 @@ GRANT SELECT ON  richiestaprenotazione TO :amministrativo;
 
 -- Permessi medico
 GRANT SELECT ON richiestaprenotazione TO :medico;
-GRANT SELECT, UPDATE ON prenotazioneaccettata TO :amministrativo;
-GRANT SELECT ON prenotazionerifiutata TO :amministrativo;
+GRANT SELECT, UPDATE ON prenotazioneaccettata TO :medico;
+GRANT SELECT ON paziente TO :medico;
+GRANT SELECT ON persona TO :medico;
+GRANT SELECT ON prenotazionerifiutata TO :medico;
 GRANT SELECT ON feedback TO :medico;
 
 -- Permessi paziente_non_registrato

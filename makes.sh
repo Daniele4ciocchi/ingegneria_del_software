@@ -114,13 +114,13 @@ make_folder server/src
 #make_folder funzioni/elimina_medico/src
 #make_folder funzioni/elimina_paziente/src
 
-#printf "############## MEDICO ##############\n\n"
+printf "############## MEDICO ##############\n\n"
 
-#set_current_root src/medico
+set_current_root src/medico
 
-#make_folder handler/src
+make_folder handler/src
 
-#make_folder funzioni/cronologia_prestazioni/src
+make_folder funzioni/cronologia_prestazioni/src
 #make_folder funzioni/prestazioni_future/src
 #make_folder funzioni/statistiche/src
 #make_folder funzioni/termina_prestazione/src
