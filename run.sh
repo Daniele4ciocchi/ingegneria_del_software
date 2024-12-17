@@ -75,11 +75,11 @@ pkill main
 #run_main funzioni/elimina_medico/bin
 #run_main funzioni/elimina_paziente/bin
 
-#printf "############## MEDICO ##############\n\n"
+printf "############## MEDICO ##############\n\n"
 
-#set_current_root src/medico
+set_current_root src/medico
 
-#run_main handler/bin
+run_main handler/bin
 
 #run_main funzioni/cronologia_prestazioni/bin
 #run_main funzioni/prestazioni_future/bin

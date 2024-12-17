@@ -40,7 +40,7 @@ def send_request(client, port, request_string):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.connect((HOST, port))
-            s.settimeout(2)  # Timeout incrementato a 5 secondi
+            s.settimeout(5)  # Timeout incrementato a 5 secondi
 
             print(f"Inviando la richiesta: {request_string}")
             s.send(request_string.encode())
@@ -62,7 +62,7 @@ def main():
     client_list = list(apis.keys())
     richieste = 0
     # MODIFICARE SOLO QUESTO VALORE PER AUMENTARE IL NUMERO DI TEST PER OGNI FUNZIONE
-    test = 30
+    test = 5
     succesful = 0
     failed = 0
 

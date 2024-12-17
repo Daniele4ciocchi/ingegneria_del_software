@@ -45,8 +45,8 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"paziente" : ["lascia_feedback"],
-        #"paziente_non_registrato" : ["registrazione","nr_ricerca_medico"]
+apis = {"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
+        "paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
         }
 
 ports = {"amministrativo" : 42070, "medico" : 42069, "paziente" : 42071, "paziente_non_registrato" : 42072}
