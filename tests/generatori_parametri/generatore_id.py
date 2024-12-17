@@ -19,7 +19,7 @@ class IdPaziente:
         self.cursor.execute("SELECT p.id FROM paziente p;")
         ids = self.cursor.fetchall()
         if not ids:
-            raise ValueError("No IDs found in the 'paziente' table.")
+            return "STOP"
         return random.choice(ids)[0]
         
 
@@ -44,7 +44,7 @@ class IdPazienteVisitato:
         self.cursor.execute("SELECT p.id AS persona, rp.id AS prenotazione FROM paziente p, richiestaprenotazione AS rp, prenotazioneaccettata AS pa WHERE p.id = rp.paziente_id AND rp.id = pa.richiesta_id AND pa.prestazioneavvenuta = 'true';")
         ids = self.cursor.fetchall()
         if not ids:
-            raise ValueError("No IDs found in the 'paziente' table.")
+            return "STOP"
         return random.choice(ids)[0]
         
 
@@ -70,9 +70,8 @@ class IdMedico:
         self.cursor.execute("SELECT m.id FROM medico m;")
         ids = self.cursor.fetchall()
         if not ids:
-            raise ValueError("No IDs found in the 'medico' table.")
-        #return random.choice(ids)[0]
-        return 6
+            return "STOP"
+        return random.choice(ids)[0]
 
     def __del__(self):
         if hasattr(self, 'cursor') and self.cursor:
@@ -96,7 +95,7 @@ class IdAmministrativo:
         self.cursor.execute("SELECT a.id FROM amministrativo a;")
         ids = self.cursor.fetchall()
         if not ids:
-            raise ValueError("No IDs found in the 'amministrativo' table.")
+            return "STOP"
         return random.choice(ids)[0]
 
     def __del__(self):
@@ -121,7 +120,32 @@ class IdPrenotazioneAccettataConclusa():
         self.cursor.execute("SELECT p.richiesta_id FROM prenotazioneaccettata p WHERE p.prestazioneavvenuta = true;")
         ids = self.cursor.fetchall()
         if not ids:
-            raise ValueError("No IDs found in the 'prenotazioneaccettata' table.")
+            return "STOP"
+        return random.choice(ids)[0]
+
+    def __del__(self):
+        if hasattr(self, 'cursor') and self.cursor:
+            self.cursor.close()
+        if hasattr(self, 'conn') and self.conn:
+            self.conn.close()
+
+class IdPrenotazioneAccettataNonConclusa():
+    def __init__(self):
+        self.conn = psycopg2.connect(
+            dbname="prenotazionimediche",
+            user="tester",
+            password="tester",
+            host="localhost",
+            port="5432"
+        )
+        
+        self.cursor = self.conn.cursor()
+
+    def receive_random_value(self):
+        self.cursor.execute("SELECT p.richiesta_id FROM prenotazioneaccettata p WHERE p.prestazioneavvenuta = false;")
+        ids = self.cursor.fetchall()
+        if not ids:
+            return "STOP"
         return random.choice(ids)[0]
 
     def __del__(self):

@@ -6,7 +6,7 @@ from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
 from generatori_parametri.generatore_specializzazioni import Specializzazione
-from generatori_parametri.generatore_id import IdPaziente, IdPazienteVisitato, IdMedico, IdAmministrativo, IdPrenotazioneAccettataConclusa
+from generatori_parametri.generatore_id import IdPaziente, IdPazienteVisitato, IdMedico, IdAmministrativo, IdPrenotazioneAccettataConclusa, IdPrenotazioneAccettataNonConclusa
 from generatori_parametri.generatore_voti import Voto
 
 requests = {
@@ -41,16 +41,19 @@ requests = {
 #funzioni medico
 "cronologia_prestazioni" : [[("medico_id", IdMedico)]],
 
+"termina_prestazione" : [[("prenotazione_id", IdPrenotazioneAccettataNonConclusa)]],
+
+"statistiche" : [[("medico_id", IdMedico)]],
 }
 
 
 apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren", "elimina_medico", "elimina_paziente"],
-       "medico" : ["cronologia_prestazioni", "prestazioni_future", "statistiche", "termina_prestazione"],
+       "medico" : ["cronologia_prestazioni", "statistiche", "termina_prestazione"],
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {#"medico" : ["cronologia_prestazioni"],
-        "paziente" : ["ricerca_medico", "cronologia_prenotazioni"],
+apis = {"medico" : ["cronologia_prestazioni", "termina_prestazione","statistiche"],
+        #"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
         #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
         }
 

@@ -13,7 +13,7 @@ int main() {
 
     while(1) {
         // inizio da non modificare 
-        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main medico BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(redConn, redReply);
 
@@ -48,7 +48,7 @@ int main() {
         queryRes = db.RunQuery(query, true);
         
         if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
-            std::cout << "Errore query o paziente non trovato" << std::endl;
+            std::cout << "Errore query o medico non trovato" << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
@@ -69,7 +69,7 @@ int main() {
         // nome_medico, cognome_medico, specializzazione, giornoorario, prestazioneavvenuta 
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
-        for(int row = 0; row < visite.size(); row++){
+        for(int row = 0; row < PQntuples(queryRes); row++){
 
             RichiestaPrenotazione *v = visite.front();
 

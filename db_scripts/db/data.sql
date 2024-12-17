@@ -137,7 +137,13 @@ INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VA
 (22, '2020-11-28 10:30', false),
 (23, '2020-11-28 11:30', false),
 (24, '2020-11-28 12:30', false),
-(25, '2020-11-28 13:30', false);
+(25, '2020-11-28 13:30', false),
+(26, '2020-11-28 14:30', true),
+(27, '2020-11-28 15:30', true),
+(28, '2020-11-28 16:30', true),
+(29, '2020-11-28 17:30', true),
+(30, '2020-11-28 18:30', true);
+
 
 
 -- Popolamento motivazioni
@@ -157,4 +163,14 @@ INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES
 -- Popolazione feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES
 (2, 2, '2024-12-20 10:30', 5, 4),
-(4, 4, '2024-12-20 12:30', 5, 5);
+(4, 4, '2024-12-20 12:30', 5, 5),
+(6, 11, '2020-12-05 09:30', 5, 5), -- Paziente 6 con prenotazione accettata 11
+(7, 12, '2020-12-05 10:30', 4, 4), -- Paziente 7 con prenotazione accettata 12
+(8, 13, '2020-12-05 11:30', 5, 3), -- Paziente 8 con prenotazione accettata 13
+(9, 14, '2020-12-05 12:30', 5, 5), -- Paziente 9 con prenotazione accettata 14
+(10, 15, '2020-12-05 13:30', 4, 5), -- Paziente 10 con prenotazione accettata 15
+(6, 26, '2020-12-10 14:30', 4, 4), -- Paziente 6 con prenotazione accettata 26
+(7, 27, '2020-12-10 15:30', 5, 5), -- Paziente 7 con prenotazione accettata 27
+(8, 28, '2020-12-10 16:30', 4, 4), -- Paziente 8 con prenotazione accettata 28
+(9, 29, '2020-12-10 17:30', 5, 5), -- Paziente 9 con prenotazione accettata 29
+(10, 30, '2020-12-10 18:30', 3, 4); -- Paziente 10 con prenotazione accettata 30

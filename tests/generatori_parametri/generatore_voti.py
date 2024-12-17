@@ -6,4 +6,4 @@ random.seed(RANDOM_SEED)
 class Voto():
 
     def receive_random_value(self):
-        return random.randint(0, 5)
+        return random.randint(1, 5)

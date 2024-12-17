@@ -43,7 +43,7 @@ int main() {
             continue;
         }
         // Query per ottenere i medici con la paziente_id visita
-        sprintf(query, "SELECT p.nome AS nome_medico, p.cognome AS cognome_medico, rp.specializzazione_nome AS specializzazione_visita, rp.giornoorariopren AS giorno_visita, rp.irich AS irich, pa.prestazioneavvenuta AS visita_avvenuta FROM prenotazioneaccettata pa, richiestaprenotazione rp, medico m, persona p WHERE pa.richiesta_id = rp.id AND rp.medico_id = m.id AND m.cf = p.cf AND rp.paziente_id = '%s';", paziente_id);
+        sprintf(query, "SELECT p.nome AS nome_medico, p.cognome AS cognome_medico, rp.specializzazione_nome AS specializzazione_visita, rp.giornoorariopren AS giorno_visita, rp.irich AS irich, pa.prestazioneavvenuta AS visita_avvenuta FROM prenotazioneaccettata AS pa, richiestaprenotazione AS rp, medico AS m, persona AS p WHERE pa.richiesta_id = rp.id AND rp.medico_id = m.id AND m.cf = p.cf AND rp.paziente_id = '%s';", paziente_id);
 
         queryRes = db.RunQuery(query, true);
         

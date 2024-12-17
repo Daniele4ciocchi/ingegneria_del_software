@@ -42,13 +42,17 @@ INSERT INTO indisponibilita (medico_id, inizioind, fineind) VALUES
 INSERT INTO richiestaprenotazione (paziente_id, medico_id, amministrativo_id, specializzazione_nome, irich, giornoorariopren) VALUES 
 (11, 6, 4, 'Pneumatologia', '2020-11-28 10:00:00', '2020-12-02 10:30:00'),
 (11, 6, 4, 'Pneumatologia', '2020-11-28 20:00:00', '2020-12-03 10:30:00'),
-(12, 6, 3, 'Cardiologia', '2020-11-28 11:00:00', '2020-12-25 10:30:00');
+(12, 6, 4, 'Pneumatologia', '2000-11-25 20:00:00', '2000-12-03 10:30:00'),
+(12, 6, 3, 'Cardiologia', '2020-11-28 11:00:00', '2020-12-25 10:30:00'),
+(12, 6, 3, 'Pediatria', '2000-11-28 11:00:00', '2000-12-18 10:30:00');
 
 -- Inserimento nella tabella prenotazioneaccettata
 
 INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VALUES 
 (31, '2020-11-30 10:00:00', true), 
-(32, '2020-11-29 21:00:00', false);
+(32, '2020-11-29 21:00:00', false),
+(33, '2000-11-26 01:00:00', true),
+(35, '2000-11-29 01:00:00', true);
 
 -- Inserimento nella tabella motivazione
 INSERT INTO motivazione (motivo) VALUES 
@@ -56,7 +60,7 @@ INSERT INTO motivazione (motivo) VALUES
 
 -- Inserimento nella tabella prenotazionerifiutata
 INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES 
-(33, '2020-11-29 09:00:00', 3);
+(34, '2020-11-29 09:00:00', 3);
 
 -- Inserimento nella tabella feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES 

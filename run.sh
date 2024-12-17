@@ -82,9 +82,8 @@ set_current_root src/medico
 run_main handler/bin
 
 run_main funzioni/cronologia_prestazioni/bin
-#run_main funzioni/prestazioni_future/bin
-#run_main funzioni/statistiche/bin
-#run_main funzioni/termina_prestazione/bin
+run_main funzioni/statistiche/bin
+run_main funzioni/termina_prestazione/bin
 
 printf "############## PAZIENTE ##############\n\n"
 

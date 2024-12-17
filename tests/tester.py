@@ -12,7 +12,12 @@ errate = []
 
 def generate_random_argument(parameter_class):
     """Genera un valore casuale per un parametro dato."""
-    return parameter_class().receive_random_value()
+    result =  parameter_class().receive_random_value()
+    if result == "STOP":
+        return "STOP"
+    else:
+        return result
+        
 
 
 def generate_random_request(funzione):
@@ -55,14 +60,12 @@ def send_request(client, port, request_string):
     except Exception as e:
         print(f"Errore durante l'invio della richiesta: {e}")
         return "ERROR"
-    finally:
-        print("Socket chiuso correttamente.")
 
 def main():
     client_list = list(apis.keys())
     richieste = 0
     # MODIFICARE SOLO QUESTO VALORE PER AUMENTARE IL NUMERO DI TEST PER OGNI FUNZIONE
-    test = 5
+    test = 4
     succesful = 0
     failed = 0
 
@@ -78,6 +81,12 @@ def main():
             for _ in range(test): 
 
                 request_string = generate_random_request(funzione)
+
+                if request_string.endswith("STOP"):
+                    request_string = request_string.split(' ')[0]
+                    print(f"Non è  più possibile eseguire la funzione {request_string}, allo stato attuale del database \n")
+                    continue
+                
                 richieste += 1
 
                 response = send_request(client_list, port, request_string)
@@ -89,9 +98,9 @@ def main():
                     errate.append("\n")
                 
 
-    print(f"\nSuccesful requests: {succesful}/{richieste}")
-    print(f"Failed requests: {failed}/{richieste}")
-    print(errate)
+    print(f"\nRichieste avvenute con successo: {succesful}/{richieste}")
+    print(f"Richieste fallite: {failed}/{richieste}")
+    print(f"Elenco richieste errate: {errate}")
 
 
 if __name__ == "__main__":

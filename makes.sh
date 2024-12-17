@@ -121,9 +121,8 @@ set_current_root src/medico
 make_folder handler/src
 
 make_folder funzioni/cronologia_prestazioni/src
-#make_folder funzioni/prestazioni_future/src
-#make_folder funzioni/statistiche/src
-#make_folder funzioni/termina_prestazione/src
+make_folder funzioni/statistiche/src
+make_folder funzioni/termina_prestazione/src
 
 printf "############## PAZIENTE ##############\n\n"
 
