@@ -69,7 +69,7 @@ int main() {
         // nome_medico, cognome_medico, specializzazione, giornoorario, prestazioneavvenuta 
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
         
-        for(int row = 0; row < visite.size(); row++){
+        for(int row = 0; row < PQntuples(queryRes); row++){
 
             RichiestaPrenotazione *v = visite.front();
 

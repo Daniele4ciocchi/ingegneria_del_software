@@ -50,7 +50,7 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
 apis = {#"medico" : ["cronologia_prestazioni"],
-        "paziente" : ["ricerca_medico"],
+        "paziente" : ["ricerca_medico", "cronologia_prenotazioni"],
         #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
         }
 
