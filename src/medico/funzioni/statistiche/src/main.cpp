@@ -94,8 +94,6 @@ int main() {
                                  WRITE_STREAM,  votosodd, votopunt);
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
-
-            PQclear(queryRes);
             
         }
          
