@@ -3,10 +3,10 @@
 
 Persona::Persona( char* cf, char* nome, char* cognome, char* nascita) {
 
-    this->cf = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->cognome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->nascita = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->cf = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->nome = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->cognome = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->nascita = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
 
     strcpy(this->cf, cf);
@@ -24,14 +24,14 @@ Persona::~Persona() {
 }
 
 Persona* Persona::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
 
-    char cf[PARAMETERS_LEN];
-    char nome[PARAMETERS_LEN];
-    char cognome[PARAMETERS_LEN];
-    char nascita[PARAMETERS_LEN];
+    char cf[PRMTRSIZE];
+    char nome[PRMTRSIZE];
+    char cognome[PRMTRSIZE];
+    char nascita[PRMTRSIZE];
 
     char read_fields = 0b00;
 
@@ -40,23 +40,23 @@ Persona* Persona::from_stream(redisReply* reply, int stream_num, int msg_num) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "cf")) {
-            strncpy(cf, value, PARAMETERS_LEN - 1);
-            cf[PARAMETERS_LEN - 1] = '\0';
+            strncpy(cf, value, PRMTRSIZE - 1);
+            cf[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b10;
 
         } else if (!strcmp(key, "nome")) {
-            strncpy(nome, value, PARAMETERS_LEN - 1);
-            nome[PARAMETERS_LEN - 1] = '\0';
+            strncpy(nome, value, PRMTRSIZE - 1);
+            nome[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b100;
 
         } else if (!strcmp(key, "cognome")) {
-            strncpy(cognome, value, PARAMETERS_LEN - 1);
-            cognome[PARAMETERS_LEN - 1] = '\0';
+            strncpy(cognome, value, PRMTRSIZE - 1);
+            cognome[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b1000;
 
         } else if (!strcmp(key, "nascita")) {
-            strncpy(nascita, value, PARAMETERS_LEN - 1);
-            nascita[PARAMETERS_LEN - 1] = '\0';
+            strncpy(nascita, value, PRMTRSIZE - 1);
+            nascita[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b10000;
 
         } else {

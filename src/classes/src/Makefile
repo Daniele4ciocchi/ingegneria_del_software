@@ -16,7 +16,7 @@ DEPS = $(wildcard $(IDIR)/*.h)
 SRC = $(wildcard *.cpp)
 OBJ = $(patsubst %.cpp, $(ODIR)/%.o, $(SRC))
 
-utils_OBJ=$(wildcard ../../../../utils/obj/*.o)
+utils_OBJ=$(wildcard ../../../../shared/obj/*.o)
 
 #all:	$(ODIR)/%.o
 
@@ -26,7 +26,7 @@ create_dirs:
 	mkdir -p $(ODIR)
 
 utils:
-	$(MAKE) -C ../../utils/src/
+	$(MAKE) -C ../../shared
 
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

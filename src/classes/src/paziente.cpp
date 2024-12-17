@@ -3,10 +3,10 @@
 
 Paziente::Paziente( char* cf, char* indirizzo, char* email, char* telefono) {
 
-    this->cf = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->indirizzo = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->email = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->telefono = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->cf = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->indirizzo = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->email = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->telefono = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
 
     strcpy(this->cf, cf);
@@ -24,14 +24,14 @@ Paziente::~Paziente() {
 }
 
 Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
 
-    char cf[PARAMETERS_LEN];
-    char indirizzo[PARAMETERS_LEN];
-    char email[PARAMETERS_LEN];
-    char telefono[PARAMETERS_LEN];
+    char cf[PRMTRSIZE];
+    char indirizzo[PRMTRSIZE];
+    char email[PRMTRSIZE];
+    char telefono[PRMTRSIZE];
 
     char read_fields = 0b00;
 
@@ -40,23 +40,23 @@ Paziente* Paziente::from_stream(redisReply* reply, int stream_num, int msg_num) 
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num + 1, value);
 
         if (!strcmp(key, "cf")) {
-            strncpy(cf, value, PARAMETERS_LEN - 1);
-            cf[PARAMETERS_LEN - 1] = '\0';
+            strncpy(cf, value, PRMTRSIZE - 1);
+            cf[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b10;
 
         } else if (!strcmp(key, "indirizzo")) {
-            strncpy(indirizzo, value, PARAMETERS_LEN - 1);
-            indirizzo[PARAMETERS_LEN - 1] = '\0';
+            strncpy(indirizzo, value, PRMTRSIZE - 1);
+            indirizzo[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b100;
 
         } else if (!strcmp(key, "email")) {
-            strncpy(email, value, PARAMETERS_LEN - 1);
-            email[PARAMETERS_LEN - 1] = '\0';
+            strncpy(email, value, PRMTRSIZE - 1);
+            email[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b1000;
 
         } else if (!strcmp(key, "telefono")) {
-            strncpy(telefono, value, PARAMETERS_LEN - 1);
-            telefono[PARAMETERS_LEN - 1] = '\0';
+            strncpy(telefono, value, PRMTRSIZE - 1);
+            telefono[PRMTRSIZE - 1] = '\0';
             read_fields |= 0b10000;
 
         } else {

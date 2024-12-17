@@ -2,9 +2,9 @@
 
 Indisponibilita::Indisponibilita( char* medico_id, char* inizio, char* fine) {
 
-    this->medico_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->inizio = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->fine = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->medico_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->inizio = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->fine = (char*) malloc(sizeof(char) * PRMTRSIZE);
     
     strcpy(this->medico_id, medico_id);
     strcpy(this->inizio, inizio);
@@ -20,12 +20,12 @@ Indisponibilita::~Indisponibilita() {
 }
 
 Indisponibilita* Indisponibilita::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char medico_id[PARAMETERS_LEN];
-    char inizio[PARAMETERS_LEN];
-    char fine[PARAMETERS_LEN];
+    char medico_id[PRMTRSIZE];
+    char inizio[PRMTRSIZE];
+    char fine[PRMTRSIZE];
 
     char read_fields = 0b0000;
 

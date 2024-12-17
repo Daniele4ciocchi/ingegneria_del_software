@@ -16,13 +16,13 @@
 
 /* Local libraries */
 
-#include "../../../../lib/con2db/pgsql.h"
-#include "../../../../lib/con2redis/src/con2redis.h"
+#include "../../../../service/database/dbConnection.h"
+#include "../../../../service/redis/redisConnection.h"
 
 #include "../../../../classes/src/paziente.h"
 #include "../../../../classes/src/persona.h"
 #include "../../../../utils/src/utils.h"
-#include "../../../../utils/src/const.h"
+#include "../../../../shared/standard.h"
 
 /* Constants */
 

@@ -2,8 +2,8 @@
 
 Amministrativo::Amministrativo(char* id_amministrativo, char* cf_amministrativo) {
 
-    this->id_amministrativo = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->cf_amministrativo = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->id_amministrativo = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->cf_amministrativo = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->id_amministrativo, id_amministrativo);
     strcpy(this->cf_amministrativo, cf_amministrativo);
@@ -15,11 +15,11 @@ Amministrativo::~Amministrativo() {
 }
 
 Amministrativo* Amministrativo::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char id_amministrativo[PARAMETERS_LEN];
-    char cf_amministrativo[PARAMETERS_LEN];
+    char id_amministrativo[PRMTRSIZE];
+    char cf_amministrativo[PRMTRSIZE];
 
     char read_fields = 0b00;
 

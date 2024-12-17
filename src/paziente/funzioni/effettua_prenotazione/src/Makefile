@@ -22,7 +22,7 @@ OBJ = $(patsubst %.cpp, $(ODIR)/%.o, $(SRC))
 con2db_OBJ=$(wildcard ../../../../lib/con2db/*.o)
 con2redis_OBJ=$(wildcard ../../../../lib/con2redis/obj/*.o)
 classes_OBJ=$(wildcard ../../../../classes/obj/*.o)
-utils_OBJ=$(wildcard ../../../../utils/obj/*.o)
+utils_OBJ=$(wildcard ../../../../shared/obj/*.o)
 
 all:	create_dirs con2db con2redis classes utils $(BDIR)/main
 

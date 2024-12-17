@@ -2,11 +2,11 @@
 
 Feedback::Feedback(char* paziente_id, char* prenotazione_accettata_id, char* ifeed,  char* votosodd, char* votopunt) {
 
-    this->paziente_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->prenotazione_accettata_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->ifeed = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->votosodd = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->votopunt = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->paziente_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->prenotazione_accettata_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->ifeed = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->votosodd = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->votopunt = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->paziente_id, paziente_id);
     strcpy(this->prenotazione_accettata_id, prenotazione_accettata_id);
@@ -24,14 +24,14 @@ Feedback::~Feedback() {
 }
 
 Feedback* Feedback::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char paziente_id[PARAMETERS_LEN];
-    char prenotazione_accettata_id[PARAMETERS_LEN];
+    char paziente_id[PRMTRSIZE];
+    char prenotazione_accettata_id[PRMTRSIZE];
     char* ifeed;
-    char votosodd[PARAMETERS_LEN];
-    char votopunt[PARAMETERS_LEN];
+    char votosodd[PRMTRSIZE];
+    char votopunt[PRMTRSIZE];
 
     char read_fields = 0b00000;
     auto current_time = std::chrono::system_clock::now();

@@ -1,8 +1,8 @@
 #include "medico.h"
 
 Medico::Medico(char* id,char* cf ) {
-    this->id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->cf = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->cf = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->id, id);
     strcpy(this->cf, cf);
@@ -15,11 +15,11 @@ Medico::~Medico() {
 
 
 Medico* Medico::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char id[PARAMETERS_LEN];
-    char cf[PARAMETERS_LEN];
+    char id[PRMTRSIZE];
+    char cf[PRMTRSIZE];
 
     char read_fields = 0b00;
 

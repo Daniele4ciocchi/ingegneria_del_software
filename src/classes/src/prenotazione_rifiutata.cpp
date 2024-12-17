@@ -1,9 +1,9 @@
 #include "prenotazione_rifiutata.h"
 
 PrenotazioneRifiutata::PrenotazioneRifiutata(char* richiesta_id, char* irif, char* motivazione_id) {
-    this->richiesta_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->irif = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->motivazione_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->richiesta_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->irif = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->motivazione_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->richiesta_id, richiesta_id);
     strcpy(this->irif, irif);
@@ -17,12 +17,12 @@ PrenotazioneRifiutata::~PrenotazioneRifiutata() {
 }
 
 PrenotazioneRifiutata* PrenotazioneRifiutata::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char richiesta_id[PARAMETERS_LEN];
-    char irif[PARAMETERS_LEN];
-    char motivazione_id[PARAMETERS_LEN];
+    char richiesta_id[PRMTRSIZE];
+    char irif[PRMTRSIZE];
+    char motivazione_id[PRMTRSIZE];
 
     char read_fields = 0b00;
 

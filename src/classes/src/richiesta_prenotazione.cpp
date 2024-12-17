@@ -2,12 +2,12 @@
 
 RichiestaPrenotazione::RichiestaPrenotazione( char* paziente_id, char* medico_id, char* amministrativo_id, char* specializzazione_nome, char* irich, char* giornoorariopren) {
     
-    this->paziente_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->medico_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->amministrativo_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->specializzazione_nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->irich = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->giornoorariopren = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->paziente_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->medico_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->amministrativo_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->specializzazione_nome = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->irich = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->giornoorariopren = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->paziente_id, paziente_id);
     strcpy(this->medico_id, medico_id);
@@ -28,15 +28,15 @@ RichiestaPrenotazione::~RichiestaPrenotazione() {
 }
 
 RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char paziente_id[PARAMETERS_LEN];
-    char medico_id[PARAMETERS_LEN];
-    char amministrativo_id[PARAMETERS_LEN];
-    char specializzazione_nome[PARAMETERS_LEN];
+    char paziente_id[PRMTRSIZE];
+    char medico_id[PRMTRSIZE];
+    char amministrativo_id[PRMTRSIZE];
+    char specializzazione_nome[PRMTRSIZE];
     char* irich;
-    char giornoorariopren[PARAMETERS_LEN];
+    char giornoorariopren[PRMTRSIZE];
 
     char read_fields = 0b00;
     auto current_time = std::chrono::system_clock::now();

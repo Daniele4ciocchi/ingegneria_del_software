@@ -10,10 +10,8 @@
 #include <cassert>
 
 /* Local libraries */
-#include "../../../../lib/con2db/pgsql.h"
-#include "../../../../lib/con2redis/src/con2redis.h"
-#include "../../../../utils/src/utils.h"
-#include "../../../../utils/src/const.h"
+#include "../../../../service/database/dbConnection.h"
+#include "../../../../service/redis/redisConnection.h"
 
 /* Constants */
 #define READ_STREAM "prestazioni-history-in"

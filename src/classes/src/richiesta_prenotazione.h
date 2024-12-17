@@ -8,8 +8,8 @@
 #include <ctime>
 
 /* Local libraries */
-#include "../../utils/src/const.h"
-#include "../../lib/con2redis/src/con2redis.h"
+#include "../../shared/standard.h"
+#include "../../service/redis/redisConnection.h"
 
 /* Classes */
 class RichiestaPrenotazione {

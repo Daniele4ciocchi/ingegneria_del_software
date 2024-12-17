@@ -69,18 +69,12 @@ check_arguments $1
 # INIZIO SCRIPT PRINCIPALE
 printf "\n\n\n########## Started make script ##########\n\n\n\n"
 
-printf "############## LIB ##############\n\n"
+printf "############## SERVICES ##############\n\n"
 
-set_current_root src/lib
+set_current_root src/service
 
-make_folder con2db
-make_folder con2redis/src
-
-printf "############## UTILS ##############\n\n"
-
-set_current_root src
-
-make_folder utils/src
+make_folder database
+make_folder redis
 
 printf "############## CLASSES ##############\n\n"
 
@@ -92,7 +86,7 @@ printf "############## SERVER ##############\n\n"
 
 set_current_root src
 
-make_folder server/src
+make_folder server
 
 #printf "############## NON FUNCTIONAL REQ ##############\n\n"
 

@@ -1,9 +1,9 @@
 #include "prenotazione_accettata.h"
 
 PrenotazioneAccettata::PrenotazioneAccettata(char* richiesta_id, char* iaccet, char* prestazioneavvenuta) {
-    this->richiesta_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->iaccet = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->prestazioneavvenuta = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->richiesta_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->iaccet = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->prestazioneavvenuta = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->richiesta_id, richiesta_id);
     strcpy(this->iaccet, iaccet);
@@ -17,12 +17,12 @@ PrenotazioneAccettata::~PrenotazioneAccettata() {
 }
 
 PrenotazioneAccettata* PrenotazioneAccettata::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char richiesta_id[PARAMETERS_LEN];
-    char iaccet[PARAMETERS_LEN];
-    char prestazioneavvenuta[PARAMETERS_LEN];
+    char richiesta_id[PRMTRSIZE];
+    char iaccet[PRMTRSIZE];
+    char prestazioneavvenuta[PRMTRSIZE];
 
     char read_fields = 0b00;
 

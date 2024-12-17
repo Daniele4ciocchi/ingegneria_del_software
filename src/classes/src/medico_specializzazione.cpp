@@ -2,8 +2,8 @@
 
 MedicoSpecializzazione::MedicoSpecializzazione(char* medico_id, char* specializzazione_nome) {
 
-    this->medico_id = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
-    this->specializzazione_nome = (char*) malloc(sizeof(char) * PARAMETERS_LEN);
+    this->medico_id = (char*) malloc(sizeof(char) * PRMTRSIZE);
+    this->specializzazione_nome = (char*) malloc(sizeof(char) * PRMTRSIZE);
 
     strcpy(this->medico_id, medico_id);
     strcpy(this->specializzazione_nome, specializzazione_nome);
@@ -17,11 +17,11 @@ MedicoSpecializzazione::~MedicoSpecializzazione() {
 }
 
 MedicoSpecializzazione* MedicoSpecializzazione::from_stream(redisReply* reply, int stream_num, int msg_num) {
-    char key[PARAMETERS_LEN];
-    char value[PARAMETERS_LEN];
+    char key[PRMTRSIZE];
+    char value[PRMTRSIZE];
 
-    char medico_id[PARAMETERS_LEN];
-    char specializzazione_nome[PARAMETERS_LEN];
+    char medico_id[PRMTRSIZE];
+    char specializzazione_nome[PRMTRSIZE];
 
     char read_fields = 0b00;
 
