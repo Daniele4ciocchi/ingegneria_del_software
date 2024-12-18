@@ -11,13 +11,27 @@ int main() {
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
+    if (redConn == NULL || redConn->err) {
+        if (redConn) {
+            std::cerr << "Redis connection error: " << redConn->errstr << std::endl;
+        } else {
+            std::cerr << "Redis connection allocation error." << std::endl;
+        }
+        return EXIT_FAILURE;
+    }
+
     while(1) {
         // inizio da non modificare 
         redReply = RedisCommand(redConn, "XREADGROUP GROUP main medico BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
+        if (!redReply) {
+            std::cerr << "Errore durante XREADGROUP." << std::endl;
+            continue;
+        }
         assertReply(redConn, redReply);
 
         if (ReadNumStreams(redReply) == 0) {
+            freeReplyObject(redReply);
             continue;
         } 
 
@@ -31,6 +45,7 @@ int main() {
 
         if(strcmp(first_key, "client_id")){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            freeReplyObject(redReply);
             continue;
         }
 
@@ -40,64 +55,56 @@ int main() {
         
         if(strcmp(second_key, "medico_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
+            freeReplyObject(redReply);
             continue;
         }
+        
+        freeReplyObject(redReply);
+    
         // Query per ottenere i pazienti con la medico_id visita
         sprintf(query, "SELECT f.paziente_id AS paziente_id, f.prenotazione_accettata_id AS prenotazione_id, f.ifeed AS ifeed, f.votosodd AS votosodd, f.votopunt AS votopunt FROM feedback AS f, richiestaprenotazione AS rp WHERE f.prenotazione_accettata_id = rp.id AND rp.medico_id = '%s';", medico_id);
 
         queryRes = db.RunQuery(query, true);
         
-        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
-            std::cout << "Errore query o medico non trovato" << std::endl;
+        if (!queryRes || (PQresultStatus(queryRes) != PGRES_TUPLES_OK)) {
+            std::cerr << "Errore durante l'esecuzione della query o medico non trovato." << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
+            if (queryRes) PQclear(queryRes);
             continue;
         }
 
         double votosodd = 0;
         double votopunt = 0;
 
-        for(int row = 0; row < PQntuples(queryRes); row++){
-            Feedback* feedback;
-            feedback = new Feedback(
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "paziente_id")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "prenotazione_id")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "ifeed")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "votosodd")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "votopunt"))); 
-
-            votosodd += atoi(feedback->votosodd);
-            votopunt += atoi(feedback->votopunt);
-            delete feedback;
+        int num_rows = PQntuples(queryRes);
+        for (int row = 0; row < num_rows; row++) {
+            votosodd += atoi(PQgetvalue(queryRes, row, PQfnumber(queryRes, "votosodd")));
+            votopunt += atoi(PQgetvalue(queryRes, row, PQfnumber(queryRes, "votopunt")));
         }
-        if (PQntuples(queryRes) != 0) {
-            votosodd = votosodd / PQntuples(queryRes);
-            votopunt = votopunt / PQntuples(queryRes);
+
+
+        if (num_rows > 0) {
+            votosodd /= num_rows;
+            votopunt /= num_rows;
         }
-        
 
-        /*
-        // nome_medico, cognome_medico, specializzazione, giornoorario, prestazioneavvenuta 
-        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
+        std::string votosodd_str = std::to_string(votosodd);
+        std::string votopunt_str = std::to_string(votopunt);
 
-        redReply = RedisCommand(redConn, "XADD %s media_soddisfazione %s media_puntualità %s ", 
-                                 WRITE_STREAM,  votosodd, votopunt);
-        assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
-        freeReplyObject(redReply);
-    
+        redReply = RedisCommand(redConn, "XADD %s media_soddisfazione %s media_puntualità %s", 
+                                WRITE_STREAM, votosodd_str, votopunt_str);
+        if (!redReply || redReply->type != REDIS_REPLY_STRING) {
+            std::cerr << "Errore XADD Redis." << std::endl;
+            send_response_status(redConn, WRITE_STREAM, client_id, "REDIS_ERROR", msg_id, 0);
+        }
+        else {
+            send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
+        }
+
+        if (redReply) freeReplyObject(redReply);
         PQclear(queryRes);
-        */
-
-        for(int row = 0; row < 1; row++){
-
-
-            redReply = RedisCommand(redConn, "XADD %s media_soddisfazione %s media_puntualità %s ", 
-                                 WRITE_STREAM,  votosodd, votopunt);
-            assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
-            freeReplyObject(redReply);
             
         }
-         
-    }
 
     db.finish();
 
