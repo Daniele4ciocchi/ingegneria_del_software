@@ -47,12 +47,12 @@ Indisponibilita* Indisponibilita::from_stream(redisReply* reply, int stream_num,
 
         } else if (!strcmp(key, "inizioind")) {
             strcpy(inizio, value);
-            replaceDoubleHashWithSpace(inizio);
+            //replaceDoubleHashWithSpace(inizio);
             read_fields |= 0b010;
 
         } else if (!strcmp(key, "fineind")) {
             strcpy(fine, value);
-            replaceDoubleHashWithSpace(fine);
+            //replaceDoubleHashWithSpace(fine);
             read_fields |= 0b100;
 
         } else {
@@ -60,7 +60,7 @@ Indisponibilita* Indisponibilita::from_stream(redisReply* reply, int stream_num,
         }
     }
 
-    if (read_fields != 0b1111) {
+    if (read_fields != 0b111) {
         throw std::invalid_argument("Stream error: invalid fields");
     }
 
