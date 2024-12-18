@@ -38,7 +38,8 @@ RichiestaPrenotazione* RichiestaPrenotazione::from_stream(redisReply* reply, int
     char* irich;
     char giornoorariopren[PARAMETERS_LEN];
 
-    char read_fields = 0b00;
+    char read_fields = 0b00000;
+    
     auto current_time = std::chrono::system_clock::now();
     std::time_t current_time_t = std::chrono::system_clock::to_time_t(current_time);
     irich = std::ctime(&current_time_t);

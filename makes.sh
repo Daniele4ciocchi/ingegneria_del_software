@@ -100,14 +100,14 @@ make_folder server/src
 
 #make_folder non-functional-req/src
 
-#printf "############## AMMINISTRATIVO ##############\n\n"
+printf "############## AMMINISTRATIVO ##############\n\n"
 
-#set_current_root src/amministrativo
+set_current_root src/amministrativo
 
-#make_folder handler/src
+make_folder handler/src
 
-#make_folder funzioni/accetta_richpren/src
-#make_folder funzioni/rifiuta_richpren/src
+make_folder funzioni/accetta_richpren/src
+make_folder funzioni/rifiuta_richpren/src
 #make_folder funzioni/aggiungi_indisponibilita_medico/src
 #make_folder funzioni/aggiungi_specializzazione_medico/src
 #make_folder funzioni/cronologia_richpren/src

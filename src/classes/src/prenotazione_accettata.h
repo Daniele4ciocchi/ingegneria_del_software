@@ -4,6 +4,8 @@
 /* System libraries */
 #include <string.h>
 #include <stdexcept>
+#include <chrono>
+#include <ctime>
 
 /* Local libraries */
 #include "../../utils/src/const.h"

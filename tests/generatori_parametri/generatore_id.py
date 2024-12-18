@@ -105,6 +105,31 @@ class IdAmministrativo:
         if hasattr(self, 'conn') and self.conn:
             self.conn.close()
 
+class IdPrenotazionePendente():
+    def __init__(self):
+        self.conn = psycopg2.connect(
+            dbname="prenotazionimediche",
+            user="tester",
+            password="tester",
+            host="localhost",
+            port="5432"
+        )
+        
+        self.cursor = self.conn.cursor()
+
+    def receive_random_value(self):
+        self.cursor.execute("SELECT rp.id FROM richiestaprenotazione rp LEFT JOIN prenotazioneaccettata pa ON rp.id = pa.richiesta_id LEFT JOIN prenotazionerifiutata pr ON rp.id = pr.richiesta_id WHERE pa.richiesta_id IS NULL AND pr.richiesta_id IS NULL;")
+        ids = self.cursor.fetchall()
+        if not ids:
+            return "STOP"
+        return random.choice(ids)[0]
+
+    def __del__(self):
+        if hasattr(self, 'cursor') and self.cursor:
+            self.cursor.close()
+        if hasattr(self, 'conn') and self.conn:
+            self.conn.close()
+
 class IdPrenotazioneAccettataConclusa():
     def __init__(self):
         self.conn = psycopg2.connect(
@@ -144,6 +169,31 @@ class IdPrenotazioneAccettataNonConclusa():
 
     def receive_random_value(self):
         self.cursor.execute("SELECT p.richiesta_id FROM prenotazioneaccettata p WHERE p.prestazioneavvenuta = false;")
+        ids = self.cursor.fetchall()
+        if not ids:
+            return "STOP"
+        return random.choice(ids)[0]
+
+    def __del__(self):
+        if hasattr(self, 'cursor') and self.cursor:
+            self.cursor.close()
+        if hasattr(self, 'conn') and self.conn:
+            self.conn.close()
+
+class IdMotivazione():
+    def __init__(self):
+        self.conn = psycopg2.connect(
+            dbname="prenotazionimediche",
+            user="tester",
+            password="tester",
+            host="localhost",
+            port="5432"
+        )
+        
+        self.cursor = self.conn.cursor()
+
+    def receive_random_value(self):
+        self.cursor.execute("SELECT id FROM motivazione;")
         ids = self.cursor.fetchall()
         if not ids:
             return "STOP"

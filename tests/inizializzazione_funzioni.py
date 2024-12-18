@@ -6,7 +6,7 @@ from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
 from generatori_parametri.generatore_specializzazioni import Specializzazione
-from generatori_parametri.generatore_id import IdPaziente, IdPazienteVisitato, IdMedico, IdAmministrativo, IdPrenotazioneAccettataConclusa, IdPrenotazioneAccettataNonConclusa
+from generatori_parametri.generatore_id import IdPaziente, IdPazienteVisitato, IdMedico, IdAmministrativo, IdPrenotazionePendente, IdPrenotazioneAccettataConclusa, IdPrenotazioneAccettataNonConclusa, IdMotivazione
 from generatori_parametri.generatore_voti import Voto
 
 requests = {
@@ -44,6 +44,12 @@ requests = {
 "termina_prestazione" : [[("prenotazione_id", IdPrenotazioneAccettataNonConclusa)]],
 
 "statistiche" : [[("medico_id", IdMedico)]],
+
+#funzioni amministrativo
+"accetta_richpren" : [[("richiesta_id", IdPrenotazionePendente)]],
+
+"rifiuta_richpren" : [[("richiesta_id", IdPrenotazionePendente)],
+                      [("motivazione_id", IdMotivazione)]]
 }
 
 
@@ -52,7 +58,8 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"medico" : ["cronologia_prestazioni", "termina_prestazione","statistiche"],
+apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren"],
+        "medico" : ["cronologia_prestazioni", "termina_prestazione","statistiche"],
         #"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
         #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
         }

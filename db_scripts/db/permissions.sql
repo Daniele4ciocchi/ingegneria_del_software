@@ -70,3 +70,5 @@ GRANT SELECT ON paziente TO :tester;
 GRANT SELECT ON amministrativo TO :tester;
 GRANT SELECT ON richiestaprenotazione TO :tester;
 GRANT SELECT ON prenotazioneaccettata TO :tester;
+GRANT SELECT ON prenotazionerifiutata TO :tester;
+GRANT SELECT ON motivazione TO :tester;

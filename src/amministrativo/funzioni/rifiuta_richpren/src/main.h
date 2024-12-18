@@ -19,7 +19,7 @@
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
 
-#include "../../../../classes/prenotazione_rifiutata.h"
+#include "../../../../classes/src/prenotazione_rifiutata.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 

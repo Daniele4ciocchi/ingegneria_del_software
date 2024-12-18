@@ -6,19 +6,15 @@ int main() {
 
     PGresult *query_res;  
 
-    std::string query;  
-
-    char response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
+    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
 
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
-
     c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
 
     PrenotazioneRifiutata* richiestaRifiutata;  
 
     while(1) {  
 
-        
         reply = RedisCommand(c2r, "XREADGROUP GROUP main amministrativo BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(c2r, reply);
@@ -46,10 +42,10 @@ int main() {
             continue;
         }
 
-        sprintf(query, "INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES (\'%s\', CURRENT_TIMESTAMP, \'%s\')",
-                       richiestaRifiutata->richiesta_id,  richiestaRifiutata->motivazione_id);
+        sprintf(query, "INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES (\'%s\', \'%s\', \'%s\');",
+                       richiestaRifiutata->richiesta_id, richiestaRifiutata->irif, richiestaRifiutata->motivazione_id);
         
-        query_res = db.RunQuery((char *) query.c_str(), false);
+        query_res = db.RunQuery(query, false);
 
         if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK) {
             send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
@@ -57,10 +53,10 @@ int main() {
         }
 
         send_response_status(c2r, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, 0);
-        
+
     }
 
     db.finish();
 
-    return 0;  
+    return 0;
 }

@@ -21,10 +21,14 @@ PrenotazioneAccettata* PrenotazioneAccettata::from_stream(redisReply* reply, int
     char value[PARAMETERS_LEN];
 
     char richiesta_id[PARAMETERS_LEN];
-    char iaccet[PARAMETERS_LEN];
+    char* iaccet;
     char prestazioneavvenuta[PARAMETERS_LEN];
 
-    char read_fields = 0b00;
+    char read_fields = 0b0;
+
+    auto current_time = std::chrono::system_clock::now();
+    std::time_t current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    iaccet = std::ctime(&current_time_t);
 
     for (int field_num = 2; field_num < ReadStreamMsgNumVal(reply, stream_num, msg_num); field_num += 2) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
@@ -32,19 +36,14 @@ PrenotazioneAccettata* PrenotazioneAccettata::from_stream(redisReply* reply, int
 
         if (!strcmp(key, "richiesta_id")) {
             strcpy(richiesta_id, value);
-            read_fields |= 0b01;
+            read_fields |= 0b1;
 
-        } else if (!strcmp(key, "iaccet")) {
-            strcpy(iaccet, value);
-            read_fields |= 0b10;
-
-        } else if (!strcmp(key, "prestazioneavvenuta")) {
-            strcpy(prestazioneavvenuta, value);
-            read_fields |= 0b100;
-        }
+        } 
+        
+        strcpy(prestazioneavvenuta, "false");
     }
 
-    if (read_fields != 0b111) {
+    if (read_fields != 0b1) {
         throw std::invalid_argument("Missing fields in PrenotazioneAccettata");
     }
 

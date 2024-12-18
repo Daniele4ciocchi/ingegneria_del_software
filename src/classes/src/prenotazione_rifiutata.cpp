@@ -21,10 +21,14 @@ PrenotazioneRifiutata* PrenotazioneRifiutata::from_stream(redisReply* reply, int
     char value[PARAMETERS_LEN];
 
     char richiesta_id[PARAMETERS_LEN];
-    char irif[PARAMETERS_LEN];
+    char* irif;
     char motivazione_id[PARAMETERS_LEN];
 
     char read_fields = 0b00;
+
+    auto current_time = std::chrono::system_clock::now();
+    std::time_t current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    irif = std::ctime(&current_time_t);
 
     for (int field_num = 2; field_num < ReadStreamMsgNumVal(reply, stream_num, msg_num); field_num += 2) {
         ReadStreamMsgVal(reply, stream_num, msg_num, field_num, key);
@@ -34,17 +38,14 @@ PrenotazioneRifiutata* PrenotazioneRifiutata::from_stream(redisReply* reply, int
             strcpy(richiesta_id, value);
             read_fields |= 0b01;
 
-        } else if (!strcmp(key, "irif")) {
-            strcpy(irif, value);
-            read_fields |= 0b10;
-
-        } else if (!strcmp(key, "motivazione_id")) {
+        }else if (!strcmp(key, "motivazione_id")) {
             strcpy(motivazione_id, value);
-            read_fields |= 0b100;
+            read_fields |= 0b10;
         }
+
     }
 
-    if (read_fields != 0b111) {
+    if (read_fields != 0b11) {
         throw std::invalid_argument("Missing fields in PrenotazioneRifiutata");
     }
 

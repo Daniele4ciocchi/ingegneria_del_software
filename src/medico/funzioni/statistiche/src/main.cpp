@@ -62,7 +62,7 @@ int main() {
         freeReplyObject(redReply);
     
         // Query per ottenere i pazienti con la medico_id visita
-        sprintf(query, "SELECT f.paziente_id AS paziente_id, f.prenotazione_accettata_id AS prenotazione_id, f.ifeed AS ifeed, f.votosodd AS votosodd, f.votopunt AS votopunt FROM feedback AS f, richiestaprenotazione AS rp WHERE f.prenotazione_accettata_id = rp.id AND rp.medico_id = '%s';", medico_id);
+        sprintf(query, "SELECT f.votosodd AS votosodd, f.votopunt AS votopunt FROM feedback AS f, richiestaprenotazione AS rp WHERE f.prenotazione_accettata_id = rp.id AND rp.medico_id = '%s';", medico_id);
 
         queryRes = db.RunQuery(query, true);
         
@@ -91,17 +91,15 @@ int main() {
         std::string votosodd_str = std::to_string(votosodd);
         std::string votopunt_str = std::to_string(votopunt);
 
-        redReply = RedisCommand(redConn, "XADD %s media_soddisfazione %s media_puntualità %s", 
-                                WRITE_STREAM, votosodd_str, votopunt_str);
-        if (!redReply || redReply->type != REDIS_REPLY_STRING) {
-            std::cerr << "Errore XADD Redis." << std::endl;
-            send_response_status(redConn, WRITE_STREAM, client_id, "REDIS_ERROR", msg_id, 0);
-        }
-        else {
-            send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
-        }
+        int row = 0;
 
-        if (redReply) freeReplyObject(redReply);
+        redReply = RedisCommand(redConn, "XADD %s * row %d media_soddisfazione %.2f media_puntualita %.2f", 
+                                WRITE_STREAM, row, votosodd_str, votopunt_str);
+
+        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id,1);
+
+        assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+        freeReplyObject(redReply);
         PQclear(queryRes);
             
         }

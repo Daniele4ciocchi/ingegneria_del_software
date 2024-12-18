@@ -1,35 +1,52 @@
-# Compiler
-CXX = g++
+#IDIR=../hdr
+IDIR=.
+ODIR=../obj
+BDIR=../bin
 
-# Compiler flags
-CXXFLAGS = -std=c++11 -Wall -I../../../../lib/con2db -I../../../../lib/con2redis/src -I../../../../utils/src
+CC=g++
+# use this when connecting to Postgresql (library lpq)
+#CFLAGS=-std=c++11 -I. -I$(IDIR) -I/usr/include/postgresql -lpq -lm 
+CFLAGS=-std=c++20 -I. -I$(IDIR) -I/usr/include/postgresql -lpq -lm -lhiredis
 
-# Linker flags
-LDFLAGS = -L../../../../lib/con2db -L../../../../lib/con2redis/src -lpq -lhiredis
+# use this when no connection to Postgresql (library lpq) is needed
+#CFLAGS=-std=c++11 -I. -I$(IDIR) -lm 
 
-# Target executable
-TARGET = main
+DEPS = $(wildcard $(IDIR)/*.h)
+#OBJ = $(wildcard $(ODIR)/*.o)
+SRC = $(wildcard *.cpp)
+OBJ = $(patsubst %.cpp, $(ODIR)/%.o, $(SRC))
 
-# Source files
-SRCS = main.cpp richiesta_prenotazione.cpp prenotazione_accettata.cpp prenotazione_rifiutata.cpp
+# con2db_OBJ=$(wildcard ../../con2db/*.o)
+con2db_OBJ=$(wildcard ../../../../lib/con2db/*.o)
+con2redis_OBJ=$(wildcard ../../../../lib/con2redis/obj/*.o)
+classes_OBJ=$(wildcard ../../../../classes/obj/*.o)
+utils_OBJ=$(wildcard ../../../../utils/obj/*.o)
 
-# Object files
-OBJS = $(SRCS:.cpp=.o)
+all:	create_dirs con2db con2redis classes utils $(BDIR)/main
 
-# Default target
-all: $(TARGET)
+create_dirs:
+	mkdir -p $(BDIR)
+	mkdir -p $(ODIR)
 
-# Link the target executable
-$(TARGET): $(OBJS)
-    $(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
+con2db:
+	$(MAKE) -C ../../../../lib/con2db
 
-# Compile source files into object files
-%.o: %.cpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+con2redis:
+	$(MAKE) -C ../../../../lib/con2redis/src/
 
-# Clean up build files
+classes:
+	$(MAKE) -C ../../../../classes/src/
+
+utils:
+	$(MAKE) -C ../../../../utils/src/
+
+$(ODIR)/%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(BDIR)/main: $(OBJ) $(DEPS)
+	$(CC) -o $@ $(OBJ) $(con2db_OBJ) $(con2redis_OBJ) $(classes_OBJ) $(utils_OBJ) $(CFLAGS)
+
+.PHONY: clean
+
 clean:
-    rm -f $(OBJS) $(TARGET)
-
-# Phony targets
-.PHONY: all clean
+	rm -f $(ODIR)/*.o *~ $(IDIR)/*~ core 

@@ -49,10 +49,10 @@ INSERT INTO richiestaprenotazione (paziente_id, medico_id, amministrativo_id, sp
 -- Inserimento nella tabella prenotazioneaccettata
 
 INSERT INTO prenotazioneaccettata (richiesta_id, iaccet, prestazioneavvenuta) VALUES 
-(31, '2020-11-30 10:00:00', true), 
-(32, '2020-11-29 21:00:00', false),
-(33, '2000-11-26 01:00:00', true),
-(35, '2000-11-29 01:00:00', true);
+(51, '2020-11-30 10:00:00', true), 
+(52, '2020-11-29 21:00:00', false),
+(53, '2000-11-26 01:00:00', true),
+(55, '2000-11-29 01:00:00', true);
 
 -- Inserimento nella tabella motivazione
 INSERT INTO motivazione (motivo) VALUES 
@@ -60,10 +60,10 @@ INSERT INTO motivazione (motivo) VALUES
 
 -- Inserimento nella tabella prenotazionerifiutata
 INSERT INTO prenotazionerifiutata (richiesta_id, irif, motivazione_id) VALUES 
-(34, '2020-11-29 09:00:00', 3);
+(54, '2020-11-29 09:00:00', 3);
 
 -- Inserimento nella tabella feedback
 INSERT INTO feedback (paziente_id, prenotazione_accettata_id, ifeed, votosodd, votopunt) VALUES 
-(11, 31, '2020-12-02 11:00:00', 4, 5);
+(11, 51, '2020-12-02 11:00:00', 4, 5);
 
 COMMIT;

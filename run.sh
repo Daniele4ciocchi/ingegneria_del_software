@@ -61,14 +61,14 @@ pkill main
 
 #run_main non-functional-req/bin
 
-#printf "############## AMMINISTRATIVO ##############\n\n"
+printf "############## AMMINISTRATIVO ##############\n\n"
 
-#set_current_root src/amministrativo
+set_current_root src/amministrativo
 
-#run_main handler/bin
+run_main handler/bin
 
-#run_main funzioni/accetta_richpren/bin
-#run_main funzioni/rifiuta_richpren/bin
+run_main funzioni/accetta_richpren/bin
+run_main funzioni/rifiuta_richpren/bin
 #run_main funzioni/aggiungi_indisponibilita_medico/bin
 #run_main funzioni/aggiungi_specializzazione_medico/bin
 #run_main funzioni/cronologia_richpren/bin
