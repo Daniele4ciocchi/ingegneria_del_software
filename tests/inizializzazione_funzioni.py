@@ -1,7 +1,7 @@
 from generatori_parametri.generatore_nomi import NomePersona
 from generatori_parametri.generatore_cognomi import CognomePersona
 from generatori_parametri.generatore_cf import CF
-from generatori_parametri.generatore_date import DataNascita, Data
+from generatori_parametri.generatore_date import DataNascita, Data, DataInizio, DataFine
 from generatori_parametri.generatore_indirizzi import Indirizzo
 from generatori_parametri.generatore_stringhe import Stringa
 from generatori_parametri.generatore_numeri_telefono import Telefono
@@ -49,7 +49,13 @@ requests = {
 "accetta_richpren" : [[("richiesta_id", IdPrenotazionePendente)]],
 
 "rifiuta_richpren" : [[("richiesta_id", IdPrenotazionePendente)],
-                      [("motivazione_id", IdMotivazione)]]
+                      [("motivazione_id", IdMotivazione)]],
+
+"aggiungi_indisponibilita_medico" : [[("medico_id", IdMedico)],
+                                     [("inizioind", DataInizio)],
+                                     [("fineind", DataFine)]],
+
+"cronologia_richpren" : [[("amministrativo_id", IdAmministrativo)]]
 }
 
 
@@ -58,8 +64,9 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren"],
-        "medico" : ["cronologia_prestazioni", "termina_prestazione","statistiche"],
+apis = {"amministrativo" : ["aggiungi_indisponibilita_medico"]
+        #"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "cronologia_richpren"],
+        #"medico" : ["cronologia_prestazioni", "termina_prestazione"],
         #"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
         #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
         }

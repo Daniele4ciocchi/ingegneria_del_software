@@ -92,15 +92,15 @@ int main() {
         std::string votopunt_str = std::to_string(votopunt);
 
         int row = 0;
-
+         
         redReply = RedisCommand(redConn, "XADD %s * row %d media_soddisfazione %.2f media_puntualita %.2f", 
                                 WRITE_STREAM, row, votosodd_str, votopunt_str);
-
-        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id,1);
+        
+        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id,0);
 
         assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
         freeReplyObject(redReply);
-        PQclear(queryRes);
+        
             
         }
 

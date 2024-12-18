@@ -69,9 +69,9 @@ run_main handler/bin
 
 run_main funzioni/accetta_richpren/bin
 run_main funzioni/rifiuta_richpren/bin
-#run_main funzioni/aggiungi_indisponibilita_medico/bin
+run_main funzioni/aggiungi_indisponibilita_medico/bin
 #run_main funzioni/aggiungi_specializzazione_medico/bin
-#run_main funzioni/cronologia_richpren/bin
+run_main funzioni/cronologia_richpren/bin
 #run_main funzioni/elimina_medico/bin
 #run_main funzioni/elimina_paziente/bin
 

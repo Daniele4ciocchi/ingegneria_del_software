@@ -3,9 +3,9 @@
 - amministrativo
     - [x] accetta richiesta prenotazione 
     - [x] rifiuta richiesta prenotazione
-    - [x] aggiungi indisponibilità medico 
+    - [ ] aggiungi indisponibilità medico 
     - [ ] aggiungi specializzazione medico
-    - [ ] cronologia richiesta prenotazione
+    - [x] cronologia richiesta prenotazione
     - [ ] elimina medico 
     - [ ] elimina paziente
 
@@ -13,10 +13,10 @@
     - [x] registrazione 
     - [x] ricerca medico
 - medico
-    - [ ] cronologia prestazioni 
-    - [ ] prestazioni future
+    - [x] cronologia prestazioni 
+    - [x] prestazioni future
     - [ ] statistiche 
-    - [ ] termina prestazione
+    - [x] termina prestazione
 - paziente
     - [x] cronologia prenotazioni testare
     - [x] effettua prenotazione testare
@@ -26,5 +26,5 @@
 - varie
     - [x] sistemare tester per fargli testare tutte le funzioni
     - [ ] Sistemare DBERROR se trigger completezza persona è attivo
-    - [ ] Aumentare il popolamento del db, soprattutto come prenotazioniavvenute
+    - [x] Aumentare il popolamento del db, soprattutto come prenotazioniavvenute
     - [ ] Sistemare tester per db error che sono corretti
