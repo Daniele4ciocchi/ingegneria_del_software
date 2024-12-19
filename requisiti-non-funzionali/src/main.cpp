@@ -1,4 +1,5 @@
 #include "main.h"
+using namespace std;
 
 int micro_sleep(long usec)
 {
@@ -59,6 +60,7 @@ int main() {
             printf("DB_ERROR\n");
             continue;
         }
+        cout << "dati connessione inseriti" << endl;
 
         sprintf(query, "SELECT EXTRACT(EPOCH FROM AVG(iresponse - irequest)) * 1000 as avg FROM communication WHERE iresponse IS NOT NULL");
 
@@ -68,7 +70,7 @@ int main() {
             printf("DB_ERROR\n");
             continue;
         }
-
+        
         average = PQgetvalue(queryRes, 0, PQfnumber(queryRes, "avg"));
 
         if(strlen(average) == 0){
