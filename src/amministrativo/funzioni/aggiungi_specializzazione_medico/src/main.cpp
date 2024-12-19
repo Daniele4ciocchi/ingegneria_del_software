@@ -6,14 +6,12 @@ int main() {
 
     PGresult *query_res;
 
-    std::string query;
-
-    char response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
+    char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
 
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     c2r = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    Specializzazione* specializzazione;
+    SpecializzazioneMedico* specializzazione;
 
     while(1) {
         reply = RedisCommand(c2r, "XREADGROUP GROUP main amministrativo BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
@@ -35,7 +33,7 @@ int main() {
 
         // Convert request
         try {
-            specializzazione = Specializzazione::from_stream(reply, 0, 0);
+            specializzazione = SpecializzazioneMedico::from_stream(reply, 0, 0);
         }
         catch(std::invalid_argument exp) {
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
@@ -43,10 +41,10 @@ int main() {
         }
 
         // Construct the query
-        query = "INSERT INTO specializzazioni (medico_id, specializzazione) VALUES (" + 
-                specializzazione->medico_id + ", '" + specializzazione->nome + "')";
+        sprintf(query, "INSERT INTO medico_specializzazione (medico_id, specializzazione_nome) VALUES (\'%s\', \'%s\');",
+                       specializzazione->medico_id, specializzazione->specializzazione_nome);
 
-        query_res = db.RunQuery((char *) query.c_str(), false);
+        query_res = db.RunQuery(query, false);
 
         if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK) {
             send_response_status(c2r, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);

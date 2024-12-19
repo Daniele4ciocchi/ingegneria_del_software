@@ -55,7 +55,10 @@ requests = {
                                      [("inizioind", DataInizio)],
                                      [("fineind", DataFine)]],
 
-"cronologia_richpren" : [[("amministrativo_id", IdAmministrativo)]]
+"cronologia_richpren" : [[("amministrativo_id", IdAmministrativo)]],
+
+"aggiungi_specializzazione_medico" : [[("medico_id", IdMedico)],
+                                      [("specializzazione", Specializzazione)]],
 }
 
 
@@ -64,8 +67,8 @@ apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_in
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
        "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
 
-apis = {"amministrativo" : ["aggiungi_indisponibilita_medico"]
-        #"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "cronologia_richpren"],
+apis = {"amministrativo" : ["aggiungi_specializzazione_medico"]
+        #"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "cronologia_richpren","aggiungi_indisponibilita_medico"],
         #"medico" : ["cronologia_prestazioni", "termina_prestazione"],
         #"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
         #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
