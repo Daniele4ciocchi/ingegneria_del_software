@@ -12,7 +12,6 @@ int main() {
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
     while(1) {
-        // inizio da non modificare 
         redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(redConn, redReply);
@@ -21,29 +20,27 @@ int main() {
             continue;
         } 
 
-        // Only one stream --> stream_num = 0
-        // Only one message in stream --> msg_num = 0
+        
         ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        // Check if the first key/value pair is the client_id
-        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+        
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);
 
         if(strcmp(first_key, "client_id")){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
-        // Take the input
-        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    // Index of third field of msg = 2
-        ReadStreamMsgVal(redReply, 0, 0, 3, specializzazione);  // Index of fourth field of msg = 3
+        
+        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    
+        ReadStreamMsgVal(redReply, 0, 0, 3, specializzazione);  
         
         if(strcmp(second_key, "specializzazione") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
-        // Query per ottenere i medici con la specializzazione richiesta
         sprintf(query, "SELECT p.cf, p.nome, p.cognome, p.nascita FROM medico m, persona p, medico_specializzazione s WHERE p.cf = m.cf AND m.id = s.medico_id AND s.specializzazione_nome = '%s';", specializzazione);
 
         queryRes = db.RunQuery(query, true);
@@ -67,6 +64,11 @@ int main() {
         }
    
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
+
+        redReply = RedisCommand(redConn, "XADD %s * row %d ", WRITE_STREAM, 0);
+
+        assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+        freeReplyObject(redReply);
         
         
         for(int row = 0; row < PQntuples(queryRes); row++){

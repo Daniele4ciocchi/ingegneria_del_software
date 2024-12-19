@@ -3,11 +3,9 @@
 - amministrativo
     - [x] accetta richiesta prenotazione 
     - [x] rifiuta richiesta prenotazione
-    - [ ] aggiungi indisponibilità medico 
-    - [ ] aggiungi specializzazione medico
+    - [x] aggiungi indisponibilità medico 
+    - [x] aggiungi specializzazione medico
     - [x] cronologia richiesta prenotazione
-    - [ ] elimina medico 
-    - [ ] elimina paziente
 
 - paziente non registrato (FINITO E FUNZIONANTE)
     - [x] registrazione 

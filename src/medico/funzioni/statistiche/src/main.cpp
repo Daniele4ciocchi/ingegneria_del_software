@@ -35,13 +35,11 @@ int main() {
             continue;
         } 
 
-        // Only one stream --> stream_num = 0
-        // Only one message in stream --> msg_num = 0
+        
         ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        // Check if the first key/value pair is the client_id
-        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    
 
         if(strcmp(first_key, "client_id")){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
@@ -49,10 +47,9 @@ int main() {
             continue;
         }
 
-        // Take the input
-        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    // Index of third field of msg = 2
-        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);  // Index of fourth field of msg = 3
-        
+        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);     
+        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);  
+       
         if(strcmp(second_key, "medico_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             freeReplyObject(redReply);
@@ -61,8 +58,8 @@ int main() {
         
         freeReplyObject(redReply);
     
-        // Query per ottenere i pazienti con la medico_id visita
-        sprintf(query, "SELECT f.votosodd AS votosodd, f.votopunt AS votopunt FROM feedback AS f, richiestaprenotazione AS rp WHERE f.prenotazione_accettata_id = rp.id AND rp.medico_id = '%s';", medico_id);
+        sprintf(query, "SELECT AVG(f.votosodd) AS media_voto_soddisfazione, AVG(f.votopunt) AS media_voto_puntualita FROM richiestaprenotazione rp JOIN prenotazioneaccettata pa ON rp.id = pa.richiesta_id JOIN feedback f ON pa.richiesta_id = f.prenotazione_accettata_id WHERE rp.medico_id = '%s' GROUP BY rp.medico_id;", medico_id);
+
 
         queryRes = db.RunQuery(query, true);
         
@@ -73,31 +70,24 @@ int main() {
             continue;
         }
 
-        double votosodd = 0;
-        double votopunt = 0;
+        char* votosodd = NULL;
+        char* votopunt = NULL;
 
-        int num_rows = PQntuples(queryRes);
-        for (int row = 0; row < num_rows; row++) {
-            votosodd += atoi(PQgetvalue(queryRes, row, PQfnumber(queryRes, "votosodd")));
-            votopunt += atoi(PQgetvalue(queryRes, row, PQfnumber(queryRes, "votopunt")));
-        }
+        votosodd = PQgetvalue(queryRes, 0, PQfnumber(queryRes, "media_voto_soddisfazione"));
+        votopunt = PQgetvalue(queryRes, 0, PQfnumber(queryRes, "media_voto_puntualita"));
 
 
-        if (num_rows > 0) {
-            votosodd /= num_rows;
-            votopunt /= num_rows;
-        }
+        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id,2);
 
-        std::string votosodd_str = std::to_string(votosodd);
-        std::string votopunt_str = std::to_string(votopunt);
+        redReply = RedisCommand(redConn, "XADD %s * row %d ", 
+                                WRITE_STREAM, 0);
 
-        int row = 0;
-         
-        redReply = RedisCommand(redConn, "XADD %s * row %d media_soddisfazione %.2f media_puntualita %.2f", 
-                                WRITE_STREAM, row, votosodd_str, votopunt_str);
+        assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
+        freeReplyObject(redReply);
+
+        redReply = RedisCommand(redConn, "XADD %s * row %d media_soddisfazione %s media_puntualita %s", 
+                                WRITE_STREAM, 1, votosodd, votopunt);
         
-        send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id,0);
-
         assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
         freeReplyObject(redReply);
         

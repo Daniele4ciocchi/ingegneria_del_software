@@ -58,20 +58,13 @@ requests = {
 "cronologia_richpren" : [[("amministrativo_id", IdAmministrativo)]],
 
 "aggiungi_specializzazione_medico" : [[("medico_id", IdMedico)],
-                                      [("specializzazione", Specializzazione)]],
+                                      [("specializzazione_nome", Specializzazione)]]
 }
 
 
-apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren", "elimina_medico", "elimina_paziente"],
+apis = {"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren"],
        "medico" : ["cronologia_prestazioni", "statistiche", "termina_prestazione"],
        "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
-       "paziente_non_registrato" : ["registrazione", "ricerca_non_registrata"]}
-
-apis = {"amministrativo" : ["aggiungi_specializzazione_medico"]
-        #"amministrativo" : ["accetta_richpren", "rifiuta_richpren", "cronologia_richpren","aggiungi_indisponibilita_medico"],
-        #"medico" : ["cronologia_prestazioni", "termina_prestazione"],
-        #"paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
-        #"paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]
-        }
+       "paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]}
 
 ports = {"amministrativo" : 42070, "medico" : 42069, "paziente" : 42071, "paziente_non_registrato" : 42072}

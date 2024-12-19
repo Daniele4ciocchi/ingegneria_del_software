@@ -111,8 +111,6 @@ make_folder funzioni/rifiuta_richpren/src
 make_folder funzioni/aggiungi_indisponibilita_medico/src
 make_folder funzioni/aggiungi_specializzazione_medico/src
 make_folder funzioni/cronologia_richpren/src
-#make_folder funzioni/elimina_medico/src
-#make_folder funzioni/elimina_paziente/src
 
 printf "############## MEDICO ##############\n\n"
 

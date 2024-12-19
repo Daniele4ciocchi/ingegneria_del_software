@@ -19,7 +19,7 @@
 #include "../../../../lib/con2db/pgsql.h"
 #include "../../../../lib/con2redis/src/con2redis.h"
 
-#include "../../../../classes/src/specializzazione_medico.h"
+#include "../../../../classes/src/medico_specializzazione.h"
 #include "../../../../utils/src/utils.h"
 #include "../../../../utils/src/const.h"
 

@@ -29,7 +29,6 @@ int main() {
         ReadStreamMsgVal(reply, 0, 0, 1, client_id);   
 
         if(strcmp(first_key, "client_id")){
-
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }

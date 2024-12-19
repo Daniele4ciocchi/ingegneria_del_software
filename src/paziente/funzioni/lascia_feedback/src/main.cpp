@@ -24,13 +24,10 @@ int main() {
             continue;
         }
 
-        // Only one stream --> stream_num = 0
-        // Only one message in stream --> msg_num = 0
         ReadStreamNumMsgID(reply, 0, 0, msg_id);
 
-        // Check if the first key/value pair is the client_id
-        ReadStreamMsgVal(reply, 0, 0, 0, first_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(reply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+        ReadStreamMsgVal(reply, 0, 0, 0, first_key);
+        ReadStreamMsgVal(reply, 0, 0, 1, client_id);
 
         if(strcmp(first_key, "client_id") != 0){
             send_response_status(c2r, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
@@ -38,7 +35,7 @@ int main() {
             continue;
         }
 
-        // Convert request
+
         try {
             feedback = Feedback::from_stream(reply, 0, 0);
         } 

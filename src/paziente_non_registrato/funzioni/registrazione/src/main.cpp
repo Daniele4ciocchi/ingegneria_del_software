@@ -24,24 +24,22 @@ int main() {
             continue;
         } 
 
-        // Only one stream --> stream_num = 0
-        // Only one message in stream --> msg_num = 0
+        
         ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        // Check if the first key/value pair is the client_id
-        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    // Index of first field of msg = 0
-        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    // Index of second field of msg = 1
+        
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    
 
         if(strcmp(first_key, "client_id")){
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUESTTTT", msg_id, 0);
             continue;
         }
 
-        // Convert request
+        
         try{
-            // campi per lo stream redis 
-            // 0: cf, 1: nome, 2: cognome, 3: nascita, 4: email, 5: telefono, 6: via, 7: civico, 8: cap, 9: citta, 10: provincia
-            persona = Persona::from_stream(redReply, 0, 0); // passo prima lo stream redis a persona e poi a paziente
+            
+            persona = Persona::from_stream(redReply, 0, 0); 
             paziente = Paziente::from_stream(redReply, 0, 0);
         }
         catch (std::invalid_argument& exp) {
@@ -49,12 +47,7 @@ int main() {
             std::cerr << "Errore in from_stream: " << exp.what() << std::endl;
             continue;
 }
-        /*
-        catch(std::invalid_argument exp){
-            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
-            continue;
-        }
-        */
+
        
         sprintf(query,  "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');"
                         "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');", 
