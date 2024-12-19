@@ -29,6 +29,7 @@ int main() {
     char query[QUERY_LEN];
 
     while(1) {
+        //Tempo medio in millisecondi di durata della connessione all'handler per richiesta
         sprintf(query, "SELECT EXTRACT(EPOCH FROM AVG(idisconnection - iconnection)) * 1000 as avg FROM client WHERE idisconnection IS NOT NULL");
 
         queryRes = logdb.RunQuery(query, true);
@@ -60,8 +61,9 @@ int main() {
             printf("DB_ERROR\n");
             continue;
         }
-        cout << "dati connessione inseriti" << endl;
+        printf("Tempo medio di durata delle connessioni ai server in millisecondi: %s\n", average);
 
+        // Tempo medio in millisecondi che passa fra la partenza della richiesta e la ricezione della risposta da parte del server
         sprintf(query, "SELECT EXTRACT(EPOCH FROM AVG(iresponse - irequest)) * 1000 as avg FROM communication WHERE iresponse IS NOT NULL");
 
         queryRes = logdb.RunQuery(query, true);
@@ -92,7 +94,7 @@ int main() {
             continue;
         }
 
-        printf("statistiche ndi connessione - media: %s ms, tipo: SESSIONE, stato: %s\n", average, response_status);
+        printf("Tempo medio trascosro fra la partenza della richiesta e la ricezione della risposta da parte del server in millisecondi: %s\n", average);
 
         micro_sleep(60000000);
     }
