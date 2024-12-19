@@ -1,6 +1,7 @@
 #include "main.h"
 
-int main() {
+int main()
+{
     redisContext *redConn;
     redisReply *redReply;
 
@@ -11,82 +12,83 @@ int main() {
     Con2DB db(POSTGRESQL_SERVER, POSTGRESQL_PORT, POSTGRESQL_USER, POSTGRESQL_PSW, POSTGRESQL_DBNAME);
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
-    while(1) {
-        
+    while (1)
+    {
         redReply = RedisCommand(redConn, "XREADGROUP GROUP main medico BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(redConn, redReply);
 
-        if (ReadNumStreams(redReply) == 0) {
+        if (ReadNumStreams(redReply) == 0)
+        {
             continue;
-        } 
+        }
 
-        
-        
         ReadStreamNumMsgID(redReply, 0, 0, msg_id);
 
-        
-        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);    
-        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);    
+        ReadStreamMsgVal(redReply, 0, 0, 0, first_key);
+        ReadStreamMsgVal(redReply, 0, 0, 1, client_id);
 
-        if(strcmp(first_key, "client_id")){
+        if (strcmp(first_key, "client_id"))
+        {
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
-        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);    
-        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);  
-        
-        if(strcmp(second_key, "medico_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4)){
+        ReadStreamMsgVal(redReply, 0, 0, 2, second_key);
+        ReadStreamMsgVal(redReply, 0, 0, 3, medico_id);
+
+        if (strcmp(second_key, "medico_id") || (ReadStreamMsgNumVal(redReply, 0, 0) > 4))
+        {
             send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
-        
+
         sprintf(query, "SELECT p.nome AS nome_paziente, p.cognome AS cognome_paziente, rp.specializzazione_nome AS specializzazione_visita, rp.giornoorariopren AS giorno_visita, rp.irich AS irich, pa.prestazioneavvenuta AS visita_avvenuta FROM prenotazioneaccettata pa, richiestaprenotazione rp, paziente paz, persona p WHERE pa.richiesta_id = rp.id AND rp.paziente_id = paz.id AND paz.cf = p.cf AND rp.medico_id = '%s';", medico_id);
 
         queryRes = db.RunQuery(query, true);
-        
-        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK) {
+
+        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK)
+        {
             std::cout << "Errore query o medico non trovato" << std::endl;
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
         }
 
-        std::list<RichiestaPrenotazione*> visite;
+        std::list<RichiestaPrenotazione *> visite;
 
-        for(int row = 0; row < PQntuples(queryRes); row++){
-            RichiestaPrenotazione* visita;
+        for (int row = 0; row < PQntuples(queryRes); row++)
+        {
+            RichiestaPrenotazione *visita;
             visita = new RichiestaPrenotazione(
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nome_paziente")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "cognome_paziente")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "specializzazione_visita")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "giorno_visita")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "irich")),
-                                PQgetvalue(queryRes, row, PQfnumber(queryRes, "visita_avvenuta"))); 
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "nome_paziente")),
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "cognome_paziente")),
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "specializzazione_visita")),
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "giorno_visita")),
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "irich")),
+                PQgetvalue(queryRes, row, PQfnumber(queryRes, "visita_avvenuta")));
             visite.push_back(visita);
         }
-        
+
         send_response_status(redConn, WRITE_STREAM, client_id, "REQUEST_SUCCESS", msg_id, PQntuples(queryRes));
 
-        redReply = RedisCommand(redConn, "XADD %s * row %d ", 
+        redReply = RedisCommand(redConn, "XADD %s * row %d ",
                                 WRITE_STREAM, 0);
 
         assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
         freeReplyObject(redReply);
-        
-        for(int row = 0; row < PQntuples(queryRes); row++){
+
+        for (int row = 0; row < PQntuples(queryRes); row++)
+        {
 
             RichiestaPrenotazione *v = visite.front();
 
             visite.pop_front();
 
-            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s specializzazione %s giorno %s prestazioneavvenuta %s", 
-                                 WRITE_STREAM, row,  v->paziente_id, v->medico_id, v->amministrativo_id, v->specializzazione_nome, v->giornoorariopren);
+            redReply = RedisCommand(redConn, "XADD %s * row %d nome %s cognome %s specializzazione %s giorno %s prestazioneavvenuta %s",
+                                    WRITE_STREAM, row, v->paziente_id, v->medico_id, v->amministrativo_id, v->specializzazione_nome, v->giornoorariopren);
             assertReplyType(redConn, redReply, REDIS_REPLY_STRING);
             freeReplyObject(redReply);
-            
         }
- 
     }
 
     db.finish();

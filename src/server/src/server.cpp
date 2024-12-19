@@ -85,7 +85,7 @@ void Server::run(){
 
         memcpy(&working_set, &current_set, sizeof(current_set));
 
-        // Listens for incoming requests. Returns the number of incoming requests
+        // Acolta le richiesta in arrivo e ne ritorna il numero
         rc = select(max_fd + 1, &working_set, NULL, NULL, &timeout);
 
         if (rc < 0) {
@@ -108,13 +108,13 @@ void Server::run(){
             add_new_clients();
         }
 
-        // Read managers responses and send to clients
+        // legge al risposte delle funzioni e le manda ai client
         response = true;
         while(response){
             out_str = "";
             client_id = -1;
 
-            response = handler->read_from_managers(&out_str, &client_id);
+            response = handler->read_from_funzioni(&out_str, &client_id);
 
             if(response){
                 send_response(client_id, out_str);
@@ -238,7 +238,7 @@ void Server::receive(int i) {
         return;
     }
 
-    if(!handler->send_to_managers(i, msg)){
+    if(!handler->send_to_funzioni(i, msg)){
         send_response(i, "BAD_REQUEST");
     }
 }

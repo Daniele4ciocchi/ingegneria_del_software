@@ -55,11 +55,11 @@ printf "\n\n\n########## Started run script ##########\n\n\n\n"
 
 pkill main
 
-#printf "############## NON FUNCTIONAL REQ ##############\n\n"
+printf "############## REQUISITI NON FUNZIONALI ##############\n\n"
 
-#set_current_root src
+set_current_root .
 
-#run_main non-functional-req/bin
+run_main requisiti-non-funzionali/bin
 
 printf "############## AMMINISTRATIVO ##############\n\n"
 

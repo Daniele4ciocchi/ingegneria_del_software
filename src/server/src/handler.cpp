@@ -9,7 +9,7 @@ Handler::Handler(const char* redis_ip, int redis_port, std::string req_types[], 
     init_streams();
 }
 
-bool Handler::send_to_managers(int client_id, std::string msg){
+bool Handler::send_to_funzioni(int client_id, std::string msg){
 
     redisReply* reply;
     bool is_valid_req;
@@ -17,7 +17,7 @@ bool Handler::send_to_managers(int client_id, std::string msg){
 
     // Get request type
     for(i = 0; i < msg.length(); i++){
-        if (msg[i] == 32)  break;   // 32 is the Space char in ASCII
+        if (msg[i] == 32)  break;   // 32 è lo Space char in ASCII
     }
     
     if (i >= msg.length()){
@@ -43,7 +43,7 @@ bool Handler::send_to_managers(int client_id, std::string msg){
         return false;
     }
 
-    // Send command on the -in stream of the corresponding manager
+    // Incia il comando all'-in stream della funzione corrispondente
     std::string redis_cmd = "XADD " + req_type +"-in * client_id " + std::to_string(client_id) + " " + req_cmd;
 
     std::cout << "\n" << redis_cmd << std::endl; 
@@ -53,7 +53,7 @@ bool Handler::send_to_managers(int client_id, std::string msg){
     return true;
 }
 
-bool Handler::read_from_managers(std::string* out_str_ptr, int* client_id_ptr){
+bool Handler::read_from_funzioni(std::string* out_str_ptr, int* client_id_ptr){
 
     redisReply* reply;
     char msg_id[MESSAGE_ID_LEN], tmp_buffer[30], client_id[VALUE_LEN], resp_status[30], num_rows[30], row[30];
@@ -65,7 +65,7 @@ bool Handler::read_from_managers(std::string* out_str_ptr, int* client_id_ptr){
         reply = RedisCommand(c2r, "XREADGROUP GROUP main handler COUNT 1 STREAMS %s-out >", types[i].c_str());
 
         assertReply(c2r, reply);
-        if (ReadNumStreams(reply) == 0)     // If empty, check next manager
+        if (ReadNumStreams(reply) == 0)     // Se vuoto va alla funzione successiva
             continue;
 
         // Get client id
@@ -73,7 +73,7 @@ bool Handler::read_from_managers(std::string* out_str_ptr, int* client_id_ptr){
         ReadStreamMsgVal(reply, 0, 0, 1, client_id);    
 
         if(strcmp(tmp_buffer, "client_id"))
-            continue;   // Ignore invalid response
+            continue;   // Ignora invalid response
 
         *client_id_ptr = strtol(client_id, NULL, 10);
         
@@ -82,7 +82,7 @@ bool Handler::read_from_managers(std::string* out_str_ptr, int* client_id_ptr){
         ReadStreamMsgVal(reply, 0, 0, 5, num_rows);     
 
         if(strcmp(tmp_buffer, "num_rows"))
-            continue;   // Ignore invalid response
+            continue;   // Ignora invalid response
 
         num_rows_int = strtol(num_rows, NULL, 10);
 
@@ -91,7 +91,7 @@ bool Handler::read_from_managers(std::string* out_str_ptr, int* client_id_ptr){
         ReadStreamMsgVal(reply, 0, 0, 3, resp_status);
 
         if(strcmp(tmp_buffer, "resp_status"))
-            continue;   // Ignore invalid response
+            continue;   // ignora invalid response
 
         if(strcmp(resp_status, "REQUEST_SUCCESS"))
             num_rows_int = 0;   // "Burn" possible tuples

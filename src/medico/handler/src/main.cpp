@@ -1,6 +1,7 @@
 #include "main.h"
 
-int main(){
+int main()
+{
     int num_types = 3;
     std::string req_types[num_types] = {"cronologia_prestazioni", "statistiche", "termina_prestazione"};
 

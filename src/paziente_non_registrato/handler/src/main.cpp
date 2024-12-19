@@ -1,6 +1,7 @@
 #include "main.h"
 
-int main(){
+int main()
+{
     int num_types = 2;
     std::string req_types[num_types] = {"registrazione", "nr_ricerca_medico"};
 

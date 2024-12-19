@@ -94,11 +94,11 @@ set_current_root src
 
 make_folder server/src
 
-#printf "############## NON FUNCTIONAL REQ ##############\n\n"
+printf "############## REQUISITI NON FUNZIONALI ##############\n\n"
 
-#set_current_root src
+set_current_root .
 
-#make_folder non-functional-req/src
+make_folder requisiti-non-funzionali/src
 
 printf "############## AMMINISTRATIVO ##############\n\n"
 

@@ -3,140 +3,134 @@
 
 #define DEBUG 1000
 
-
 Con2DB::Con2DB(const char *hostname,
-	       const char *port,
-	 const char *username,
-	 const char *password,
-	 const char *dbname) 
+               const char *port,
+               const char *username,
+               const char *password,
+               const char *dbname)
 {
 
-  char buf[1000];
+    char buf[1000];
 
-  sprintf(buf, "host=%s port=%s user=%s password=%s dbname=%s",
-	  hostname,
-	  port,
-	  username,
-	  password,
-	  dbname
-	  );
-  
-  // connect linux user to database (must have privileges)
-      conn = PQconnectdb(buf);
+    sprintf(buf, "host=%s port=%s user=%s password=%s dbname=%s",
+            hostname,
+            port,
+            username,
+            password,
+            dbname);
 
-  //    PGconn *conn = PQconnectdb("user=enrico dbname=sdfs");
-  //  PGconn *conn = PQconnectdb("user=sdfs dbname=sdfs");    // on MPM server
+    // connect linux user to database (must have privileges)
+    conn = PQconnectdb(buf);
 
-    if (PQstatus(conn) != CONNECTION_OK) {
-        
+    //    PGconn *conn = PQconnectdb("user=enrico dbname=sdfs");
+    //  PGconn *conn = PQconnectdb("user=sdfs dbname=sdfs");    // on MPM server
+
+    if (PQstatus(conn) != CONNECTION_OK)
+    {
+
         fprintf(stderr, "Con2DB(%s): Connection to database failed: %s\n",
-		dbname,
-		PQerrorMessage(conn)
-		);
+                dbname,
+                PQerrorMessage(conn));
         finish();
     }
 
 #if 0
     fprintf(stderr, "Con2DB(%s): PQconnectPoll: %d\n", dbname, PQconnectPoll(conn));        
     fprintf(stderr, "Con2DB(%s): PQstatus: %d\n", dbname, PQstatus(conn));       
-    fprintf(stderr, "Con2DB(%s): Connection to DB successfully established \n", dbname);        
+    fprintf(stderr, "Con2DB(%s): Connection to DB successfully established \n", dbname);
 #endif
 
-   
-}  /* Con2DB() */
+} /* Con2DB() */
 
+void Con2DB::finish()
+{
 
-
-void Con2DB::finish() {
-    
     PQfinish(conn);
     conn = NULL;
     exit(1);
 }
 
-
-
-
 /* use this for commands returning no data, e.g. INSERT */
-PGresult* Con2DB::ExecSQLcmd(char *sqlcmd)
+PGresult *Con2DB::ExecSQLcmd(char *sqlcmd)
 {
 
-  if (conn == NULL)
+    if (conn == NULL)
     // error
     {
-     fprintf(stderr, "ExecSQLcmd(): no connection to DB: PQexec on: %s\n", sqlcmd);
-          exit (1);
+        fprintf(stderr, "ExecSQLcmd(): no connection to DB: PQexec on: %s\n", sqlcmd);
+        exit(1);
     }
-  
-#if (DEBUG > 1000000)
-  fprintf(stderr, "ExecSQLcmd(): PQexec on: %s\n", sqlcmd);        
-  fprintf(stderr, "ExecSQLcmd(): PQconnectPoll: %d\n", PQconnectPoll(conn));        
-  fprintf(stderr, "ExecSQLcmd(): PQstatus: %d\n", PQstatus(conn));        
-#endif
-
-   
-  PGresult *res = PQexec(conn, sqlcmd);    
 
 #if (DEBUG > 1000000)
-    fprintf(stderr, "ExecSQLcmd(): PQexec done\n");        
+    fprintf(stderr, "ExecSQLcmd(): PQexec on: %s\n", sqlcmd);
+    fprintf(stderr, "ExecSQLcmd(): PQconnectPoll: %d\n", PQconnectPoll(conn));
+    fprintf(stderr, "ExecSQLcmd(): PQstatus: %d\n", PQstatus(conn));
 #endif
-    
-    if (PQresultStatus(res) != PGRES_COMMAND_OK) {
 
-      fprintf(stderr, "ExecSQLcmd(): SQL command failed: %s\n", sqlcmd);
-      fprintf(stderr, "ExecSQLcmd(): %s\n",
-	      PQresStatus(PQresultStatus(res)));
-      fprintf(stderr, "ExecSQLcmd(): PQresultErrorMessage: %s\n",
-	      PQresultErrorMessage(res) ) ;
-           
-        //PQclear(res);
-        // finish();
-    }    
+    PGresult *res = PQexec(conn, sqlcmd);
+
+#if (DEBUG > 1000000)
+    fprintf(stderr, "ExecSQLcmd(): PQexec done\n");
+#endif
+
+    if (PQresultStatus(res) != PGRES_COMMAND_OK)
+    {
+
+        fprintf(stderr, "ExecSQLcmd(): SQL command failed: %s\n", sqlcmd);
+        fprintf(stderr, "ExecSQLcmd(): %s\n",
+                PQresStatus(PQresultStatus(res)));
+        fprintf(stderr, "ExecSQLcmd(): PQresultErrorMessage: %s\n",
+                PQresultErrorMessage(res));
+
+        // PQclear(res);
+        //  finish();
+    }
 
 #if 0
-    fprintf(stderr, "ExecSQLcmd() SQL command OK: %s\n", sqlcmd);        
+    fprintf(stderr, "ExecSQLcmd() SQL command OK: %s\n", sqlcmd);
 #endif
 
     return (res);
 }
 
-
 /* use this for commands returning data, e.g. SELECT */
-PGresult* Con2DB::ExecSQLtuples(char *sqlcmd)
+PGresult *Con2DB::ExecSQLtuples(char *sqlcmd)
 {
 
-  if (conn == NULL)
+    if (conn == NULL)
     // error
     {
-     fprintf(stderr, "ExecSQLtuples(): no connection to DB: sqlcmd = %s\n", sqlcmd);
-     // exit (1);
+        fprintf(stderr, "ExecSQLtuples(): no connection to DB: sqlcmd = %s\n", sqlcmd);
+        // exit (1);
     }
 
-  // conn != NULL
-  
-  PGresult *res = PQexec(conn, sqlcmd);    
-	
-    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+    // conn != NULL
 
-      fprintf(stderr, "ExecSQLtuples(): SQL command failed: %s\n", sqlcmd);
-      fprintf(stderr, "ExecSQLtuples(): %s\n", PQresStatus(PQresultStatus(res)));
-      fprintf(stderr, "ExecSQLcmd(): PQresultErrorMessage: %s\n",
-	      PQresultErrorMessage(res) ) ;
+    PGresult *res = PQexec(conn, sqlcmd);
+
+    if (PQresultStatus(res) != PGRES_TUPLES_OK)
+    {
+
+        fprintf(stderr, "ExecSQLtuples(): SQL command failed: %s\n", sqlcmd);
+        fprintf(stderr, "ExecSQLtuples(): %s\n", PQresStatus(PQresultStatus(res)));
+        fprintf(stderr, "ExecSQLcmd(): PQresultErrorMessage: %s\n",
+                PQresultErrorMessage(res));
 
         // PQclear(res);
         // finish();
-    }    
+    }
 
 #if 0
-    fprintf(stderr, "ExecSQLtuples() OK: %s\n", sqlcmd);        
+    fprintf(stderr, "ExecSQLtuples() OK: %s\n", sqlcmd);
 #endif
 
     return (res);
 }
 
-PGresult* Con2DB::RunQuery(char* query, bool has_tuples) {
-    PGresult* trans_res;
-    PGresult* query_res;
+PGresult *Con2DB::RunQuery(char *query, bool has_tuples)
+{
+    PGresult *trans_res;
+    PGresult *query_res;
 
     char sqlCmd[7];
 
@@ -145,7 +139,8 @@ PGresult* Con2DB::RunQuery(char* query, bool has_tuples) {
     trans_res = ExecSQLcmd(sqlCmd);
 
     // if not ok
-    if (PQresultStatus(trans_res) != PGRES_COMMAND_OK) {
+    if (PQresultStatus(trans_res) != PGRES_COMMAND_OK)
+    {
         PQclear(trans_res);
         return trans_res;
     }
@@ -160,19 +155,23 @@ PGresult* Con2DB::RunQuery(char* query, bool has_tuples) {
     trans_res = ExecSQLcmd(sqlCmd);
 
     // if an error occurred during query execution
-    if(PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK){
+    if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK)
+    {
         PQclear(trans_res);
         PQclear(query_res);
         return query_res;
     }
-    else if(PQresultStatus(trans_res) != PGRES_COMMAND_OK){
+    else if (PQresultStatus(trans_res) != PGRES_COMMAND_OK)
+    {
         PQclear(query_res);
         PQclear(trans_res);
         return trans_res;
     }
-    else{
+    else
+    {
         PQclear(trans_res);
-        if (PQresultStatus(query_res) != PGRES_TUPLES_OK) PQclear(query_res);
+        if (PQresultStatus(query_res) != PGRES_TUPLES_OK)
+            PQclear(query_res);
         return query_res;
     }
 }
