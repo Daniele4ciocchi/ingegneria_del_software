@@ -49,6 +49,11 @@ funzioni = {
             "rifiuta_richpren" : [[("richiesta_id", IdPrenotazionePendente)],
                                   [("motivazione_id", IdMotivazione)]],
 
+            "inserisci_medico" : [[("cf", CF)],
+                                  [("nome", NomePersona)],
+                                  [("cognome", CognomePersona)],
+                                  [("nascita", DataNascita)]],
+
             "aggiungi_indisponibilita_medico" : [[("medico_id", IdMedico)],
                                                  [("inizioind", DataInizio)],
                                                  [("fineind", DataFine)]],
@@ -56,12 +61,12 @@ funzioni = {
             "cronologia_richpren" : [[("amministrativo_id", IdAmministrativo)]],
 
             "aggiungi_specializzazione_medico" : [[("medico_id", IdMedico)],
-                                                  [("specializzazione_nome", Specializzazione)]]
+                                                  [("specializzazione_nome", Specializzazione)]],
             }
 
 
 apis = {
-        "amministrativo" : ["accetta_richpren", "rifiuta_richpren", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren"],
+        "amministrativo" : ["accetta_richpren", "rifiuta_richpren", "inserisci_medico", "aggiungi_indisponibilita_medico", "aggiungi_specializzazione_medico", "cronologia_richpren"],
         "medico" : ["cronologia_prestazioni", "statistiche", "termina_prestazione"],
         "paziente" : ["ricerca_medico", "cronologia_prenotazioni", "effettua_prenotazione", "lascia_feedback"],
         "paziente_non_registrato" : ["registrazione", "nr_ricerca_medico"]

@@ -92,6 +92,8 @@ int main() {
             continue;
         }
 
+        printf("statistiche ndi connessione - media: %s ms, tipo: SESSIONE, stato: %s\n", average, response_status);
+
         micro_sleep(60000000);
     }
 

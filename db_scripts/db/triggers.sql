@@ -45,28 +45,6 @@ FOR EACH ROW
 EXECUTE FUNCTION verifica_persona_completezza_deferred();
 */
 
--- [V.medico.almenounaspecializzazione]
-CREATE OR REPLACE FUNCTION medico_specializzato()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM medico_specializzazione 
-        WHERE medico_id = NEW.id
-    ) THEN
-        RAISE EXCEPTION 'Violazione del vincolo: Ogni medico deve avere almeno una specializzazione.';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE CONSTRAINT TRIGGER medico_almeno_una_specializzazione 
-AFTER INSERT OR UPDATE ON medico
-DEFERRABLE INITIALLY DEFERRED
-FOR EACH ROW
-EXECUTE FUNCTION medico_specializzato();
-
-
 -- [V.richiestaprenotazione.disgiunzione]
 CREATE OR REPLACE FUNCTION verifica_disgiunzione_richiesta()
 RETURNS TRIGGER AS $$

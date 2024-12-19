@@ -1,6 +1,6 @@
 ### Requisiti funzionali
-Il nostro progetto prevede la progettazione di un sistema di gestione di una piattaforma ospedaliera a cui possono essere fatte diverse richieste 
-Troviamo quattro tipi di entità che possono effettuare operazioni all'interno del sistema e per ognuna sono definite delle funzioni effettuabili come segue 
+Il nostro progetto consiste nella progettazione del backend di una piattaforma di gestione di appuntamenti medici alla quale possono essere fatte richieste di diverso tipo. 
+Nel sistema vi sono quattro tipi di entità che possono effettuare diverse operazioni al suo interno, nello specifico abbiamo:  
 #### Paziente non registrato 
 - Registrazione
 - Ricerca medico
@@ -22,7 +22,7 @@ Troviamo quattro tipi di entità che possono effettuare operazioni all'interno d
 
 ### Requisiti non funzionali
 
-Inoltre il sistema consente di controllare tramite un requisito non funzionale i tempi di risposta nelle connessioni al db nell'arco di un minuto
+Inoltre il sistema consente di controllare tramite requisiti non funzionali i tempi di risposta nelle connessioni al database.
 
 Di seguito i comandi per testare il sistema:
 
@@ -49,7 +49,7 @@ python3 tester.py
 ```
 
 
-#### Progetto creato da
+#### Progetto realizzato da
 - Sepe Gabriele
 - Quattrociocchi Daniele
 - Mastromattei Luca

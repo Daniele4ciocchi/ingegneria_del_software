@@ -12,10 +12,9 @@
 /* Classes */
 class Medico {
     public:
-        char* id = NULL;
         char* cf = NULL;
 
-        Medico(char* id, char* cf);
+        Medico(char* cf);
         ~Medico();
 
         static Medico* from_stream(redisReply* reply, int stream_num, int msg_num);

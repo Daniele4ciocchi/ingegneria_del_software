@@ -5,7 +5,7 @@ int main()
     redisContext *redConn;
     redisReply *redReply;
 
-    PGresult *query_res;
+    PGresult *queryRes;
 
     char query[QUERY_LEN], response[RESPONSE_LEN], msg_id[MESSAGE_ID_LEN], first_key[KEY_LEN], client_id[VALUE_LEN];
 
@@ -13,12 +13,12 @@ int main()
     redConn = redisConnect(REDIS_SERVER, REDIS_PORT);
 
     Persona *persona;
-    Paziente *paziente;
+    Medico *medico;
 
     while (1)
     {
 
-        redReply = RedisCommand(redConn, "XREADGROUP GROUP main paziente_non_registrato BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
+        redReply = RedisCommand(redConn, "XREADGROUP GROUP main amministrativo BLOCK 0 COUNT 1 STREAMS %s >", READ_STREAM);
 
         assertReply(redConn, redReply);
 
@@ -40,9 +40,8 @@ int main()
 
         try
         {
-
             persona = Persona::from_stream(redReply, 0, 0);
-            paziente = Paziente::from_stream(redReply, 0, 0);
+            medico = Medico::from_stream(redReply, 0, 0);
         }
         catch (std::invalid_argument &exp)
         {
@@ -52,13 +51,13 @@ int main()
         }
 
         sprintf(query, "INSERT INTO Persona (cf, nome, cognome, nascita) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');"
-                       "INSERT INTO Paziente (cf, indirizzo, email, telefono) VALUES (\'%s\', \'%s\', \'%s\', \'%s\');",
-                persona->cf, persona->nome, persona->cognome, persona->nascita,
-                paziente->cf, paziente->indirizzo, paziente->email, paziente->telefono);
+                       "INSERT INTO Medico (cf) VALUES (\'%s\');",
+                        persona->cf, persona->nome, persona->cognome, persona->nascita,
+                        medico->cf);
 
-        query_res = db.RunQuery(query, false);
+        queryRes = db.RunQuery(query, false);
 
-        if (PQresultStatus(query_res) != PGRES_COMMAND_OK && PQresultStatus(query_res) != PGRES_TUPLES_OK)
+        if (PQresultStatus(queryRes) != PGRES_COMMAND_OK && PQresultStatus(queryRes) != PGRES_TUPLES_OK)
         {
             send_response_status(redConn, WRITE_STREAM, client_id, "DB_ERROR", msg_id, 0);
             continue;
