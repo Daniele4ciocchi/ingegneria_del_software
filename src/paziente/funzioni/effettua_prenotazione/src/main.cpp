@@ -43,7 +43,7 @@ int main()
         }
         catch (std::invalid_argument exp)
         {
-            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUESTTT", msg_id, 0);
+            send_response_status(redConn, WRITE_STREAM, client_id, "BAD_REQUEST", msg_id, 0);
             continue;
         }
 
