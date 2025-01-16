@@ -11,4 +11,4 @@ sudo apt-get install python3-libpq-dev
 sudo apt-get install python3-psycopg2
 
 # così scritto aggiunge postgres al gruppo dell'utente che esegue il comando
-sudo usermod -aG $USER postgres\
+# sudo usermod -aG $USER postgres\
